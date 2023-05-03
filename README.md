@@ -2,6 +2,6 @@
 
 ## Authors
 Amir Eskandari:
-Cadan Glass:
+Cadan Glass: https://github.com/CadanGlass
 Daniel Okonov:
 Jas Randhawa:
