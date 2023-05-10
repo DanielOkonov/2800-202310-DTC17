@@ -1,11 +1,37 @@
 {
+  "name": "2800-202310-dtc17",
+  "version": "1.0.0",
+  "description": "Amir Eskandari:\r Cadan Glass: https://github.com/CadanGlass\r Daniel Okonov:\r Jas Randhawa:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanielOkonov/2800-202310-DTC17.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanielOkonov/2800-202310-DTC17/issues"
+  },
+  "homepage": "https://github.com/DanielOkonov/2800-202310-DTC17#readme",
   "dependencies": {
     "body-parser": "^1.20.2",
-    "dotenv": "^16.0.3",
+    "bcrypt": "^5.1.0",
+    "connect-mongodb-session": "^3.1.1",
+    "crypto": "^1.0.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "joi": "^17.9.2",
     "mongodb": "^5.4.0",
-    "mongoose": "^7.1.0"
+    "mongoose": "^7.1.0",
+    "nodemailer": "^6.9.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.22"
   }
 }
