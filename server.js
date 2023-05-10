@@ -15,7 +15,7 @@ dotenv.config();
 // Initialize app and constants
 const app = express();
 const NODE_SESSION_SECRET = process.env.NODE_SESSION_SECRET;
-const MONGODB_URI = process.env.MONGODB_URI;
+const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?retryWrites=true&w=majority`;
 const saltRounds = 12;
 
 // Set view engine and views folder
@@ -25,9 +25,6 @@ app.set("views", path.join(__dirname, "views"));
 // Middleware configuration
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
-// Start the server
-app.listen(3000);
 
 // Joi validation schemas
 const schema = Joi.object({
@@ -44,7 +41,7 @@ const loginSchema = Joi.object({
 
 // Connect to MongoDB
 mongoose
-  .connect(MONGODB_URI, {
+  .connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -54,7 +51,7 @@ mongoose
 
 // Configure session store
 const mongoStore = new MongoDBSession({
-  uri: MONGODB_URI,
+  uri: url,
   collection: "sessions",
 });
 
@@ -96,10 +93,11 @@ app.get("/", redirectToDashboardIfAuth, (req, res) => {
   res.render("index.ejs");
 });
 
-app.get("/login", redirectToDashboardIfAuth, (req, res) => {
-  res.render("login.ejs", { error: null });
-});
+// app.get("/login", redirectToDashboardIfAuth, (req, res) => {
 
+exports.renderLogin = function (req, res) {
+  res.render("login.ejs", { error: null });
+};
 
 app.get("/register", redirectToDashboardIfAuth, (req, res) => {
   res.render("register.ejs");
@@ -196,4 +194,3 @@ app.post("/logout", (req, res) => {
 app.use((req, res) => {
   res.status(404).render("404.ejs");
 });
-
