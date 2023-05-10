@@ -97,8 +97,9 @@ app.get("/", redirectToDashboardIfAuth, (req, res) => {
 });
 
 app.get("/login", redirectToDashboardIfAuth, (req, res) => {
-  res.render("login.ejs");
+  res.render("login.ejs", { error: null });
 });
+
 
 app.get("/register", redirectToDashboardIfAuth, (req, res) => {
   res.render("register.ejs");
