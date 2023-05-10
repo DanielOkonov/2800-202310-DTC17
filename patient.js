@@ -17,11 +17,12 @@ const patientSchema = Joi.object({
   sex: Joi.string().valid("male", "female", "other").required(),
 });
 
-app.get("/add-patient", (req, res) => {
+exports.renderAddPatients = function (req, res) {
   res.render("add-patient");
-});
+};
 
-app.post("/add-patient", async (req, res) => {
+exports.addPatient = async function (req, res) {
+  console.log("req.body: " + JSON.stringify(req.body));
   try {
     await patientSchema.validateAsync(req.body);
 
@@ -48,8 +49,4 @@ app.post("/add-patient", async (req, res) => {
       res.status(500).send("Error saving patient");
     }
   }
-});
-
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
+};
