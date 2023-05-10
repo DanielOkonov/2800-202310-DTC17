@@ -164,7 +164,7 @@ app.post("/login", async (req, res) => {
   if (!user) {
     return res
       .status(400)
-      .render("login", { error: "Invalid email or password" });
+      .render("login.ejs", { error: "Invalid email or password" });
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -172,7 +172,7 @@ app.post("/login", async (req, res) => {
   if (!isMatch) {
     return res
       .status(400)
-      .render("login", { error: "Invalid email or password" });
+      .render("login.ejs", { error: "Invalid email or password" });
   }
 
   req.session.isAuth = true;
