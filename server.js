@@ -192,3 +192,8 @@ app.post("/logout", (req, res) => {
     res.redirect("/login");
   });
 });
+
+app.use((req, res) => {
+  res.status(404).render("404.ejs");
+});
+
