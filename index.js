@@ -57,6 +57,13 @@ app.post("/register", server.processRegister);
 app.post("/login", server.processLogin);
 app.post("/logout", server.logout);
 
+app.get("*", (req, res) => {
+  res.status(404)
+  res.render("404")
+})
+
+
+
 app.listen(3000, () => {
   console.log("Server started on http://localhost:3000");
 });

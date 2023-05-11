@@ -69,7 +69,6 @@
 //   })
 // );
 
-
 // // Middleware to protect routes
 // exports.isAuth = (req, res, next) => {
 //   if (req.session.isAuth) {
@@ -200,7 +199,6 @@
 //     return;
 //   }
 
-
 //   // req.session.isAuth = true;
 //   // req.session.cookie.maxAge = 3600000 // 1 hour
 //   // req.session.userEmail = email; // Store the user's email in the session
@@ -223,7 +221,6 @@
 //   res.status(404).render("404.ejs");
 // });
 
-
 //Updated imports
 require("./utils.js");
 const dotenv = require("dotenv");
@@ -240,7 +237,9 @@ dotenv.config();
 // Initialize app and constants
 const app = express();
 var { database } = include("database-connection");
-const userCollection = database.db(process.env.MONGODB_DATABASE).collection(process.env.MONGODB_USERCOLLECTION);
+const userCollection = database
+  .db(process.env.MONGODB_DATABASE)
+  .collection(process.env.MONGODB_USERCOLLECTION);
 
 // Set view engine and views folder
 app.set("view-engine", "ejs");
@@ -252,7 +251,10 @@ app.use(express.static("public"));
 
 // Joi validation schemas
 const schema = Joi.object({
-  username: Joi.string().alphanum().max(20).required(),
+  username: Joi.string()
+    .regex(/^[\w-\s]+$/)
+    .max(20)
+    .required(),
   email: Joi.string().email().required(),
   password: Joi.string().max(20).required(),
   admin: Joi.boolean().optional(),
@@ -361,13 +363,12 @@ exports.processRegister = async function (req, res) {
 };
 
 exports.processLogin = async function (req, res) {
-
   let email = req.body.email;
   let password = req.body.password;
 
   const result = await userCollection
     .find({ email: email })
-    .project({ email: 1, password: 1, admin: 1, _id: 1 })
+    .project({ email: 1, password: 1, admin: 1, _id: 1, username: 1 })
     .toArray();
 
   if (result.length != 1) {
@@ -377,8 +378,9 @@ exports.processLogin = async function (req, res) {
   }
   if (await bcrypt.compare(password, result[0].password)) {
     console.log("correct password");
+    console.log(result[0]);
     req.session.isAuth = true;
-    req.session.isAuth = true;
+    req.session.username = result[0].username;
     req.session.userEmail = result[0].email;
     req.session.cookie.maxAge = 3600000;
     req.session.admin = result[0].admin;
@@ -401,20 +403,16 @@ exports.logout = function (req, res) {
 
 exports.currentUserInfo = async function (req, res) {
   const email = req.session.userEmail;
-  const user = await UserModel.findOne({ email: email });
+  // const user = await UserModel.findOne({ email: email });
+  const user = req.session.username;
   // console.log("user from db: " + JSON.stringify(user));
 
   console.log("Current user email: " + email);
-  console.log("Current user username: " + user.username);
+  console.log("Current user username: " + user);
 
   res.render("doctor-profile", {
     user: user,
     userEmail: email,
   });
 };
-
-app.use((req, res) => {
-  res.status(404).render("404.ejs");
-});
-
 
