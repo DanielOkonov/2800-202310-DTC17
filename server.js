@@ -5,7 +5,6 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const mongoose = require("mongoose");
-const MongoDBSession = require("connect-mongodb-session")(session);
 const Joi = require("joi");
 const UserModel = require("./models/user");
 
@@ -49,30 +48,9 @@ mongoose
     console.log("MongoDB Connected");
   });
 
-// Configure session store
-const mongoStore = new MongoDBSession({
-  uri: url,
-  collection: "sessions",
-});
-
-// Use the session middleware (sessions expire after 1 hour)
-
-app.use(
-  session({
-    secret: NODE_SESSION_SECRET,
-    store: mongoStore,
-    saveUninitialized: false,
-    resave: false,
-    rolling: true,
-    cookie: {
-      maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
-    },
-  })
-);
-
 // Middleware to protect routes
 exports.isAuth = (req, res, next) => {
-  if (req.session && req.session.isAuth) {
+  if (req.session.isAuth) {
     next();
   } else {
     res.redirect("/login");
@@ -81,7 +59,7 @@ exports.isAuth = (req, res, next) => {
 
 // Middleware to redirect to dashboard if authenticated
 exports.redirectToDashboardIfAuth = (req, res, next) => {
-  if (req.session && req.session.isAuth) {
+  if (req.session.isAuth) {
     res.redirect("/dashboard");
   } else {
     next();
@@ -104,10 +82,6 @@ exports.renderRegister = function (req, res) {
 exports.renderDashboard = function (req, res) {
   res.render("dashboard.ejs");
 };
-
-// app.get("/register", redirectToDashboardIfAuth, (req, res) => {
-//   res.render("register");
-// });
 
 exports.processRegister = async function (req, res) {
   const { username, email, password } = req.body;
