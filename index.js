@@ -19,7 +19,7 @@ app.set("view engine", "ejs");
 const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?retryWrites=true&w=majority`;
 
 const mongoStore = new MongoDBSession({
-  uri: url,
+  uri: `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/HeartWise`,
   collection: "sessions",
 });
 
