@@ -168,11 +168,17 @@ exports.logout = function (req, res) {
 };
 
 exports.currentUserInfo = async function (req, res) {
-  let userEmail = req.session.user.email;
-  // let userName = await UserModel.findOne({ username });
-  // let userPass = await UserModel.findOne({ password });
+  const email = req.session.userEmail;
+  const user = await UserModel.findOne({ email: email });
+  // console.log("user from db: " + JSON.stringify(user));
 
-  console.log("Current user email: " + userEmail);
+  console.log("Current user email: " + email);
+  console.log("Current user username: " + user.username);
+
+  res.render("doctor-profile", {
+    user: user,
+    userEmail: email,
+  });
 };
 
 app.use((req, res) => {

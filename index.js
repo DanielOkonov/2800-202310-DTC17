@@ -40,20 +40,14 @@ app.use(
   })
 );
 
-app.get("/add-patient", patient.renderAddPatients);
+app.get("/add-patient", server.isAuth, patient.renderAddPatients);
 app.post("/add-patient", patient.addPatient);
 
 app.get("/", server.redirectToDashboardIfAuth, server.renderIndex);
 app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);
 app.get("/register", server.redirectToDashboardIfAuth, server.renderRegister);
 app.get("/dashboard", server.isAuth, server.renderDashboard);
-// app.get(
-//   "/doctor-profile",
-//   server.isAuth,
-//   server.renderDoctorProfile,
-//   server.currentUserInfo
-// );
-app.get("/doctor-profile", server.isAuth, server.currentUserInfo);
+app.get("/doctor-profile", server.currentUserInfo);
 
 app.post("/register", server.processRegister);
 app.post("/login", server.processLogin);
