@@ -83,6 +83,10 @@ exports.renderDashboard = function (req, res) {
   res.render("dashboard.ejs");
 };
 
+exports.renderDoctorProfile = function (req, res) {
+  res.render("doctor-profile.ejs");
+};
+
 exports.processRegister = async function (req, res) {
   const { username, email, password } = req.body;
   const admin = req.body.admin === "on" ? true : false;
@@ -161,6 +165,14 @@ exports.logout = function (req, res) {
     res.clearCookie("connect.sid"); // Clear the session cookie
     res.redirect("/login");
   });
+};
+
+exports.currentUserInfo = async function (req, res) {
+  let userEmail = req.session.user.email;
+  // let userName = await UserModel.findOne({ username });
+  // let userPass = await UserModel.findOne({ password });
+
+  console.log("Current user email: " + userEmail);
 };
 
 app.use((req, res) => {
