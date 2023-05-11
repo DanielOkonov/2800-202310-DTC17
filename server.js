@@ -71,8 +71,8 @@ app.use(
 );
 
 // Middleware to protect routes
-const isAuth = (req, res, next) => {
-  if (req.session.isAuth) {
+exports.isAuth = (req, res, next) => {
+  if (req.session && req.session.isAuth) {
     next();
   } else {
     res.redirect("/login");
@@ -80,8 +80,8 @@ const isAuth = (req, res, next) => {
 };
 
 // Middleware to redirect to dashboard if authenticated
-const redirectToDashboardIfAuth = (req, res, next) => {
-  if (req.session.isAuth) {
+exports.redirectToDashboardIfAuth = (req, res, next) => {
+  if (req.session && req.session.isAuth) {
     res.redirect("/dashboard");
   } else {
     next();
@@ -89,29 +89,27 @@ const redirectToDashboardIfAuth = (req, res, next) => {
 };
 
 // Routes
-app.get("/", redirectToDashboardIfAuth, (req, res) => {
+exports.renderIndex = function (req, res) {
   res.render("index.ejs");
-});
-
-// app.get("/login", redirectToDashboardIfAuth, (req, res) => {
+};
 
 exports.renderLogin = function (req, res) {
   res.render("login.ejs", { error: null });
 };
 
-app.get("/register", redirectToDashboardIfAuth, (req, res) => {
+exports.renderRegister = function (req, res) {
   res.render("register.ejs");
-});
+};
 
-app.get("/dashboard", isAuth, (req, res) => {
+exports.renderDashboard = function (req, res) {
   res.render("dashboard.ejs");
-});
+};
 
-app.get("/register", redirectToDashboardIfAuth, (req, res) => {
-  res.render("register");
-});
+// app.get("/register", redirectToDashboardIfAuth, (req, res) => {
+//   res.render("register");
+// });
 
-app.post("/register", async (req, res) => {
+exports.processRegister = async function (req, res) {
   const { username, email, password } = req.body;
   const admin = req.body.admin === "on" ? true : false;
 
@@ -148,9 +146,9 @@ app.post("/register", async (req, res) => {
     console.error("Error hashing password:", error);
     res.redirect("/register");
   }
-});
+};
 
-app.post("/login", async (req, res) => {
+exports.processLogin = async function (req, res) {
   const validationResult = loginSchema.validate(req.body);
   if (validationResult.error) {
     console.log(validationResult.error);
@@ -177,9 +175,9 @@ app.post("/login", async (req, res) => {
   req.session.isAuth = true;
   req.session.userEmail = email; // Store the user's email in the session
   res.redirect("/dashboard");
-});
+};
 
-app.post("/logout", (req, res) => {
+exports.logout = function (req, res) {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
@@ -189,7 +187,7 @@ app.post("/logout", (req, res) => {
     res.clearCookie("connect.sid"); // Clear the session cookie
     res.redirect("/login");
   });
-});
+};
 
 app.use((req, res) => {
   res.status(404).render("404.ejs");
