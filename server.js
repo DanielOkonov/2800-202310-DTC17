@@ -315,6 +315,10 @@ exports.renderDashboard = function (req, res) {
   res.render("dashboard.ejs");
 };
 
+exports.renderDoctorProfile = function (req, res) {
+  res.render("doctor-profile.ejs");
+};
+
 exports.processRegister = async function (req, res) {
   var username = req.body.username;
   var email = req.body.email;
@@ -388,6 +392,20 @@ exports.logout = function (req, res) {
 
     res.clearCookie("connect.sid"); // Clear the session cookie
     res.redirect("/login");
+  });
+};
+
+exports.currentUserInfo = async function (req, res) {
+  const email = req.session.userEmail;
+  const user = await UserModel.findOne({ email: email });
+  // console.log("user from db: " + JSON.stringify(user));
+
+  console.log("Current user email: " + email);
+  console.log("Current user username: " + user.username);
+
+  res.render("doctor-profile", {
+    user: user,
+    userEmail: email,
   });
 };
 
