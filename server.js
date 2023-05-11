@@ -1,9 +1,10 @@
-// Import required modules
+//Updated imports
 const dotenv = require("dotenv");
 const express = require("express");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
+const { MongoClient } = require("mongodb");
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const UserModel = require("./models/user");
@@ -16,6 +17,8 @@ const app = express();
 const NODE_SESSION_SECRET = process.env.NODE_SESSION_SECRET;
 const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?retryWrites=true&w=majority`;
 const saltRounds = 12;
+
+const client = new MongoClient(url, { useUnifiedTopology: true });
 
 // Set view engine and views folder
 app.set("view-engine", "ejs");
@@ -114,7 +117,11 @@ exports.processRegister = async function (req, res) {
       admin: admin,
     });
 
-    await user.save();
+    await client.connect();
+    const db = client.db(process.env.MONGODB_DATABASE);
+    const userCollection = db.collection(process.env.MONGODB_USERCOLLECTION);
+    await userCollection.insertOne(user);
+
     res.redirect("/login");
   } catch (error) {
     console.error("Error hashing password:", error);
