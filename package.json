@@ -18,8 +18,9 @@
   },
   "homepage": "https://github.com/DanielOkonov/2800-202310-DTC17#readme",
   "dependencies": {
-    "body-parser": "^1.20.2",
     "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "connect-mongo": "^5.0.0",
     "connect-mongodb-session": "^3.1.1",
     "crypto": "^1.0.1",
     "ejs": "^3.1.9",

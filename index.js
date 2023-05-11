@@ -48,11 +48,15 @@ app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);
 app.get("/register", server.redirectToDashboardIfAuth, server.renderRegister);
 app.get("/dashboard", server.isAuth, server.renderDashboard);
 app.get("/doctor-profile", server.currentUserInfo);
+app.get("/under-construction", server.renderUnderConstruction);
+
+
+
 
 app.post("/register", server.processRegister);
 app.post("/login", server.processLogin);
 app.post("/logout", server.logout);
 
 app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+  console.log("Server started on http://localhost:3000");
 });

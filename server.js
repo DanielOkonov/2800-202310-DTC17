@@ -182,7 +182,7 @@
 //     .find({email: email})
 //     .project({email: 1, password: 1, admin: 1, _id: 1})
 //     .toArray();
-  
+
 //   if(result.length != 1){
 //     return res
 //       .status(400)
@@ -319,6 +319,10 @@ exports.renderDoctorProfile = function (req, res) {
   res.render("doctor-profile.ejs");
 };
 
+exports.renderUnderConstruction = function (req, res) {
+  res.render("under-construction.ejs");
+};
+
 exports.processRegister = async function (req, res) {
   var username = req.body.username;
   var email = req.body.email;
@@ -362,14 +366,14 @@ exports.processLogin = async function (req, res) {
   let password = req.body.password;
 
   const result = await userCollection
-    .find({email: email})
-    .project({email: 1, password: 1, admin: 1, _id: 1})
+    .find({ email: email })
+    .project({ email: 1, password: 1, admin: 1, _id: 1 })
     .toArray();
-  
-  if(result.length != 1){
+
+  if (result.length != 1) {
     return res
       .status(400)
-      .redirect("login.ejs", { error: "Invalid email or password"} );
+      .redirect("login.ejs", { error: "Invalid email or password" });
   }
   if (await bcrypt.compare(password, result[0].password)) {
     console.log("correct password");
