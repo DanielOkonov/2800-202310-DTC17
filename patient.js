@@ -88,7 +88,7 @@ exports.getPatients = async function (req, res) {
       .toArray();
 
     // render the patients.ejs view and pass the patients data to it
-    res.render('patients', {
+    res.render('patient-list', {
       patients: patients,
       currentPage: currentPage,
       totalPages: totalPages,
@@ -126,13 +126,14 @@ exports.searchPatients = async function (req, res) {
     const totalPages = Math.ceil(totalCount / itemsPerPage);
 
     // render the searchResults.ejs view and pass the patients data to it
-    res.render('searchResults', {
-      patients: patients, // Change this from 'results' to 'patients'
+    res.render('patient-search', {
+      patients: patients,
       currentPage: currentPage,
       totalPages: totalPages,
       itemsPerPage: itemsPerPage,
       query: req.query.q // The search query string
     });
+
 
 
   } catch (error) {

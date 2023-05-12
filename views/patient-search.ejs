@@ -1,12 +1,14 @@
 <%- include("templates/header") %>
 
-    <!-- Pagination -->
+
+    <!-- Search Bar -->
     <%- include("templates/search-bar") %>
         <!-- Pagination -->
         <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages, itemsPerPage:
             itemsPerPage }) %>
             <!-- Patients list -->
             <div class="list-group mb-2">
+
                 <div id="patientList" class="list-group mb-2">
                     <% patients.forEach(function(patient) { %>
                         <div class="list-group-item">
@@ -57,6 +59,12 @@
 
                         });
                     });
+
+                    $('#clear-search').click(function () {
+                        $('#searchBar').val('');
+                    });
+
+
                 });
             </script>
 
