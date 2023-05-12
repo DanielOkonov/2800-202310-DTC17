@@ -1,0 +1,15 @@
+<%- include("templates/header") %>
+
+    <h1>THIS IS DOCTOR PROFILE</h1>
+    <div class="container">
+        <p>User: <%= user %>
+        </p>
+        <p>Email: <%= userEmail %>
+        </p>
+    </div>
+
+    <form action="/dashboard">
+        <button type="submit" class="btn btn-primary mt-3">Back</button>
+    </form>
+
+    <%- include("templates/bottom-navbar") %>

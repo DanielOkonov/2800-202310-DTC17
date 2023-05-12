@@ -1,0 +1,24 @@
+<%- include("templates/header") %>
+
+<body>
+    <h1>Add New Patient</h1>
+    <form action="/add-patient" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="1" required>
+        <br>
+        <label for="sex">Sex:</label>
+        <select name="sex" id="sex" required>
+            <option value="">--Select--</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select>
+        <br>
+        <input type="submit" value="Add Patient">
+    </form>
+</body>
+
+ <%- include("templates/bottom-navbar") %>

@@ -1,0 +1,28 @@
+<div class="container pb-5 mb-4">
+    <h1 class="text-center my-3">Patients List</h1>
+
+    <div class="container">
+        <div class="row mt-3">
+            <!-- Search Form -->
+            <div class="col-md-12 mb-3">
+                <!-- Search Query Alert -->
+                <!-- <% if (query) { %>
+                    <div class="alert alert-primary mt-3 py-1 px-2" role="alert">
+                        Search results for: <strong>
+                            <%= query %>
+                        </strong>
+                    </div>
+                    <% } %> -->
+                <form action="/search" method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search patients..." aria-label="Search"
+                            aria-describedby="button-addon2" id="searchBar" name="q" value="<%= query || '' %>">
+                        <div class="input-group-append mx-2">
+                            <button class="btn btn-primary" type="submit" id="button-addon2">Search</button>
+                            <button class="btn btn-outline-primary" type="button" id="clear-search"><i
+                                    class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
