@@ -231,6 +231,9 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const Joi = require("joi");
 
+
+console.log("Script loaded!")
+
 // Load environment variables
 dotenv.config();
 
