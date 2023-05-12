@@ -374,7 +374,7 @@ exports.processLogin = async function (req, res) {
   if (result.length != 1) {
     return res
       .status(400)
-      .redirect("login.ejs", { error: "Invalid email or password" });
+      .render("login", { error: "Invalid email or password" });
   }
   if (await bcrypt.compare(password, result[0].password)) {
     console.log("correct password");
@@ -386,8 +386,13 @@ exports.processLogin = async function (req, res) {
     req.session.admin = result[0].admin;
     res.redirect("/dashboard");
     return;
+  } else {
+    return res
+      .status(400)
+      .render("login", { error: "Invalid email or password" });
   }
 };
+
 
 exports.logout = function (req, res) {
   req.session.destroy((err) => {
