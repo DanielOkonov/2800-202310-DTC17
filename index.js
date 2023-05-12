@@ -78,9 +78,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-app.get("/forgot-password", (req, res) => {
-  res.render("forgot-password")
-})
+app.get("/forgot-password", function (req, res) {
+  res.render("forgot-password", { message: "Your custom error message here" });
+});
+
 
 app.post("/forgot-password", async (req, res, next) => {
   try {
@@ -89,7 +90,7 @@ app.post("/forgot-password", async (req, res, next) => {
     const existingUser = await userCollection.findOne({ email: email });
 
     if (!existingUser) {
-      return res.status(404).json({ message: `No user with email ${email}.` });
+      return res.render("error", { message: `No user with email ${email}.` }); // render an error page
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
@@ -111,23 +112,22 @@ app.post("/forgot-password", async (req, res, next) => {
       html: `<p>Dear ${existingUser.username},</p><p>Please click the following link to reset your password: <a href="http://localhost:3000/resetPassword/${resetToken}">Reset Password</a></p>`,
     };
 
-
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log("Error sending email:", error);
-        res.status(500).json({
+        return res.render("error", {
           message: "Error occurred while sending password reset email.",
-        });
+        }); // render an error page
       } else {
         console.log("Email sent:", info.response);
-        res
-          .status(200)
-          .json({ message: "Password reset email sent successfully." });
+        return res.render("success", {
+          message: "Password reset email sent successfully.",
+        }); // render a success page
       }
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error occurred during password reset." });
+    res.render("error", { message: "Error occurred during password reset." }); // render an error page
   }
 });
 
@@ -159,16 +159,16 @@ app.post("/resetPassword", async (req, res) => {
   const { error, value } = schema.validate(req.body);
 
   if (error) {
-    return res
-      .status(400)
-      .json({ message: `Please provide ${error.details[0].message}.` });
+    return res.render("error", {
+      message: `Please provide ${error.details[0].message}.`,
+    }); // render an error page
   }
 
   try {
     const user = await userCollection.findOne({ resetToken: value.token });
 
     if (!user) {
-      return res.status(404).json({ message: "Invalid or expired token." });
+      return res.render("error", { message: "Invalid or expired token." }); // render an error page
     }
 
     const hashedPassword = await bcrypt.hash(value.newPassword, saltRounds);
@@ -183,12 +183,12 @@ app.post("/resetPassword", async (req, res) => {
       }
     );
 
-    return res.status(200).json({ message: "Password changed successfully." });
+    return res.render("success", { message: "Password changed successfully." }); // render a success page
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ message: "Error occurred during password change." });
+    return res.render("error", {
+      message: "Error occurred during password change.",
+    }); // render an error page
   }
 });
 
