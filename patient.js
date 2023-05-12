@@ -99,3 +99,37 @@ exports.getPatients = async function (req, res) {
     res.status(500).send("Error getting patients");
   }
 };
+
+exports.searchPatients = async function (req, res) {
+  try {
+    const query = req.query.q;
+
+    await client.connect();
+    const db = client.db(process.env.MONGODB_DATABASE);
+    const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
+
+    // Fetch the data based on the search query
+    const patients = await patientsCollection
+      .find({ name: new RegExp(query, 'i') })
+      .toArray();
+
+    // Calculate pagination variables
+    const itemsPerPage = 10; // Or whatever number you choose
+    const totalPages = Math.ceil(patients.length / itemsPerPage);
+    const currentPage = req.query.page || 1;
+
+    // render the searchResults.ejs view and pass the patients data to it
+    res.render('searchResults', {
+      patients: patients,
+      currentPage: currentPage,
+      totalPages: totalPages,
+      itemsPerPage: itemsPerPage
+    });
+  } catch (error) {
+    console.error("Error searching patients:", error);
+    res.status(500).json({ error: "Error searching patients" });
+  }
+};
+
+
+

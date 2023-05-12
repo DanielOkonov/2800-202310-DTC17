@@ -39,11 +39,11 @@ app.use(
     },
   })
 );
-
 app.get("/add-patient", server.isAuth, patient.renderAddPatients);
 app.post("/add-patient", patient.addPatient);
 app.get("/patients", server.isAuth, patient.getPatients);
 app.post("/patients", server.isAuth, patient.addPatient);
+app.get('/search', patient.searchPatients);
 
 
 

@@ -1,53 +1,82 @@
 <%- include("templates/header") %>
 
-    <div class="container pb-5 mb-4">
-        <h1 class="text-center my-3">Patients List</h1>
+
+
+
+    <!-- Pagination -->
+    <%- include("templates/search-bar") %>
+
+
+        <!-- Patients list -->
+        <div class="list-group mb-2">
+            <% patients.forEach(function(patient) { %>
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
+                            <%= patient.name %>
+                        </h4>
+                        <div class="text-right mx-2">
+                            <p class="mb-0 text-muted text-sm">Age: <%= patient.age %>
+                            </p>
+                            <p class="mb-0 text-muted text-sm">Sex: <%= patient.sex %>
+                            </p>
+                        </div>
+                        <div class="ml-3">
+                            <a href="#" class="btn btn-light"><i class="fas fa-info-circle"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+        </div>
 
         <!-- Pagination -->
         <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages, itemsPerPage:
             itemsPerPage }) %>
 
 
-            <!-- Patients list -->
-            <div class="list-group mb-2">
-                <% patients.forEach(function(patient) { %>
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
-                                <%= patient.name %>
-                            </h4>
-                            <div class="text-right mx-2">
-                                <p class="mb-0 text-muted text-sm">Age: <%= patient.age %>
-                                </p>
-                                <p class="mb-0 text-muted text-sm">Sex: <%= patient.sex %>
-                                </p>
-                            </div>
-                            <div class="ml-3">
-                                <a href="#" class="btn btn-light"><i class="fas fa-info-circle"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <% }); %>
             </div>
 
-            <!-- Pagination -->
-            <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages, itemsPerPage:
-                itemsPerPage }) %>
+            <!-- Include jQuery -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+            <!-- Your jQuery script -->
+            <script>
+                $(document).ready(function () {
+                    console.log("jQuery is loaded and ready!");
+
+                    $('.dropdown-menu a').click(function () {
+                        $('#dropdownMenuButton').text('Displaying: ' + $(this).text());
+                    });
+
+                    function renderPatients(patients) {
+                        var patientList = $('.list-group');
+                        patientList.empty(); // Remove existing patients
+
+                        // Add new patients
+                        $.each(patients, function (i, patient) {
+                            var patientItem = '<div class="list-group-item"><div class="d-flex justify-content-between align-items-center"><h4 class="list-group-item-heading mb-0 text-left flex-grow-1">' + patient.name + '</h4><div class="text-right mx-2"><p class="mb-0 text-muted text-sm">Age: ' + patient.age + '</p><p class="mb-0 text-muted text-sm">Sex: ' + patient.sex + '</p></div><div class="ml-3"><a href="#" class="btn btn-light"><i class="fas fa-info-circle"></i></a></div></div></div>';
+                            patientList.append(patientItem);
+                        });
+                    }
 
 
-    </div>
+                    // Fetch and render all patients initially
+                    $.getJSON('/', function (data) {
+                        renderPatients(data);
+                    });
 
-    <!-- Include jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <!-- Your jQuery script -->
-    <script>
-        $(document).ready(function () {
-            $('.dropdown-menu a').click(function () {
-                $('#dropdownMenuButton').text('Displaying: ' + $(this).text());
-            });
-        });
-    </script>
+                    // Update the list when a search is submitted
+                    $('#searchForm').on('submit', function (event) {
+                        event.preventDefault();
+                        let query = $('#searchBar').val();
+                        $.getJSON('/search?q=' + query, function (data) {
+                            renderPatients(data);
+                        });
+                    });
+                });
 
 
-    <%- include("templates/bottom-navbar") %>
+            </script>
+
+
+            <%- include("templates/bottom-navbar") %>

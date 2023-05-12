@@ -231,6 +231,9 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const Joi = require("joi");
 
+
+console.log("Script loaded!")
+
 // Load environment variables
 dotenv.config();
 
@@ -323,10 +326,6 @@ exports.renderDoctorProfile = function (req, res) {
 
 exports.renderUnderConstruction = function (req, res) {
   res.render("under-construction.ejs");
-};
-
-exports.renderPatients = function (req, res) {
-  res.render("patients.ejs");
 };
 
 exports.processRegister = async function (req, res) {
