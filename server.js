@@ -321,6 +321,10 @@ exports.renderDoctorProfile = function (req, res) {
   res.render("doctor-profile.ejs");
 };
 
+exports.renderUnderConstruction = function (req, res) {
+  res.render("under-construction.ejs");
+};
+
 exports.processRegister = async function (req, res) {
   var username = req.body.username;
   var email = req.body.email;
@@ -412,6 +416,3 @@ exports.currentUserInfo = async function (req, res) {
   });
 };
 
-app.use((req, res) => {
-  res.status(404).render("404.ejs");
-});
