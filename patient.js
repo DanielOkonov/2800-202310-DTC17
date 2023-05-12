@@ -104,7 +104,12 @@ exports.getPatients = async function (req, res) {
 
 exports.searchPatients = async function (req, res) {
   try {
-    const query = req.query.q;
+    // Function to escape special characters for use in a regular expression
+    function escapeRegExp(string) {
+      return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    }
+
+    const query = escapeRegExp(req.query.q);
     const itemsPerPage = parseInt(req.query.itemsPerPage) || 10; // Default to 10 if not specified
     const currentPage = parseInt(req.query.page) || 1; // Default to page 1 if not specified
 
@@ -133,8 +138,6 @@ exports.searchPatients = async function (req, res) {
       itemsPerPage: itemsPerPage,
       query: req.query.q // The search query string
     });
-
-
 
   } catch (error) {
     console.error("Error searching patients:", error);
