@@ -5,9 +5,9 @@
         Displaying: <%= itemsPerPage %>
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="?page=<%= currentPage %>&itemsPerPage=10">10</a>
-        <a class="dropdown-item" href="?page=<%= currentPage %>&itemsPerPage=25">25</a>
-        <a class="dropdown-item" href="?page=<%= currentPage %>&itemsPerPage=50">50</a>
+        <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=10">10</a>
+        <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=25">25</a>
+        <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=50">50</a>
     </div>
 </div>
 
@@ -16,18 +16,18 @@
     <ul class="pagination">
         <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
             <a class="page-link text-primary"
-                href="?page=<%= currentPage - 1 %>&itemsPerPage=<%= itemsPerPage %>">Previous</a>
+                href="/search?q=<%= query %>&page=<%= currentPage - 1 %>&itemsPerPage=<%= itemsPerPage %>">Previous</a>
         </li>
         <% for(let page=1; page <=totalPages; page++) { %>
             <li class="page-item <%= currentPage === page ? 'active' : '' %>">
-                <a class="page-link" href="?page=<%= page %>&itemsPerPage=<%= itemsPerPage %>">
+                <a class="page-link" href="/search?q=<%= query %>&page=<%= page %>&itemsPerPage=<%= itemsPerPage %>">
                     <%= page %>
                 </a>
             </li>
             <% } %>
                 <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
                     <a class="page-link"
-                        href="<%= currentPage === totalPages ? '#' : '?page=' + (currentPage + 1) + '&itemsPerPage=' + itemsPerPage %>">Next</a>
+                        href="<%= currentPage === totalPages ? '#' : '/search?q=' + query + '&page=' + (currentPage + 1) + '&itemsPerPage=' + itemsPerPage %>">Next</a>
                 </li>
     </ul>
 </nav>

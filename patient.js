@@ -92,8 +92,10 @@ exports.getPatients = async function (req, res) {
       patients: patients,
       currentPage: currentPage,
       totalPages: totalPages,
-      itemsPerPage: itemsPerPage
+      itemsPerPage: itemsPerPage,
+      query: req.query.q // The search query string
     });
+
   } catch (error) {
     console.error("Error getting patients:", error);
     res.status(500).send("Error getting patients");
@@ -103,6 +105,8 @@ exports.getPatients = async function (req, res) {
 exports.searchPatients = async function (req, res) {
   try {
     const query = req.query.q;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || 10; // Default to 10 if not specified
+    const currentPage = parseInt(req.query.page) || 1; // Default to page 1 if not specified
 
     await client.connect();
     const db = client.db(process.env.MONGODB_DATABASE);
@@ -111,25 +115,29 @@ exports.searchPatients = async function (req, res) {
     // Fetch the data based on the search query
     const patients = await patientsCollection
       .find({ name: new RegExp(query, 'i') })
+      .skip((currentPage - 1) * itemsPerPage)
+      .limit(itemsPerPage)
       .toArray();
 
+    // Fetch total count of patients for pagination
+    const totalCount = await patientsCollection.countDocuments({ name: new RegExp(query, 'i') });
+
     // Calculate pagination variables
-    const itemsPerPage = 10; // Or whatever number you choose
-    const totalPages = Math.ceil(patients.length / itemsPerPage);
-    const currentPage = req.query.page || 1;
+    const totalPages = Math.ceil(totalCount / itemsPerPage);
 
     // render the searchResults.ejs view and pass the patients data to it
     res.render('searchResults', {
-      patients: patients,
+      patients: patients, // Change this from 'results' to 'patients'
       currentPage: currentPage,
       totalPages: totalPages,
-      itemsPerPage: itemsPerPage
+      itemsPerPage: itemsPerPage,
+      query: req.query.q // The search query string
     });
+
+
   } catch (error) {
     console.error("Error searching patients:", error);
     res.status(500).json({ error: "Error searching patients" });
   }
 };
-
-
 
