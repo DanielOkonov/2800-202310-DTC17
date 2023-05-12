@@ -325,6 +325,10 @@ exports.renderUnderConstruction = function (req, res) {
   res.render("under-construction.ejs");
 };
 
+exports.renderPatients = function (req, res) {
+  res.render("patients.ejs");
+};
+
 exports.processRegister = async function (req, res) {
   var username = req.body.username;
   var email = req.body.email;

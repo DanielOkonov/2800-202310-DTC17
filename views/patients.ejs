@@ -1,0 +1,53 @@
+<%- include("templates/header") %>
+
+    <div class="container pb-5 mb-4">
+        <h1 class="text-center my-3">Patients List</h1>
+
+        <!-- Pagination -->
+        <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages, itemsPerPage:
+            itemsPerPage }) %>
+
+
+            <!-- Patients list -->
+            <div class="list-group mb-2">
+                <% patients.forEach(function(patient) { %>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
+                                <%= patient.name %>
+                            </h4>
+                            <div class="text-right mx-2">
+                                <p class="mb-0 text-muted text-sm">Age: <%= patient.age %>
+                                </p>
+                                <p class="mb-0 text-muted text-sm">Sex: <%= patient.sex %>
+                                </p>
+                            </div>
+                            <div class="ml-3">
+                                <a href="#" class="btn btn-light"><i class="fas fa-info-circle"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+
+            <!-- Pagination -->
+            <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages, itemsPerPage:
+                itemsPerPage }) %>
+
+
+    </div>
+
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Your jQuery script -->
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-menu a').click(function () {
+                $('#dropdownMenuButton').text('Displaying: ' + $(this).text());
+            });
+        });
+    </script>
+
+
+    <%- include("templates/bottom-navbar") %>

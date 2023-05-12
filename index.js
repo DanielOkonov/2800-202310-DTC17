@@ -42,6 +42,10 @@ app.use(
 
 app.get("/add-patient", server.isAuth, patient.renderAddPatients);
 app.post("/add-patient", patient.addPatient);
+app.get("/patients", server.isAuth, patient.getPatients);
+app.post("/patients", server.isAuth, patient.addPatient);
+
+
 
 app.get("/", server.redirectToDashboardIfAuth, server.renderIndex);
 app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);
@@ -49,6 +53,7 @@ app.get("/register", server.redirectToDashboardIfAuth, server.renderRegister);
 app.get("/dashboard", server.isAuth, server.renderDashboard);
 app.get("/doctor-profile", server.currentUserInfo);
 app.get("/under-construction", server.renderUnderConstruction);
+
 
 
 
