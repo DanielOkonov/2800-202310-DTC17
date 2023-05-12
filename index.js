@@ -109,7 +109,7 @@ app.post("/forgot-password", async (req, res, next) => {
       from: "heartwiseincorporated@gmail.com",
       to: email,
       subject: "Password Reset",
-      html: `<p>Dear ${existingUser.username},</p><p>Please click the following link to reset your password: <a href="http://localhost:3000/resetPassword/${resetToken}">Reset Password</a></p>`,
+      html: `<p>Dear ${existingUser.username},</p><p>Please click the following link to reset your password: <a href="http://localhost:3000/resetPassword/${resetToken}">Reset Password.</a></p>`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
