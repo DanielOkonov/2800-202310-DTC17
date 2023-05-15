@@ -12,6 +12,9 @@ const nodemailer = require("nodemailer");
 const Joi = require("joi");
 const saltRounds = 10;
 
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });  // files will be saved in the 'uploads' directory. You can change this to suit your needs
+
 dotenv.config();
 
 const server = require("./server");
@@ -201,6 +204,46 @@ app.get("/analyze", (req, res) => {
   res.render("analyze")
 })
 
+app.get("/share", (req, res) => {
+  res.render("share-button"); // replace 'share-button' with the correct path to your share-button.ejs file if it's not in the views directory
+});
+
+
+app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const pdfPath = req.file.path;
+
+    const mailOptions = {
+      from: process.env.EMAIL_ADDRESS,
+      to: email,
+      subject: "Here is the PDF you requested",
+      text: "Please find the PDF attached.",
+      attachments: [
+        {
+          filename: "file.pdf",
+          path: pdfPath,
+          contentType: "application/pdf",
+        },
+      ],
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", error);
+        return res
+          .status(500)
+          .json({ message: "Error occurred while sending email." });
+      } else {
+        console.log("Email sent:", info.response);
+        return res.render("success", { message: "Email sent successfully." });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error occurred during email sending." });
+  }
+});
 
 
 
