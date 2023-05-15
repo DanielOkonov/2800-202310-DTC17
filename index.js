@@ -197,6 +197,10 @@ app.post("/resetPassword", async (req, res) => {
   }
 });
 
+app.get("/analyze", (req, res) => {
+  res.render("analyze")
+})
+
 
 
 
