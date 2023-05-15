@@ -1,15 +1,27 @@
 <%- include("templates/header") %>
 
-    <h1>THIS IS DOCTOR PROFILE</h1>
-    <div class="container">
-        <p>User: <%= user %>
-        </p>
-        <p>Email: <%= userEmail %>
-        </p>
-    </div>
+    <body id="pageBody">
+        <h1>THIS IS DOCTOR PROFILE</h1>
+        <div class="container">
+            <p>User: <%= user %>
+            </p>
+            <p>Email: <%= userEmail %>
+            </p>
+        </div>
 
-    <form action="/dashboard">
-        <button type="submit" class="btn btn-primary mt-3">Back</button>
-    </form>
-
+        <form action="/dashboard">
+            <button type="submit" class="btn btn-primary mt-3">Back</button>
+        </form>
+        <script>
+            window.onload = function () {
+                console.log("Function being called");
+                let count = parseInt(localStorage.getItem("buttonClicks")) || 0;
+                if (count % 4 === 0 && count !== 0) {
+                    document.getElementById("pageBody").style.fontFamily = "Papyrus";
+                } else {
+                    document.getElementById("pageBody").style.fontFamily = "";
+                }
+            }
+        </script>
+    </body>
     <%- include("templates/bottom-navbar") %>
