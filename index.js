@@ -58,6 +58,7 @@ app.post("/add-patient", patient.addPatient);
 app.get("/patient-list", server.isAuth, patient.getPatients);
 app.post("/patient-list", server.isAuth, patient.addPatient);
 app.get('/search', patient.searchPatients);
+app.get('/patient-profile/:id', patient.getPatientProfile);
 
 
 

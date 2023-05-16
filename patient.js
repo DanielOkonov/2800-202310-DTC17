@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const Joi = require("joi");
 require("dotenv").config();
 
@@ -144,4 +144,31 @@ exports.searchPatients = async function (req, res) {
     res.status(500).json({ error: "Error searching patients" });
   }
 };
+
+exports.getPatientProfile = async function (req, res) {
+  let error = null;  // Initialize error as null
+  try {
+    const patientId = req.params.id;
+
+    await client.connect();
+    const db = client.db(process.env.MONGODB_DATABASE);
+    const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
+
+    const patient = await patientsCollection.findOne({ _id: new ObjectId(patientId) });
+
+    if (patient) {
+      res.render('patient-profile', { patient: patient, error: error });
+    } else {
+      throw new Error('Patient not found');
+    }
+
+  } catch (error) {
+    console.error("Error fetching patient profile:", error);
+    res.render('patient-profile', { error: error.message });
+  }
+};
+
+
+
+
 
