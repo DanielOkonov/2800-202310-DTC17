@@ -12,13 +12,29 @@ const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PAS
 const client = new MongoClient(url, { useUnifiedTopology: true });
 
 const patientSchema = Joi.object({
-  name: Joi.string().min(1).required(),
-  age: Joi.number().integer().min(1).required(),
+  firstName: Joi.string().min(1).required(),
+  middleName: Joi.string().allow('', null),
+  lastName: Joi.string().min(1).required(),
+  personalHealthId: Joi.string().min(9).max(10).required(),
+  dateOfBirth: Joi.date().iso().required(),
   sex: Joi.string().valid("male", "female", "other").required(),
+  anaemia: Joi.boolean().required(),
+  diabetes: Joi.boolean().required(),
+  highBloodPressure: Joi.boolean().required(),
+  // ejectionFraction: Joi.object({
+  //   value: Joi.number().integer().min(0).required(),
+  //   lastModifiedDate: Joi.date().required(),
+  //   state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+  // }).required(),
+  // serumCreatinine: Joi.object({
+  //   value: Joi.number().precision(1).min(0.0).required(),
+  //   lastModifiedDate: Joi.date().required(),
+  //   state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+  // }).required(),
 });
 
 exports.renderAddPatients = function (req, res) {
-  res.render("add-patient");
+  res.render("add-patient", { error: null });
 };
 
 exports.renderPatients = function (req, res) {
@@ -27,15 +43,54 @@ exports.renderPatients = function (req, res) {
 
 exports.addPatient = async function (req, res) {
   console.log("req.body: " + JSON.stringify(req.body));
+
+  // Convert anaemia, diabetes, and highBloodPressure fields to boolean
+  req.body.anaemia = req.body.anaemia === 'on';
+  req.body.diabetes = req.body.diabetes === 'on';
+  req.body.highBloodPressure = req.body.highBloodPressure === 'on';
+
   try {
     await patientSchema.validateAsync(req.body);
 
+    // Set avatarType based on sex
+    let avatarType;
+    switch (req.body.sex) {
+      case 'male':
+        avatarType = 'male';
+        break;
+      case 'female':
+        avatarType = 'female';
+        break;
+      case 'other':
+      default:
+        avatarType = 'human';
+        break;
+    }
+
     const patientData = {
-      name: req.body.name,
-      age: parseInt(req.body.age),
+      firstName: req.body.firstName,
+      middleName: req.body.middleName ? req.body.middleName : null,
+      lastName: req.body.lastName,
+      dateOfBirth: new Date(req.body.dateOfBirth),
       sex: req.body.sex,
-      previous_analysis: [],
+      anaemia: req.body.anaemia,  // no need to convert again
+      diabetes: req.body.diabetes,  // no need to convert again
+      highBloodPressure: req.body.highBloodPressure,  // no need to convert again
+      // ejectionFraction: {
+      //   value: parseInt(req.body.ejectionFraction),
+      //   lastModifiedDate: new Date(),
+      //   state: 'profile created'
+      // },
+      // serumCreatinine: {
+      //   value: parseFloat(req.body.serumCreatinine),
+      //   lastModifiedDate: new Date(),
+      //   state: 'profile created'
+      // },
+      // previous_analysis: [],
+      avatar: `https://avatars.dicebear.com/api/${avatarType}/${req.body.firstName}.svg`,
     };
+
+
 
     await client.connect();
     const db = client.db(process.env.MONGODB_DATABASE);
@@ -44,13 +99,15 @@ exports.addPatient = async function (req, res) {
 
     console.log("Patient added successfully: ", patientData);
 
-    res.send("Patient added successfully");
+    // Send a success message to the view, also pass error as null
+    res.render("add-patient", { success: "Patient added successfully", error: null });
+
   } catch (error) {
+    console.error("Error saving patient:", error);
     if (error.isJoi) {
-      res.status(400).send(error.details[0].message);
+      res.status(400).render("add-patient", { error: error.details[0].message });
     } else {
-      console.error("Error saving patient:", error);
-      res.status(500).send("Error saving patient");
+      res.status(500).render("add-patient", { error: "Error saving patient" });
     }
   }
 };
