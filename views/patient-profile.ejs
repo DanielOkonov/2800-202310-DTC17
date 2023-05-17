@@ -30,10 +30,7 @@
                             <li class="list-group-item">High Blood Pressure: <%= patient.highBloodPressure ? 'Yes'
                                     : 'No' %>
                             </li>
-                            <!-- Uncomment these lines if you want to display ejectionFraction and serumCreatinine fields
-                    <li class="list-group-item">Ejection Fraction: <%= patient.ejectionFraction.value %></li>
-                    <li class="list-group-item">Serum Creatinine: <%= patient.serumCreatinine.value %></li>
-                    -->
+
                             <% if (patient.previous_analysis && patient.previous_analysis.length> 0) { %>
                                 <% patient.previous_analysis.forEach(analysis=> { %>
                                     <li class="list-group-item">Analysis: <%= analysis %>
