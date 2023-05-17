@@ -231,8 +231,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const Joi = require("joi");
 
-
-console.log("Script loaded!")
+console.log("Script loaded!");
 
 // Load environment variables
 dotenv.config();
@@ -396,7 +395,6 @@ exports.processLogin = async function (req, res) {
   }
 };
 
-
 exports.logout = function (req, res) {
   req.session.destroy((err) => {
     if (err) {
@@ -423,4 +421,3 @@ exports.currentUserInfo = async function (req, res) {
     userEmail: email,
   });
 };
-
