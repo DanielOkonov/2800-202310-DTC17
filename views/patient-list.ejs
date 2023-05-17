@@ -1,99 +1,102 @@
 <%- include("templates/header") %>
+    <div class="container pb-5 mb-4">
 
-
-
-
-    <!-- Search Bar -->
-    <%- include("templates/search-bar") %>
-
-
-
-        <!-- Patients list -->
-        <div class="list-group mb-2">
-            <% patients.forEach(function(patient) { %>
-                <div class="list-group-item">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
-                            <%= patient.firstName + (patient.middleName ? ' ' + patient.middleName : '' ) + ' ' +
-                                patient.lastName %>
-                        </h4>
-                        <div class="text-right mx-2">
-                            <p class="mb-0 text-muted text-sm">Age: <%= patient.age %>
-                            </p>
-                            <p class="mb-0 text-muted text-sm">Sex: <%= patient.sex %>
-                            </p>
-                        </div>
-                        <div class="ml-3">
-                            <a href="/patient/<%= patient._id %>" class="btn btn-light"><i
-                                    class="fas fa-info-circle"></i></a>
-                        </div>
+        <div class="container">
+            <div class="row mt-3">
+                <!-- Search Bar -->
+                <div class="col-12 mb-1">
+                    <%- include("templates/search-bar") %>
+                </div>
+            </div>
+            <!-- Patients list -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="list-group mb-2">
+                        <% patients.forEach(function(patient) { %>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
+                                        <%= patient.firstName + (patient.middleName ? ' ' + patient.middleName : '' )
+                                            + ' ' + patient.lastName %>
+                                    </h4>
+                                    <div class="text-right mx-2">
+                                        <p class="mb-0 text-muted text-sm">Age: <%= patient.age %>
+                                        </p>
+                                        <p class="mb-0 text-muted text-sm">Sex: <%= patient.sex %>
+                                        </p>
+                                    </div>
+                                    <div class="ml-3">
+                                        <a href="/patient/<%= patient._id %>" class="btn btn-light"><i
+                                                class="fas fa-info-circle"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
                     </div>
                 </div>
-                <% }); %>
-        </div>
-
-        <!-- Pagination -->
-        <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages, itemsPerPage:
-            itemsPerPage }) %>
-
-
             </div>
 
-            <!-- Include jQuery -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <!-- Pagination -->
+            <div class="row">
+                <div class="col-12">
+                    <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages,
+                        itemsPerPage: itemsPerPage }) %>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <!-- Your jQuery script -->
-            <script>
-                $(document).ready(function () {
-                    console.log("jQuery is loaded and ready!");
 
-                    $('.dropdown-menu a').click(function () {
-                        $('#dropdownMenuButton').text('Displaying: ' + $(this).text());
+    <!-- Your jQuery script -->
+    <script>
+        $(document).ready(function () {
+            console.log("jQuery is loaded and ready!");
+
+            $('.dropdown-menu a').click(function () {
+                $('#dropdownMenuButton').text('Displaying: ' + $(this).text());
+            });
+
+            function renderPatients(patients) {
+                var patientList = $('.list-group');
+                patientList.empty(); // Remove existing patients
+
+                // Add new patients
+                $.each(patients, function (i, patient) {
+                    var patientItem = '<div class="list-group-item"><div class="d-flex justify-content-between align-items-center"><h4 class="list-group-item-heading mb-0 text-left flex-grow-1">' + patient.name + '</h4><div class="text-right mx-2"><p class="mb-0 text-muted text-sm">Age: ' + patient.age + '</p><p class="mb-0 text-muted text-sm">Sex: ' + patient.sex + '</p></div><div class="ml-3"><a href="/patient/' + patient._id + '" class="btn btn-light"><i class="fas fa-info-circle"></i></a></div></div></div>';
+                });
+            }
+
+
+            // Fetch and render all patients initially
+            $.getJSON('/', function (data) {
+                renderPatients(data);
+            });
+
+            $('#searchForm').on('submit', function (event) {
+                event.preventDefault();
+                let query = $('#searchBar').val();
+                $.getJSON('/search?q=' + query, function (data) {
+                    console.log(data);
+                    var patientList = $('#patientList');
+                    patientList.empty(); // Remove existing patients
+
+                    // Add new patients from search result
+                    $.each(data, function (i, patient) {
+                        var patientItem = '<div class="list-group-item"><div class="d-flex justify-content-between align-items-center"><h4 class="list-group-item-heading mb-0 text-left flex-grow-1">' + patient.name + '</h4><div class="text-right mx-2"><p class="mb-0 text-muted text-sm">Age: ' + patient.age + '</p><p class="mb-0 text-muted text-sm">Sex: ' + patient.sex + '</p></div><div class="ml-3"><a href="#" class="btn btn-light"><i class="fas fa-info-circle"></i></a></div></div></div>';
+                        patientList.append(patientItem);
                     });
-
-                    function renderPatients(patients) {
-                        var patientList = $('.list-group');
-                        patientList.empty(); // Remove existing patients
-
-                        // Add new patients
-                        $.each(patients, function (i, patient) {
-                            var patientItem = '<div class="list-group-item"><div class="d-flex justify-content-between align-items-center"><h4 class="list-group-item-heading mb-0 text-left flex-grow-1">' + patient.name + '</h4><div class="text-right mx-2"><p class="mb-0 text-muted text-sm">Age: ' + patient.age + '</p><p class="mb-0 text-muted text-sm">Sex: ' + patient.sex + '</p></div><div class="ml-3"><a href="/patient/' + patient._id + '" class="btn btn-light"><i class="fas fa-info-circle"></i></a></div></div></div>';
-                        });
-                    }
-
-
-                    // Fetch and render all patients initially
-                    $.getJSON('/', function (data) {
-                        renderPatients(data);
-                    });
-
-                    $('#searchForm').on('submit', function (event) {
-                        event.preventDefault();
-                        let query = $('#searchBar').val();
-                        $.getJSON('/search?q=' + query, function (data) {
-                            console.log(data);
-                            var patientList = $('#patientList');
-                            patientList.empty(); // Remove existing patients
-
-                            // Add new patients from search result
-                            $.each(data, function (i, patient) {
-                                var patientItem = '<div class="list-group-item"><div class="d-flex justify-content-between align-items-center"><h4 class="list-group-item-heading mb-0 text-left flex-grow-1">' + patient.name + '</h4><div class="text-right mx-2"><p class="mb-0 text-muted text-sm">Age: ' + patient.age + '</p><p class="mb-0 text-muted text-sm">Sex: ' + patient.sex + '</p></div><div class="ml-3"><a href="#" class="btn btn-light"><i class="fas fa-info-circle"></i></a></div></div></div>';
-                                patientList.append(patientItem);
-                            });
-
-                        });
-                    });
-
-                    $('#clear-search').click(function () {
-                        $('#searchBar').val('');
-                    });
-
 
                 });
+            });
+
+            $('#clear-search').click(function () {
+                $('#searchBar').val('');
+            });
 
 
-            </script>
-            <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
+        });
 
 
-            <%- include("templates/bottom-navbar") %>
+    </script>
+
+    <%- include("templates/bottom-navbar") %>

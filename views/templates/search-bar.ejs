@@ -1,4 +1,4 @@
-<div class="container pb-5 mb-4">
+<div class="container pb-1 mb-1">
     <h1 class="text-center my-3">Patients List</h1>
 
     <div class="container">
@@ -8,25 +8,22 @@
                 <!-- Search Query Alert -->
                 <% if (query) { %>
                     <div class="alert alert-primary mt-3 py-1 px-2" role="alert">
-                        Search results for: <strong>
-                            <%= query %>
-                        </strong>
+                        Search results for: <strong><%= query %></strong>
                     </div>
-                    <% } %>
-                        <form action="/search" method="GET">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search patients..."
-                                    aria-label="Search" aria-describedby="button-addon2" id="searchBar" name="q"
-                                    value="<%= query || '' %>">
-                                <div class="input-group-append mx-2">
-                                    <button class="btn btn-primary" type="submit" id="button-addon2">Search
-                                        Patients...</button>
-                                    <a href="/search" class="btn btn-outline-primary" id="clear-search">Reset Search</a>
-                                    <a href="/add-patient" class="btn btn-success mx-2" id="add-patient-button"><i
-                                            class="fas fa-plus"></i> Add Patient</a>
-                                </div>
-
-                            </div>
-                        </form>
+                <% } %>
+                <form action="/search" method="GET">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search patients..." aria-label="Search" aria-describedby="button-addon2" id="searchBar" name="q" value="<%= query || '' %>">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit" id="button-addon2">Search Patients...</button>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap">
+                        <a href="/search" class="btn btn-outline-primary mb-2 mr-2" id="clear-search">Reset Search</a>
+                        <a href="/add-patient" class="btn btn-success mb-2" id="add-patient-button"><i class="fas fa-plus"></i> Add Patient</a>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+</div>
