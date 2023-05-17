@@ -19,7 +19,8 @@
                                 <div class="list-group-item">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
-                                            <%= patient.name %>
+                                            <%= patient.firstName + (patient.middleName ? ' ' + patient.middleName : ''
+                                                ) + ' ' + patient.lastName %>
                                         </h4>
                                         <div class="text-right mx-2">
                                             <p class="mb-0 text-muted text-sm">Age: <%= patient.age %>
@@ -28,8 +29,10 @@
                                             </p>
                                         </div>
                                         <div class="ml-3">
-                                            <a href="#" class="btn btn-light"><i class="fas fa-info-circle"></i></a>
+                                            <a href="/patient/<%= patient._id %>" class="btn btn-light"><i
+                                                    class="fas fa-info-circle"></i></a>
                                         </div>
+
                                     </div>
                                 </div>
                                 <% }); %>
@@ -50,6 +53,21 @@
                         $('#dropdownMenuButton').text('Displaying: ' + $(this).text());
                     });
 
+                    function renderPatients(patients) {
+                        var patientList = $('.list-group');
+                        patientList.empty(); // Remove existing patients
+
+                        // Add new patients
+                        $.each(patients, function (i, patient) {
+                            var patientItem = '<div class="list-group-item"><div class="d-flex justify-content-between align-items-center"><h4 class="list-group-item-heading mb-0 text-left flex-grow-1">' + patient.name + '</h4><div class="text-right mx-2"><p class="mb-0 text-muted text-sm">Age: ' + patient.age + '</p><p class="mb-0 text-muted text-sm">Sex: ' + patient.sex + '</p></div><div class="ml-3"><a href="/patient/' + patient._id + '" class="btn btn-light"><i class="fas fa-info-circle"></i></a></div></div></div>';
+                        });
+                    }
+
+                    // Fetch and render all patients initially
+                    $.getJSON('/', function (data) {
+                        renderPatients(data);
+                    });
+
                     $('#searchForm').on('submit', function (event) {
                         event.preventDefault();
                         let query = $('#searchBar').val();
@@ -63,16 +81,17 @@
                                 var patientItem = '<div class="list-group-item"><div class="d-flex justify-content-between align-items-center"><h4 class="list-group-item-heading mb-0 text-left flex-grow-1">' + patient.name + '</h4><div class="text-right mx-2"><p class="mb-0 text-muted text-sm">Age: ' + patient.age + '</p><p class="mb-0 text-muted text-sm">Sex: ' + patient.sex + '</p></div><div class="ml-3"><a href="#" class="btn btn-light"><i class="fas fa-info-circle"></i></a></div></div></div>';
                                 patientList.append(patientItem);
                             });
-
                         });
                     });
+
 
                     $('#clear-search').click(function () {
                         $('#searchBar').val('');
                     });
-
-
                 });
             </script>
+            <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
+
+
 
             <%- include("templates/bottom-navbar") %>

@@ -7,6 +7,7 @@ require("dotenv").config();
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 
 const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?retryWrites=true&w=majority`;
 const client = new MongoClient(url, { useUnifiedTopology: true });
@@ -150,6 +151,7 @@ exports.getPatients = async function (req, res) {
       currentPage: currentPage,
       totalPages: totalPages,
       itemsPerPage: itemsPerPage,
+      path: '/patient-list',
       query: req.query.q // The search query string
     });
 
@@ -161,6 +163,10 @@ exports.getPatients = async function (req, res) {
 
 exports.searchPatients = async function (req, res) {
   try {
+    // Check if the request query parameter is null or empty
+    if (!req.query.q || req.query.q.trim() === '') {
+      return exports.getPatients(req, res);
+    }
     // Function to escape special characters for use in a regular expression
     function escapeRegExp(string) {
       return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
@@ -174,15 +180,24 @@ exports.searchPatients = async function (req, res) {
     const db = client.db(process.env.MONGODB_DATABASE);
     const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
 
+    // Update the search query to match firstName, middleName, or lastName
+    const searchQuery = {
+      $or: [
+        { firstName: new RegExp(query, 'i') },
+        { middleName: new RegExp(query, 'i') },
+        { lastName: new RegExp(query, 'i') },
+      ],
+    };
+
     // Fetch the data based on the search query
     const patients = await patientsCollection
-      .find({ name: new RegExp(query, 'i') })
+      .find(searchQuery)
       .skip((currentPage - 1) * itemsPerPage)
       .limit(itemsPerPage)
       .toArray();
 
     // Fetch total count of patients for pagination
-    const totalCount = await patientsCollection.countDocuments({ name: new RegExp(query, 'i') });
+    const totalCount = await patientsCollection.countDocuments(searchQuery);
 
     // Calculate pagination variables
     const totalPages = Math.ceil(totalCount / itemsPerPage);
@@ -193,7 +208,8 @@ exports.searchPatients = async function (req, res) {
       currentPage: currentPage,
       totalPages: totalPages,
       itemsPerPage: itemsPerPage,
-      query: req.query.q // The search query string
+      query: req.query.q, // The search query string
+      path: '/search', // Add this line
     });
 
   } catch (error) {
@@ -202,10 +218,11 @@ exports.searchPatients = async function (req, res) {
   }
 };
 
+
 exports.getPatientProfile = async function (req, res) {
-  let error = null;  // Initialize error as null
   try {
     const patientId = req.params.id;
+    console.log('Fetching patient with ID:', patientId);
 
     await client.connect();
     const db = client.db(process.env.MONGODB_DATABASE);
@@ -214,16 +231,25 @@ exports.getPatientProfile = async function (req, res) {
     const patient = await patientsCollection.findOne({ _id: new ObjectId(patientId) });
 
     if (patient) {
-      res.render('patient-profile', { patient: patient, error: error });
+      console.log('Found patient:', patient);
+      res.render('patient-profile', { patient: patient, error: null });
     } else {
-      throw new Error('Patient not found');
+      console.log('Patient not found');
+      res.status(404).render('404', { error: 'Patient not found' });
     }
 
   } catch (error) {
     console.error("Error fetching patient profile:", error);
-    res.render('patient-profile', { error: error.message });
+    if (error instanceof TypeError) {
+      // this will catch errors when trying to convert invalid strings to ObjectId
+      res.status(400).render('error', { error: 'Invalid patient ID' });
+    } else {
+      res.status(500).render('error', { error: error.message });
+    }
   }
 };
+
+
 
 
 

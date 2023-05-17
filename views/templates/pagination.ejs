@@ -1,6 +1,6 @@
 <!-- Dropdown for display options -->
 <div class="dropdown mr-auto my-1">
-    <button class="btn btn-primary dropdown-toggle mr-2" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+    <button class="btn btn-primary dropdown-toggle mr-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         Displaying: <%= itemsPerPage %>
     </button>
@@ -11,23 +11,28 @@
     </div>
 </div>
 
+
 <!-- Pagination -->
 <nav>
     <ul class="pagination">
         <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-            <a class="page-link text-primary"
-                href="/search?q=<%= query %>&page=<%= currentPage - 1 %>&itemsPerPage=<%= itemsPerPage %>">Previous</a>
+            <a class="page-link"
+                href="<%= path %>?q=<%= query ? query : '' %>&page=<%= currentPage - 1 %>&itemsPerPage=<%= itemsPerPage %>">Previous</a>
+
         </li>
         <% for(let page=1; page <=totalPages; page++) { %>
             <li class="page-item <%= currentPage === page ? 'active' : '' %>">
-                <a class="page-link" href="/search?q=<%= query %>&page=<%= page %>&itemsPerPage=<%= itemsPerPage %>">
-                    <%= page %>
+                <a class="page-link"
+                    href="<%= path %>?q=<%= query ? query : '' %>&page=<%= page %>&itemsPerPage=<%= itemsPerPage %>">
+                    <%= page %> <!-- Display page number here -->
                 </a>
             </li>
             <% } %>
+
                 <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
                     <a class="page-link"
-                        href="<%= currentPage === totalPages ? '#' : '/search?q=' + query + '&page=' + (currentPage + 1) + '&itemsPerPage=' + itemsPerPage %>">Next</a>
+                        href="<%= path %>?q=<%= query ? query : '' %>&page=<%= currentPage === totalPages ? '#' : currentPage + 1 %>&itemsPerPage=<%= itemsPerPage %>">Next</a>
+
                 </li>
     </ul>
 </nav>

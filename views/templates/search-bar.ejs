@@ -6,23 +6,27 @@
             <!-- Search Form -->
             <div class="col-md-12 mb-3">
                 <!-- Search Query Alert -->
-                <!-- <% if (query) { %>
+                <% if (query) { %>
                     <div class="alert alert-primary mt-3 py-1 px-2" role="alert">
                         Search results for: <strong>
                             <%= query %>
                         </strong>
                     </div>
-                    <% } %> -->
-                <form action="/search" method="GET">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search patients..." aria-label="Search"
-                            aria-describedby="button-addon2" id="searchBar" name="q" value="<%= query || '' %>">
-                        <div class="input-group-append mx-2">
-                            <button class="btn btn-primary" type="submit" id="button-addon2">Search</button>
-                            <button class="btn btn-outline-primary" type="button" id="clear-search"><i
-                                    class="fas fa-times"></i></button>
-                        </div>
-                    </div>
-                </form>
+                    <% } %>
+                        <form action="/search" method="GET">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search patients..."
+                                    aria-label="Search" aria-describedby="button-addon2" id="searchBar" name="q"
+                                    value="<%= query || '' %>">
+                                <div class="input-group-append mx-2">
+                                    <button class="btn btn-primary" type="submit" id="button-addon2">Search
+                                        Patients...</button>
+                                    <a href="/search" class="btn btn-outline-primary" id="clear-search">Reset Search</a>
+                                    <a href="/add-patient" class="btn btn-success mx-2" id="add-patient-button"><i
+                                            class="fas fa-plus"></i> Add Patient</a>
+                                </div>
+
+                            </div>
+                        </form>
             </div>
         </div>
