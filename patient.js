@@ -34,7 +34,29 @@ exports.addPatient = async function (req, res) {
       name: req.body.name,
       age: parseInt(req.body.age),
       sex: req.body.sex,
-      previous_analysis: [],
+      previous_analysis: [
+        //dummy patient analysis
+        {
+          timestamp: new Date(),
+          heartFailureRiskPercent: 11,
+          serumCreatinineMg: 1.5,
+          ejectionFraction: 63,
+        },
+
+        {
+          timestamp: new Date(),
+          heartFailureRiskPercent: 22,
+          serumCreatinineMg: 3.5,
+          ejectionFraction: 33,
+        },
+
+        {
+          timestamp: new Date(),
+          heartFailureRiskPercent: 55,
+          serumCreatinineMg: 5.5,
+          ejectionFraction: 22,
+        },
+      ],
     };
 
     await client.connect();
@@ -88,14 +110,13 @@ exports.getPatients = async function (req, res) {
       .toArray();
 
     // render the patients.ejs view and pass the patients data to it
-    res.render('patient-list', {
+    res.render("patient-list", {
       patients: patients,
       currentPage: currentPage,
       totalPages: totalPages,
       itemsPerPage: itemsPerPage,
-      query: req.query.q // The search query string
+      query: req.query.q, // The search query string
     });
-
   } catch (error) {
     console.error("Error getting patients:", error);
     res.status(500).send("Error getting patients");
@@ -106,7 +127,7 @@ exports.searchPatients = async function (req, res) {
   try {
     // Function to escape special characters for use in a regular expression
     function escapeRegExp(string) {
-      return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+      return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
     }
 
     const query = escapeRegExp(req.query.q);
@@ -119,29 +140,29 @@ exports.searchPatients = async function (req, res) {
 
     // Fetch the data based on the search query
     const patients = await patientsCollection
-      .find({ name: new RegExp(query, 'i') })
+      .find({ name: new RegExp(query, "i") })
       .skip((currentPage - 1) * itemsPerPage)
       .limit(itemsPerPage)
       .toArray();
 
     // Fetch total count of patients for pagination
-    const totalCount = await patientsCollection.countDocuments({ name: new RegExp(query, 'i') });
+    const totalCount = await patientsCollection.countDocuments({
+      name: new RegExp(query, "i"),
+    });
 
     // Calculate pagination variables
     const totalPages = Math.ceil(totalCount / itemsPerPage);
 
     // render the searchResults.ejs view and pass the patients data to it
-    res.render('patient-search', {
+    res.render("patient-search", {
       patients: patients,
       currentPage: currentPage,
       totalPages: totalPages,
       itemsPerPage: itemsPerPage,
-      query: req.query.q // The search query string
+      query: req.query.q, // The search query string
     });
-
   } catch (error) {
     console.error("Error searching patients:", error);
     res.status(500).json({ error: "Error searching patients" });
   }
 };
-
