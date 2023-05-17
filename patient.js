@@ -1,25 +1,41 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { MongoClient } = require("mongodb");
-const { ObjectId } = require("mongodb");
 const Joi = require("joi");
 require("dotenv").config();
 
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 
 const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/?retryWrites=true&w=majority`;
 const client = new MongoClient(url, { useUnifiedTopology: true });
 
 const patientSchema = Joi.object({
-  name: Joi.string().min(1).required(),
-  age: Joi.number().integer().min(1).required(),
+  firstName: Joi.string().min(1).required(),
+  middleName: Joi.string().allow("", null),
+  lastName: Joi.string().min(1).required(),
+  personalHealthId: Joi.string().min(9).max(10).required(),
+  dateOfBirth: Joi.date().iso().required(),
   sex: Joi.string().valid("male", "female", "other").required(),
+  anaemia: Joi.boolean().required(),
+  diabetes: Joi.boolean().required(),
+  highBloodPressure: Joi.boolean().required(),
+  // ejectionFraction: Joi.object({
+  //   value: Joi.number().integer().min(0).required(),
+  //   lastModifiedDate: Joi.date().required(),
+  //   state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+  // }).required(),
+  // serumCreatinine: Joi.object({
+  //   value: Joi.number().precision(1).min(0.0).required(),
+  //   lastModifiedDate: Joi.date().required(),
+  //   state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+  // }).required(),
 });
 
 exports.renderAddPatients = function (req, res) {
-  res.render("add-patient");
+  res.render("add-patient", { error: null });
 };
 
 exports.renderPatients = function (req, res) {
@@ -28,36 +44,37 @@ exports.renderPatients = function (req, res) {
 
 exports.addPatient = async function (req, res) {
   console.log("req.body: " + JSON.stringify(req.body));
+
+  // Convert anaemia, diabetes, and highBloodPressure fields to boolean
+  req.body.anaemia = req.body.anaemia === "on";
+  req.body.diabetes = req.body.diabetes === "on";
+  req.body.highBloodPressure = req.body.highBloodPressure === "on";
+
   try {
     await patientSchema.validateAsync(req.body);
 
+    // Set avatarType based on sex
+    let avatarType;
+    switch (req.body.sex) {
+      case "male":
+        avatarType = "male";
+        break;
+      case "female":
+        avatarType = "female";
+        break;
+      case "other":
+      default:
+        avatarType = "human";
+        break;
+    }
+
     const patientData = {
-      name: req.body.name,
-      age: parseInt(req.body.age),
+      firstName: req.body.firstName,
+      middleName: req.body.middleName ? req.body.middleName : null,
+      lastName: req.body.lastName,
+      dateOfBirth: new Date(req.body.dateOfBirth),
       sex: req.body.sex,
-      previous_analysis: [
-        //dummy patient analysis
-        {
-          timestamp: new Date(),
-          heartFailureRiskPercent: 11,
-          serumCreatinineMg: 1.5,
-          ejectionFraction: 63,
-        },
-
-        {
-          timestamp: new Date(),
-          heartFailureRiskPercent: 22,
-          serumCreatinineMg: 3.5,
-          ejectionFraction: 33,
-        },
-
-        {
-          timestamp: new Date(),
-          heartFailureRiskPercent: 55,
-          serumCreatinineMg: 5.5,
-          ejectionFraction: 22,
-        },
-      ],
+      previous_analysis: [],
     };
 
     await client.connect();
@@ -67,13 +84,19 @@ exports.addPatient = async function (req, res) {
 
     console.log("Patient added successfully: ", patientData);
 
-    res.send("Patient added successfully");
+    // Send a success message to the view, also pass error as null
+    res.render("add-patient", {
+      success: "Patient added successfully",
+      error: null,
+    });
   } catch (error) {
+    console.error("Error saving patient:", error);
     if (error.isJoi) {
-      res.status(400).send(error.details[0].message);
+      res
+        .status(400)
+        .render("add-patient", { error: error.details[0].message });
     } else {
-      console.error("Error saving patient:", error);
-      res.status(500).send("Error saving patient");
+      res.status(500).render("add-patient", { error: "Error saving patient" });
     }
   }
 };
@@ -126,6 +149,10 @@ exports.getPatients = async function (req, res) {
 
 exports.searchPatients = async function (req, res) {
   try {
+    // Check if the request query parameter is null or empty
+    if (!req.query.q || req.query.q.trim() === "") {
+      return exports.getPatients(req, res);
+    }
     // Function to escape special characters for use in a regular expression
     function escapeRegExp(string) {
       return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
@@ -138,6 +165,15 @@ exports.searchPatients = async function (req, res) {
     await client.connect();
     const db = client.db(process.env.MONGODB_DATABASE);
     const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
+
+    // Update the search query to match firstName, middleName, or lastName
+    const searchQuery = {
+      $or: [
+        { firstName: new RegExp(query, "i") },
+        { middleName: new RegExp(query, "i") },
+        { lastName: new RegExp(query, "i") },
+      ],
+    };
 
     // Fetch the data based on the search query
     const patients = await patientsCollection
@@ -166,18 +202,4 @@ exports.searchPatients = async function (req, res) {
     console.error("Error searching patients:", error);
     res.status(500).json({ error: "Error searching patients" });
   }
-};
-
-exports.getPatientInfo = async function (req, res) {
-  console.log("patient Id: " + req.params.patientId);
-  await client.connect();
-  const db = client.db(process.env.MONGODB_DATABASE);
-  const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
-  const query = { _id: new ObjectId(req.params.patientId) };
-  const patient = await patientsCollection.findOne(query);
-
-  console.log("patient name: " + patient.name);
-  res.render("patient-info", {
-    patient: patient,
-  });
 };

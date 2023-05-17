@@ -1,0 +1,37 @@
+<!-- Share Button -->
+<%- include("templates/header") %>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#shareModal">
+  Share
+</button>
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareModalLabel">Share via Email</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="shareForm" method="post" action="/email-pdf" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="recipientEmail" class="col-form-label">Recipient:</label>
+            <input type="email" class="form-control" id="recipientEmail" name="email">
+          </div>
+          <div class="form-group">
+            <label for="pdf">Upload or drag PDF:</label>
+            <input type="file" class="form-control" id="pdf" name="pdf" accept=".pdf">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" form="shareForm" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("templates/bottom-navbar") %> 

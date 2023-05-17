@@ -1,0 +1,19 @@
+<%- include("templates/header") %>
+  <div class="container">
+    <button id="downloadBtn" class="btn btn-primary">Download</button>
+  </div>
+  <script>
+    document.getElementById('downloadBtn').addEventListener('click', function () {
+      var data = "Hello, World!";
+      var blob = new Blob([data], { type: 'text/plain' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'example.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  </script>
+
+  <%- include("templates/bottom-navbar") %>
