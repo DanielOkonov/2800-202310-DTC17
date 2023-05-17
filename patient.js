@@ -67,7 +67,12 @@ exports.addPatient = async function (req, res) {
         avatarType = "human";
         break;
     }
-
+    const date = new Date("2022-11-20");
+    const dateWithoutTime = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
     const patientData = {
       firstName: req.body.firstName,
       middleName: req.body.middleName ? req.body.middleName : null,
@@ -87,7 +92,29 @@ exports.addPatient = async function (req, res) {
       //   lastModifiedDate: new Date(),
       //   state: 'profile created'
       // },
-      // previous_analysis: [],
+      previous_analysis: [
+        //dummy patient analysis
+        {
+          timestamp: dateWithoutTime,
+          heartFailureRiskPercent: 11,
+          serumCreatinineMg: 1.5,
+          ejectionFraction: 63,
+        },
+
+        {
+          timestamp: dateWithoutTime,
+          heartFailureRiskPercent: 22,
+          serumCreatinineMg: 3.5,
+          ejectionFraction: 33,
+        },
+
+        {
+          timestamp: dateWithoutTime,
+          heartFailureRiskPercent: 55,
+          serumCreatinineMg: 5.5,
+          ejectionFraction: 22,
+        },
+      ],
       avatar: `https://avatars.dicebear.com/api/${avatarType}/${req.body.firstName}.svg`,
     };
 

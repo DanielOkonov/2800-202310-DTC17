@@ -3,8 +3,8 @@ const bodyParser = require("body-parser");
 const { MongoClient, ObjectId } = require("mongodb");
 const Joi = require("joi");
 require("dotenv").config();
-const moment = require('moment');
-const faker = require('faker');
+const moment = require("moment");
+const faker = require("faker");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -29,45 +29,60 @@ const patientSchema = Joi.object({
   anaemia: Joi.object({
     value: Joi.number().integer().min(0).max(1).required(),
     lastModifiedDate: Joi.date().required(),
-    state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+    state: Joi.string()
+      .valid("profile created", "data modified", "last analysis")
+      .required(),
   }).required(),
   creatininePhosphokinase: Joi.object({
     value: Joi.number().integer().min(0).required(),
     lastModifiedDate: Joi.date().required(),
-    state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+    state: Joi.string()
+      .valid("profile created", "data modified", "last analysis")
+      .required(),
   }).required(),
   diabetes: Joi.object({
     value: Joi.number().integer().min(0).max(1).required(),
     lastModifiedDate: Joi.date().required(),
-    state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+    state: Joi.string()
+      .valid("profile created", "data modified", "last analysis")
+      .required(),
   }).required(),
   ejectionFraction: Joi.object({
     value: Joi.number().integer().min(0).required(),
     lastModifiedDate: Joi.date().required(),
-    state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+    state: Joi.string()
+      .valid("profile created", "data modified", "last analysis")
+      .required(),
   }).required(),
   highBloodPressure: Joi.object({
     value: Joi.number().integer().min(0).max(1).required(),
     lastModifiedDate: Joi.date().required(),
-    state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+    state: Joi.string()
+      .valid("profile created", "data modified", "last analysis")
+      .required(),
   }).required(),
   platelets: Joi.object({
     value: Joi.number().integer().min(0).required(),
     lastModifiedDate: Joi.date().required(),
-    state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+    state: Joi.string()
+      .valid("profile created", "data modified", "last analysis")
+      .required(),
   }).required(),
   serumCreatinine: Joi.object({
     value: Joi.number().precision(1).min(0.0).required(),
     lastModifiedDate: Joi.date().required(),
-    state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
+    state: Joi.string()
+      .valid("profile created", "data modified", "last analysis")
+      .required(),
   }).required(),
   serumSodium: Joi.object({
     value: Joi.number().integer().min(0).required(),
     lastModifiedDate: Joi.date().required(),
-    state: Joi.string().valid('profile created', 'data modified', 'last analysis').required()
-  }).required()
+    state: Joi.string()
+      .valid("profile created", "data modified", "last analysis")
+      .required(),
+  }).required(),
 });
-
 
 exports.renderAddPatients = function (req, res) {
   res.render("add-patient");
@@ -85,15 +100,15 @@ exports.addPatient = async function (req, res) {
     // Set avatarType based on sex
     let avatarType;
     switch (req.body.sex) {
-      case 'male':
-        avatarType = 'male';
+      case "male":
+        avatarType = "male";
         break;
-      case 'female':
-        avatarType = 'female';
+      case "female":
+        avatarType = "female";
         break;
-      case 'other':
+      case "other":
       default:
-        avatarType = 'human';
+        avatarType = "human";
         break;
     }
 
@@ -124,7 +139,6 @@ exports.addPatient = async function (req, res) {
       avatar: `https://avatars.dicebear.com/api/${avatarType}/${req.body.firstName}.svg`,
     };
 
-
     await client.connect();
     const db = client.db(process.env.MONGODB_DATABASE);
     const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
@@ -142,8 +156,6 @@ exports.addPatient = async function (req, res) {
     }
   }
 };
-
-
 
 exports.getPatients = async function (req, res) {
   try {
@@ -178,14 +190,13 @@ exports.getPatients = async function (req, res) {
       .toArray();
 
     // render the patients.ejs view and pass the patients data to it
-    res.render('patient-list', {
+    res.render("patient-list", {
       patients: patients,
       currentPage: currentPage,
       totalPages: totalPages,
       itemsPerPage: itemsPerPage,
-      query: req.query.q // The search query string
+      query: req.query.q, // The search query string
     });
-
   } catch (error) {
     console.error("Error getting patients:", error);
     res.status(500).send("Error getting patients");
@@ -196,7 +207,7 @@ exports.searchPatients = async function (req, res) {
   try {
     // Function to escape special characters for use in a regular expression
     function escapeRegExp(string) {
-      return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+      return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
     }
 
     const query = escapeRegExp(req.query.q);
@@ -211,10 +222,10 @@ exports.searchPatients = async function (req, res) {
     const patients = await patientsCollection
       .find({
         $or: [
-          { firstName: new RegExp(query, 'i') },
-          { middleName: new RegExp(query, 'i') },
-          { lastName: new RegExp(query, 'i') }
-        ]
+          { firstName: new RegExp(query, "i") },
+          { middleName: new RegExp(query, "i") },
+          { lastName: new RegExp(query, "i") },
+        ],
       })
       .skip((currentPage - 1) * itemsPerPage)
       .limit(itemsPerPage)
@@ -223,33 +234,31 @@ exports.searchPatients = async function (req, res) {
     // Fetch total count of patients for pagination
     const totalCount = await patientsCollection.countDocuments({
       $or: [
-        { firstName: new RegExp(query, 'i') },
-        { middleName: new RegExp(query, 'i') },
-        { lastName: new RegExp(query, 'i') }
-      ]
+        { firstName: new RegExp(query, "i") },
+        { middleName: new RegExp(query, "i") },
+        { lastName: new RegExp(query, "i") },
+      ],
     });
 
     // Calculate pagination variables
     const totalPages = Math.ceil(totalCount / itemsPerPage);
 
     // render the searchResults.ejs view and pass the patients data to it
-    res.render('patient-search', {
+    res.render("patient-search", {
       patients: patients,
       currentPage: currentPage,
       totalPages: totalPages,
       itemsPerPage: itemsPerPage,
-      query: req.query.q // The search query string
+      query: req.query.q, // The search query string
     });
-
   } catch (error) {
     console.error("Error searching patients:", error);
     res.status(500).json({ error: "Error searching patients" });
   }
 };
 
-
 exports.getPatientProfile = async function (req, res) {
-  let error = null;  // Initialize error as null
+  let error = null; // Initialize error as null
   try {
     const patientId = req.params.id;
 
@@ -257,17 +266,18 @@ exports.getPatientProfile = async function (req, res) {
     const db = client.db(process.env.MONGODB_DATABASE);
     const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
 
-    const patient = await patientsCollection.findOne({ _id: new ObjectId(patientId) });
+    const patient = await patientsCollection.findOne({
+      _id: new ObjectId(patientId),
+    });
 
     if (patient) {
-      res.render('patient-profile', { patient: patient, error: error });
+      res.render("patient-profile", { patient: patient, error: error });
     } else {
-      throw new Error('Patient not found');
+      throw new Error("Patient not found");
     }
-
   } catch (error) {
     console.error("Error fetching patient profile:", error);
-    res.render('patient-profile', { error: error.message });
+    res.render("patient-profile", { error: error.message });
   }
 };
 
@@ -354,13 +364,11 @@ exports.updatePatients = async function (req, res) {
     }
 
     res.status(200).json({ message: "Patients data updated successfully" });
-
   } catch (error) {
     console.error("Error updating patients:", error);
     res.status(500).json({ error: "Error updating patients" });
   }
 };
-
 
 exports.generatePatients = async function (req, res) {
   try {
@@ -369,15 +377,15 @@ exports.generatePatients = async function (req, res) {
       const gender = faker.random.arrayElement(["male", "female", "other"]);
       let avatarType;
       switch (gender) {
-        case 'male':
-          avatarType = 'male';
+        case "male":
+          avatarType = "male";
           break;
-        case 'female':
-          avatarType = 'female';
+        case "female":
+          avatarType = "female";
           break;
-        case 'other':
+        case "other":
         default:
-          avatarType = 'human';
+          avatarType = "human";
           break;
       }
       const firstName = faker.name.firstName();
@@ -385,7 +393,9 @@ exports.generatePatients = async function (req, res) {
         firstName: firstName,
         middleName: faker.random.arrayElement([faker.name.middleName(), null]),
         lastName: faker.name.lastName(),
-        personalHealthId: faker.random.number({ min: 000000000, max: 9999999999 }).toString(),
+        personalHealthId: faker.random
+          .number({ min: 000000000, max: 9999999999 })
+          .toString(),
         age: faker.random.number({ min: 40, max: 95 }),
         anaemia: faker.random.number({ min: 0, max: 1 }),
         creatininePhosphokinase: faker.random.number({ min: 23, max: 7861 }),
@@ -420,7 +430,7 @@ class Patient {
   }
 
   getAge() {
-    return moment().diff(this.dateOfBirth, 'years');
+    return moment().diff(this.dateOfBirth, "years");
   }
 }
 

@@ -31,9 +31,11 @@
                                     : 'No' %>
                             </li>
 
+                            <br>
+
                             <% if (patient.previous_analysis && patient.previous_analysis.length> 0) { %>
                                 <% patient.previous_analysis.forEach(analysis=> { %>
-                                    <li class="list-group-item">Analysis: <%= analysis %>
+                                    <li class="list-group-item">Analysis: <%= analysis.timestamp %>
                                     </li>
                                     <% }) %>
                                         <% } else { %>
