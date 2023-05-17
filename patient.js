@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { MongoClient } = require("mongodb");
+const { ObjectId } = require("mongodb");
 const Joi = require("joi");
 require("dotenv").config();
 
@@ -165,4 +166,18 @@ exports.searchPatients = async function (req, res) {
     console.error("Error searching patients:", error);
     res.status(500).json({ error: "Error searching patients" });
   }
+};
+
+exports.getPatientInfo = async function (req, res) {
+  console.log("patient Id: " + req.params.patientId);
+  await client.connect();
+  const db = client.db(process.env.MONGODB_DATABASE);
+  const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
+  const query = { _id: new ObjectId(req.params.patientId) };
+  const patient = await patientsCollection.findOne(query);
+
+  console.log("patient name: " + patient.name);
+  res.render("patient-info", {
+    patient: patient,
+  });
 };
