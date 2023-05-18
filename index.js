@@ -12,6 +12,8 @@ const nodemailer = require("nodemailer");
 const Joi = require("joi");
 const saltRounds = 10;
 
+app.use("/public/", express.static("./public"));
+
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });  // files will be saved in the 'uploads' directory. You can change this to suit your needs
 
