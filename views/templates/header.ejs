@@ -29,24 +29,24 @@
     <title>HeartWise</title>
 
     <style>
-        /* Add styles here */
         body {
-            padding-top: 56px;
+            padding-top: 50px;
             /* Space for the navbar */
-            padding-bottom: 56px;
+            padding-bottom: 60px;
             /* Space for the bottom navbar */
         }
 
         @media (max-width: 991.98px) {
-            body {
-                padding-top: 68px;
-                padding-bottom: 68px;
+            .main-content {
+                overflow-y: auto;
+                height: calc(100vh - 136px);
+                /* Adjust this value based on the total height of your navbars */
             }
         }
 
         .main-content {
             overflow-y: auto;
-            height: calc(100vh - 160px);
+            height: calc(100vh - 110px);
             /* Adjust this value based on the total height of your navbars */
         }
     </style>
