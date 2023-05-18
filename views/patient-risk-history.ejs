@@ -1,0 +1,38 @@
+<%- include("templates/header") %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <body>
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+        <script>
+
+            var xyValues = JSON.parse('<%- data %>');
+
+
+
+            new Chart("myChart", {
+                type: "scatter",
+                data: {
+                    datasets: [{
+                        pointRadius: 4,
+                        pointBackgroundColor: "rgb(0,0,255)",
+                        data: xyValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    scales: {
+                        xAxes: [{ ticks: { min: 60, max: 160 } }],
+                        yAxes: [{ ticks: { min: 0, max: 100 } }],
+                    }
+                }
+            });
+        </script>
+
+    </body>
+
+
+
+
+    <%- include("templates/bottom-navbar") %>

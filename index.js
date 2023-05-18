@@ -59,6 +59,7 @@ app.post("/patient-list", server.isAuth, patient.addPatient);
 app.get("/search", patient.searchPatients);
 app.get("/patient/:id", patient.getPatientProfile);
 app.get("/analysis-result/:patientId/:analysisId", patient.getAnalysisResult);
+app.get("/patient-risk-history/:id", patient.getPatientRiskHistory);
 
 app.get("/", server.redirectToDashboardIfAuth, server.renderIndex);
 app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);
