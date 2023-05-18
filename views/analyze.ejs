@@ -1,5 +1,14 @@
 <%- include("templates/header") %>
   <div class="container">
+    <div class="analysis-form">
+      <label for="serum-creatinine">Serum Creatinine:</label>
+      <input type="text" name="serum-creatinine" id="serum-creatinine">
+    </div>
+    <div class="analysis-form">
+      <label for="ejection-fraction">Ejection Fraction:</label>
+      <input type="text" name="ejection-fraction" id="ejection-fraction">
+    </div>
+    <button type="button" class="btn btn-primary">Analyze</button>
     <button id="downloadBtn" class="btn btn-primary">Download</button>
   </div>
   <script>
