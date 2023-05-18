@@ -19,6 +19,10 @@ dotenv.config();
 
 const server = require("./server");
 const patient = require("./patient");
+const { createDummyPatients } = require("./controllers/patients/dummyDataGenerator");
+const { deleteAllPatients } = require("./controllers/patients/deletePatientCollection");
+
+
 
 module.exports = app;
 
@@ -58,6 +62,17 @@ app.get("/patient-list", server.isAuth, patient.getPatients);
 app.post("/patient-list", server.isAuth, patient.addPatient);
 app.get("/search", patient.searchPatients);
 app.get("/patient/:id", patient.getPatientProfile);
+
+app.get("/create-dummy-patients", server.isAuth, async (req, res) => {
+  const loggedInUsername = req.session.username;
+  await createDummyPatients(loggedInUsername);
+  res.send("Dummy patients created successfully.");
+});
+app.get("/delete-all-patients", server.isAuth, async (req, res) => {
+  await deleteAllPatients();
+  res.send("All patient entries deleted successfully.");
+});
+
 
 app.get("/", server.redirectToDashboardIfAuth, server.renderIndex);
 app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);

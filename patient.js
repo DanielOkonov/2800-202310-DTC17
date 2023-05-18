@@ -1,7 +1,9 @@
+const axios = require("axios").default;
 const express = require("express");
 const bodyParser = require("body-parser");
 const { MongoClient, ObjectId } = require("mongodb");
 const Joi = require("joi");
+const faker = require("faker");
 require("dotenv").config();
 
 const app = express();
@@ -18,10 +20,12 @@ const patientSchema = Joi.object({
   lastName: Joi.string().min(1).required(),
   personalHealthId: Joi.string().min(9).max(10).required(),
   dateOfBirth: Joi.date().iso().required(),
+  age: Joi.number().integer().min(0).required(),
   sex: Joi.string().valid("male", "female", "other").required(),
   anaemia: Joi.boolean().required(),
   diabetes: Joi.boolean().required(),
   highBloodPressure: Joi.boolean().required(),
+  avatar: Joi.string().uri().required(), // New line
   analysis: Joi.array().items(
     Joi.object({
       analysisDate: Joi.date().iso().required(),
@@ -32,6 +36,7 @@ const patientSchema = Joi.object({
     })
   ).optional()
 });
+
 
 exports.renderAddPatients = function (req, res) {
   res.render("add-patient", { error: null });
@@ -50,7 +55,14 @@ exports.addPatient = async function (req, res) {
   req.body.highBloodPressure = req.body.highBloodPressure === "on";
 
   try {
-    await patientSchema.validateAsync(req.body);
+    // Calculate the age from the date of birth
+    const dateOfBirth = new Date(req.body.dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - dateOfBirth.getFullYear();
+    const monthDiff = today.getMonth() - dateOfBirth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dateOfBirth.getDate())) {
+      age--;
+    }
 
     // Set avatarType based on sex
     let avatarType;
@@ -67,19 +79,22 @@ exports.addPatient = async function (req, res) {
         break;
     }
 
+    // Validate the request body against the patient schema
     const patientData = {
       firstName: req.body.firstName,
       middleName: req.body.middleName ? req.body.middleName : null,
       lastName: req.body.lastName,
-      personalHealthId: req.body.personalHealthId, // added this line
-      dateOfBirth: new Date(req.body.dateOfBirth),
+      personalHealthId: req.body.personalHealthId,
+      dateOfBirth: dateOfBirth.toISOString(),
+      age: age,
       sex: req.body.sex,
-      anaemia: req.body.anaemia, // no need to convert again
-      diabetes: req.body.diabetes, // no need to convert again
-      highBloodPressure: req.body.highBloodPressure, // no need to convert again
-      analysis: req.body.analysis || [], // added this line
+      anaemia: req.body.anaemia,
+      diabetes: req.body.diabetes,
+      highBloodPressure: req.body.highBloodPressure,
+      analysis: req.body.analysis || [],
       avatar: `https://avatars.dicebear.com/api/${avatarType}/${req.body.firstName}.svg`,
     };
+    await patientSchema.validateAsync(patientData);
 
     await client.connect();
     const db = client.db(process.env.MONGODB_DATABASE);
@@ -104,6 +119,8 @@ exports.addPatient = async function (req, res) {
     }
   }
 };
+
+
 
 exports.getPatients = async function (req, res) {
   try {
