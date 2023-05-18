@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const { MongoClient, ObjectId } = require("mongodb");
 const Joi = require("joi");
 const faker = require("faker");
+const { timeStamp } = require("console");
 require("dotenv").config();
 
 const app = express();
@@ -80,6 +81,12 @@ exports.addPatient = async function (req, res) {
     }
 
     // Validate the request body against the patient schema
+    // const date = new Date("2022-11-20");
+    // const dateWithoutTime = new Date(
+    //   date.getFullYear(),
+    //   date.getMonth(),
+    //   date.getDate()
+    // );
     const patientData = {
       firstName: req.body.firstName,
       middleName: req.body.middleName ? req.body.middleName : null,
@@ -92,6 +99,29 @@ exports.addPatient = async function (req, res) {
       diabetes: req.body.diabetes,
       highBloodPressure: req.body.highBloodPressure,
       analysis: req.body.analysis || [],
+      // previous_analysis: [
+      //   //dummy patient analysis
+      //   {
+      //     timestamp: new Date(2023, 1, 1, 0, 0, 0, 0),
+      //     heartFailureRiskPercent: 11,
+      //     serumCreatinineMg: 1.5,
+      //     ejectionFraction: 63,
+      //   },
+
+      //   {
+      //     timestamp: new Date(2023, 1, 2, 0, 0, 0, 0),
+      //     heartFailureRiskPercent: 22,
+      //     serumCreatinineMg: 3.5,
+      //     ejectionFraction: 33,
+      //   },
+
+      //   {
+      //     timestamp: new Date(2023, 1, 3, 0, 0, 0, 0),
+      //     heartFailureRiskPercent: 55,
+      //     serumCreatinineMg: 5.5,
+      //     ejectionFraction: 22,
+      //   },
+      // ],
       avatar: `https://avatars.dicebear.com/api/${avatarType}/${req.body.firstName}.svg`,
     };
     await patientSchema.validateAsync(patientData);
@@ -264,6 +294,57 @@ exports.getPatientProfile = async function (req, res) {
     }
   } catch (error) {
     console.error("Error fetching patient profile:", error);
+    if (error instanceof TypeError) {
+      // this will catch errors when trying to convert invalid strings to ObjectId
+      res.status(400).render("error", { error: "Invalid patient ID" });
+    } else {
+      res.status(500).render("error", { error: error.message });
+    }
+  }
+};
+
+exports.getAnalysisResult = async function (req, res) {
+  const patientId = req.params.patientId;
+  const analysisId = parseInt(req.params.analysisId);
+
+  console.log(
+    `Fetching analysis result for patient with ID ${patientId} and analysisId ${analysisId}`
+  );
+
+  try {
+    await client.connect();
+    console.log("Connected to MongoDB");
+
+    const db = client.db(process.env.MONGODB_DATABASE);
+    console.log("Using database:", process.env.MONGODB_DATABASE);
+
+    const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
+    console.log("Using collection:", process.env.MONGODB_COLLECTION);
+
+    const patient = await patientsCollection.findOne({
+      _id: new ObjectId(patientId),
+    });
+
+    if (patient) {
+      console.log("Found patient:", patient);
+    } else {
+      console.log("Patient for analysis result not found");
+      res
+        .status(404)
+        .render("404", { error: "Patient for analysis result not found" });
+    }
+
+    const analysisResult = patient.previous_analysis[analysisId];
+
+    if (analysisResult) {
+      console.log("Found analysisResult:", analysisResult);
+      res.render("analysis-result", { result: analysisResult, error: null });
+    } else {
+      console.log("analysisResult not found");
+      res.status(404).render("404", { error: "analysisResult not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching patient analysis result:", error);
     if (error instanceof TypeError) {
       // this will catch errors when trying to convert invalid strings to ObjectId
       res.status(400).render("error", { error: "Invalid patient ID" });

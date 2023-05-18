@@ -12,8 +12,10 @@ const nodemailer = require("nodemailer");
 const Joi = require("joi");
 const saltRounds = 10;
 
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" }); // files will be saved in the 'uploads' directory. You can change this to suit your needs
+app.use("/public/", express.static("./public"));
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });  // files will be saved in the 'uploads' directory. You can change this to suit your needs
 
 dotenv.config();
 
@@ -62,6 +64,7 @@ app.get("/patient-list", server.isAuth, patient.getPatients);
 app.post("/patient-list", server.isAuth, patient.addPatient);
 app.get("/search", patient.searchPatients);
 app.get("/patient/:id", patient.getPatientProfile);
+app.get("/analysis-result/:patientId/:analysisId", patient.getAnalysisResult);
 
 app.get("/create-dummy-patients", server.isAuth, async (req, res) => {
   const loggedInUsername = req.session.username;

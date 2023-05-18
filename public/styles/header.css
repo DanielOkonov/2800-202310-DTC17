@@ -1,0 +1,33 @@
+body {
+    padding-top: 80px; /* Space for the navbar */
+    padding-bottom: 56px; /* Space for the bottom navbar */
+    background-color: #f2f8fb;
+    color: #333;
+}
+
+@media (max-width: 991.98px) { 
+    body {
+        padding-top: 100px;
+        padding-bottom: 68px;
+    }
+}
+
+.main-content {
+    overflow-y: auto;
+    height: calc(100vh - 160px); /* Adjust this value based on the total height of your navbars */
+}
+
+.navbar {
+    background-color: #20639b; /* Navy color */
+    border-bottom: 1px solid #e9ecef; /* Simple border */
+    padding: 15px 0; /* Extra padding */
+}
+
+.navbar-brand {
+    color: #f8f9fa !important; /* Change text color */
+}
+
+.fixed-bottom {
+    background-color: #20639b;
+
+}

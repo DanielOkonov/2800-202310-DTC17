@@ -36,9 +36,17 @@
                                 <li class="list-group-item">High Blood Pressure: <%= patient.highBloodPressure ? 'Yes'
                                         : 'No' %>
                                 </li>
-                                <% if (patient.analysis && patient.analysis.length> 0) { %>
-                                    <% patient.analysis.forEach(analysis=> { %>
-                                        <li class="list-group-item">Analysis: <%= analysis %>
+
+                                <br>
+
+                                <% if (patient.previous_analysis && patient.previous_analysis.length> 0) { %>
+                                    <% patient.previous_analysis.forEach(analysis=> { %>
+                                        <li class="list-group-item">
+                                            Analysis:
+                                            <a
+                                                href="/analysis-result/<%= patient._id %>/<%= patient.previous_analysis.indexOf(analysis) %>">
+                                                <%= analysis.timestamp %>
+                                            </a>
                                         </li>
                                         <% }) %>
                                             <% } else { %>
