@@ -1,20 +1,26 @@
 body {
-    padding-top: 80px; /* Space for the navbar */
-    padding-bottom: 56px; /* Space for the bottom navbar */
+    padding-top: 50px; /* Adjust if navbar height changes */
+    padding-bottom: 60px; /* Adjust if bottom navbar height changes */
     background-color: #f2f8fb;
     color: #333;
+    
 }
 
-@media (max-width: 991.98px) { 
+@media (max-width: 991.98px) {
     body {
-        padding-top: 100px;
-        padding-bottom: 68px;
+        padding-top: 68px; /* Adjust if navbar height changes */
+        padding-bottom: 68px; /* Adjust if bottom navbar height changes */
+    }
+
+    .main-content {
+        overflow-y: auto;
+        height: calc(100vh - 136px); /* Adjust this value based on the total height of your navbars */
     }
 }
 
 .main-content {
     overflow-y: auto;
-    height: calc(100vh - 160px); /* Adjust this value based on the total height of your navbars */
+    height: calc(100vh - 110px); /* Adjust this value based on the total height of your navbars */
 }
 
 .navbar {
@@ -31,3 +37,6 @@ body {
     background-color: #20639b;
 
 }
+
+
+
