@@ -1,26 +1,25 @@
 body {
-    padding-top: 50px; /* Adjust if navbar height changes */
-    padding-bottom: 60px; /* Adjust if bottom navbar height changes */
+    padding-top: 71px; /* Adjusted based on actual navbar height */
+    padding-bottom: 86px; /* Adjusted based on actual bottom navbar height */
     background-color: #f2f8fb;
     color: #333;
-    
 }
 
 @media (max-width: 991.98px) {
     body {
-        padding-top: 68px; /* Adjust if navbar height changes */
-        padding-bottom: 68px; /* Adjust if bottom navbar height changes */
+        padding-top: 71px; /* Adjust if navbar height changes */
+        padding-bottom: 86px; /* Adjust if bottom navbar height changes */
     }
 
     .main-content {
         overflow-y: auto;
-        height: calc(100vh - 136px); /* Adjust this value based on the total height of your navbars */
+        height: calc(100vh - (71px + 86px)); /* Adjusted based on actual navbar and bottom navbar heights */
     }
 }
 
 .main-content {
     overflow-y: auto;
-    height: calc(100vh - 110px); /* Adjust this value based on the total height of your navbars */
+    height: calc(100vh - (71px + 86px)); /* Adjusted based on actual navbar and bottom navbar heights */
 }
 
 .navbar {
@@ -35,5 +34,4 @@ body {
 
 .fixed-bottom {
     background-color: #20639b;
-
 }

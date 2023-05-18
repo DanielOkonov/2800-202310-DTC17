@@ -10,57 +10,48 @@
                 </div>
             </div>
             <!-- Patients list -->
-            <div class="d-flex justify-content-center my-3">
-                <span class="badge bg-primary me-2"><a class="text-decoration-none text-white"
-                        href="?sort=firstName&order=asc">First Name (A-Z)</a></span>
-                <span class="badge bg-primary me-2"><a class="text-decoration-none text-white"
-                        href="?sort=firstName&order=desc">First Name (Z-A)</a></span>
-                <span class="badge bg-primary me-2"><a class="text-decoration-none text-white"
-                        href="?sort=lastName&order=asc">Last Name (A-Z)</a></span>
-                <span class="badge bg-primary"><a class="text-decoration-none text-white"
-                        href="?sort=lastName&order=desc">Last Name (Z-A)</a></span>
-            </div>
+            <%- include("templates/sorting-pills") %>
 
-            <div class="row">
-                <div class="col-12">
-                    <div id="patientList" class="list-group mb-2">
-                        <% if (patients.length===0) { %>
-                            <div class="alert alert-warning" role="alert">
-                                No patients match your search.
-                            </div>
-                            <% } else { %>
-                                <% patients.forEach(function(patient) { %>
-                                    <div class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
-                                                <%= patient.firstName + (patient.middleName ? ' ' + patient.middleName
-                                                    : '' ) + ' ' + patient.lastName %>
-                                            </h4>
-                                            <div class="text-right mx-2">
-                                                <p class="mb-0 text-muted text-sm">Age: <%= patient.age %>
-                                                </p>
-                                                <p class="mb-0 text-muted text-sm">Sex: <%= patient.sex %>
-                                                </p>
-                                            </div>
-                                            <div class="ml-3">
-                                                <a href="/patient/<%= patient._id %>" class="btn btn-light"><i
-                                                        class="fas fa-info-circle"></i></a>
+                <div class="row">
+                    <div class="col-12">
+                        <div id="patientList" class="list-group mb-2">
+                            <% if (patients.length===0) { %>
+                                <div class="alert alert-warning" role="alert">
+                                    No patients match your search.
+                                </div>
+                                <% } else { %>
+                                    <% patients.forEach(function(patient) { %>
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
+                                                    <%= patient.firstName + (patient.middleName ? ' ' +
+                                                        patient.middleName : '' ) + ' ' + patient.lastName %>
+                                                </h4>
+                                                <div class="text-right mx-2">
+                                                    <p class="mb-0 text-muted text-sm">Age: <%= patient.age %>
+                                                    </p>
+                                                    <p class="mb-0 text-muted text-sm">Sex: <%= patient.sex %>
+                                                    </p>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <a href="/patient/<%= patient._id %>" class="btn btn-light"><i
+                                                            class="fas fa-info-circle"></i></a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <% }); %>
-                                        <% } %>
+                                        <% }); %>
+                                            <% } %>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Pagination -->
-            <div class="row">
-                <div class="col-12">
-                    <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages,
-                        itemsPerPage: itemsPerPage }) %>
+                <!-- Pagination -->
+                <div class="row">
+                    <div class="col-12">
+                        <%- include("templates/pagination", { currentPage: currentPage, totalPages: totalPages,
+                            itemsPerPage: itemsPerPage }) %>
+                    </div>
                 </div>
-            </div>
         </div>
     </div>
 
