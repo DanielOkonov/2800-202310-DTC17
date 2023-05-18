@@ -7,7 +7,7 @@ const MongoDBSession = require("connect-mongodb-session")(session);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 const crypto = require("crypto");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Joi = require("joi");
 const saltRounds = 10;
@@ -37,7 +37,6 @@ const mongoStore = new MongoDBSession({
 
 const NODE_SESSION_SECRET = process.env.NODE_SESSION_SECRET;
 
-
 var { database } = include("database-connection");
 const userCollection = database
   .db(process.env.MONGODB_DATABASE)
@@ -59,9 +58,9 @@ app.get("/add-patient", server.isAuth, patient.renderAddPatients);
 app.post("/add-patient", patient.addPatient);
 app.get("/patient-list", server.isAuth, patient.getPatients);
 app.post("/patient-list", server.isAuth, patient.addPatient);
-app.get('/search', patient.searchPatients);
-
-
+app.get("/search", patient.searchPatients);
+app.get("/patient/:id", patient.getPatientProfile);
+app.get("/analysis-result/:patientId/:analysisId", patient.getAnalysisResult);
 
 app.get("/", server.redirectToDashboardIfAuth, server.renderIndex);
 app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);
@@ -70,14 +69,9 @@ app.get("/dashboard", server.isAuth, server.renderDashboard);
 app.get("/doctor-profile", server.currentUserInfo);
 app.get("/under-construction", server.renderUnderConstruction);
 
-
-
-
-
 app.post("/register", server.processRegister);
 app.post("/login", server.processLogin);
 app.post("/logout", server.logout);
-
 
 // Attempting to implement reset password functionality
 const transporter = nodemailer.createTransport({
@@ -91,7 +85,6 @@ const transporter = nodemailer.createTransport({
 app.get("/forgot-password", function (req, res) {
   res.render("forgot-password", { message: "Your custom error message here" });
 });
-
 
 app.post("/forgot-password", async (req, res, next) => {
   try {
@@ -203,13 +196,12 @@ app.post("/resetPassword", async (req, res) => {
 });
 
 app.get("/analyze", (req, res) => {
-  res.render("analyze")
-})
+  res.render("analyze");
+});
 
 app.get("/share", (req, res) => {
   res.render("share-button"); // replace 'share-button' with the correct path to your share-button.ejs file if it's not in the views directory
 });
-
 
 app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
   try {
@@ -247,16 +239,10 @@ app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
   }
 });
 
-
-
 app.get("*", (req, res) => {
-  res.status(404)
-  res.render("404")
-})
-
-
-
-
+  res.status(404);
+  res.render("404");
+});
 
 app.listen(3000, () => {
   console.log("Server started on http://localhost:3000");
