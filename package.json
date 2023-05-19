@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/DanielOkonov/2800-202310-DTC17#readme",
   "dependencies": {
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "connect-mongo": "^5.0.0",
@@ -28,6 +29,7 @@
     "express-session": "^1.17.3",
     "faker": "^5.5.3",
     "joi": "^17.9.2",
+    "jsdom": "^22.0.0",
     "moment": "^2.29.4",
     "mongodb": "^5.5.0",
     "mongoose": "^7.1.0",

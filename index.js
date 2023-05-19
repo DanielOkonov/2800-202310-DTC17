@@ -12,13 +12,19 @@ const nodemailer = require("nodemailer");
 const Joi = require("joi");
 const saltRounds = 10;
 
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" }); // files will be saved in the 'uploads' directory. You can change this to suit your needs
+app.use("/public/", express.static("./public"));
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });  // files will be saved in the 'uploads' directory. You can change this to suit your needs
 
 dotenv.config();
 
 const server = require("./server");
 const patient = require("./patient");
+const { createDummyPatients } = require("./controllers/patients/dummyDataGenerator");
+const { deleteAllPatients } = require("./controllers/patients/deletePatientCollection");
+
+
 
 module.exports = app;
 
@@ -60,6 +66,17 @@ app.get("/search", patient.searchPatients);
 app.get("/patient/:id", patient.getPatientProfile);
 app.get("/analysis-result/:patientId/:analysisId", patient.getAnalysisResult);
 app.get("/patient-risk-history/:id", patient.getPatientRiskHistory);
+
+app.get("/create-dummy-patients", server.isAuth, async (req, res) => {
+  const loggedInUsername = req.session.username;
+  await createDummyPatients(loggedInUsername);
+  res.send("Dummy patients created successfully.");
+});
+app.get("/delete-all-patients", server.isAuth, async (req, res) => {
+  await deleteAllPatients();
+  res.send("All patient entries deleted successfully.");
+});
+
 
 app.get("/", server.redirectToDashboardIfAuth, server.renderIndex);
 app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);
