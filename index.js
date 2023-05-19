@@ -14,17 +14,19 @@ const saltRounds = 10;
 
 app.use("/public/", express.static("./public"));
 
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });  // files will be saved in the 'uploads' directory. You can change this to suit your needs
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" }); // files will be saved in the 'uploads' directory. You can change this to suit your needs
 
 dotenv.config();
 
 const server = require("./server");
 const patient = require("./patient");
-const { createDummyPatients } = require("./controllers/patients/dummyDataGenerator");
-const { deleteAllPatients } = require("./controllers/patients/deletePatientCollection");
-
-
+const {
+  createDummyPatients,
+} = require("./controllers/patients/dummyDataGenerator");
+const {
+  deleteAllPatients,
+} = require("./controllers/patients/deletePatientCollection");
 
 module.exports = app;
 
@@ -76,7 +78,6 @@ app.get("/delete-all-patients", server.isAuth, async (req, res) => {
   await deleteAllPatients();
   res.send("All patient entries deleted successfully.");
 });
-
 
 app.get("/", server.redirectToDashboardIfAuth, server.renderIndex);
 app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);
@@ -226,7 +227,7 @@ app.get("/api/livesearch", patient.liveSearchPatients);
 
 
 app.get("/share", (req, res) => {
-  res.render("share-button"); // replace 'share-button' with the correct path to your share-button.ejs file if it's not in the views directory
+  res.render("share"); // replace 'share-button' with the correct path to your share-button.ejs file if it's not in the views directory
 });
 
 app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
