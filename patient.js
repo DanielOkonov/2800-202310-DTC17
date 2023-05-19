@@ -353,19 +353,19 @@ exports.getPatientRiskHistory = async function (req, res) {
 
     if (patient) {
       console.log("Found patient:", patient);
-      const fullData = [
-        { a: new Date(2022, 1, 24), b: 7, c: "blah" },
-        { a: new Date(2022, 3, 24), b: 8, c: "blah" },
-        { a: new Date(2022, 5, 24), b: 9, c: "blah" },
-        { a: new Date(2022, 7, 24), b: 12, c: "blah" },
-        { a: new Date(2022, 8, 24), b: 10, c: "blah" },
-      ];
+      // const fullData = [
+      //   { a: new Date(2022, 1, 24), b: 7, c: "blah" },
+      //   { a: new Date(2022, 3, 24), b: 8, c: "blah" },
+      //   { a: new Date(2022, 5, 24), b: 9, c: "blah" },
+      //   { a: new Date(2022, 7, 24), b: 12, c: "blah" },
+      //   { a: new Date(2022, 8, 24), b: 10, c: "blah" },
+      // ];
 
-      const xyValues = fullData.map((datum) => ({ x: datum.a, y: datum.b }));
-      // const xyValues = patient.previous_analysis.map((analysis) => ({
-      //   x: analysis.timestamp,
-      //   y: analysis.heartFailureRiskPercent,
-      // }));
+      //const xyValues = fullData.map((datum) => ({ x: datum.a, y: datum.b }));
+      const xyValues = patient.previous_analysis.map((analysis) => ({
+        x: analysis.timestamp,
+        y: analysis.heartFailureRiskPercent,
+      }));
 
       res.render("patient-risk-history", { data: JSON.stringify(xyValues) });
       // res.render("patient-risk-history", {
