@@ -9,25 +9,47 @@
 
             var xyValues = JSON.parse('<%- data %>');
 
-
+            const labels = xyValues.map((v) => (v.x));
 
             new Chart("myChart", {
-                type: "scatter",
+                type: 'line',
                 data: {
+                    labels: labels,
                     datasets: [{
                         pointRadius: 4,
                         pointBackgroundColor: "rgb(0,0,255)",
-                        data: xyValues
+                        data: xyValues,
                     }]
                 },
+
                 options: {
-                    legend: { display: false },
+                    plugins: {
+                        title: {
+                            text: 'Heart failure risk history',
+                            display: true
+                        }
+                    },
                     scales: {
-                        xAxes: [{ ticks: { min: 60, max: 160 } }],
-                        yAxes: [{ ticks: { min: 0, max: 100 } }],
-                    }
-                }
+                        x: {
+                            type: 'time',
+                            time: {
+                                tooltipFormat: 'DD T'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'value'
+                            }
+                        }
+                    },
+                },
             });
+
         </script>
 
     </body>
