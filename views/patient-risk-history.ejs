@@ -1,0 +1,60 @@
+<%- include("templates/header") %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+    <body>
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+        <script>
+
+            var xyValues = JSON.parse('<%- data %>');
+
+            const labels = xyValues.map((v) => (v.x));
+
+            new Chart("myChart", {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        pointRadius: 4,
+                        pointBackgroundColor: "rgb(0,0,255)",
+                        data: xyValues,
+                    }]
+                },
+
+                options: {
+                    plugins: {
+                        title: {
+                            text: 'Heart failure risk history',
+                            display: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                tooltipFormat: 'DD T'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'value'
+                            }
+                        }
+                    },
+                },
+            });
+
+        </script>
+
+    </body>
+
+
+
+
+    <%- include("templates/bottom-navbar") %>

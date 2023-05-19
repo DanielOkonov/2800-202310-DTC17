@@ -6,10 +6,11 @@
             Displaying: <%= itemsPerPage %>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=10">10</a>
-            <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=25">25</a>
-            <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=50">50</a>
+            <a class="dropdown-item" href="/search?q=<%= query %>&page=1&itemsPerPage=10">10</a>
+            <a class="dropdown-item" href="/search?q=<%= query %>&page=1&itemsPerPage=25">25</a>
+            <a class="dropdown-item" href="/search?q=<%= query %>&page=1&itemsPerPage=50">50</a>
         </div>
+
     </div>
 
     <!-- Pagination -->
