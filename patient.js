@@ -217,12 +217,8 @@ exports.searchPatients = async function (req, res) {
     if (!req.query.q || req.query.q.trim() === "") {
       return exports.getPatients(req, res);
     }
-    // Function to escape special characters for use in a regular expression
-    function escapeRegExp(string) {
-      return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-    }
 
-    const query = escapeRegExp(req.query.q);
+    const query = req.query.q;
     const itemsPerPage = parseInt(req.query.itemsPerPage) || 10; // Default to 10 if not specified
     const currentPage = parseInt(req.query.page) || 1; // Default to page 1 if not specified
 
@@ -230,13 +226,18 @@ exports.searchPatients = async function (req, res) {
     const db = client.db(process.env.MONGODB_DATABASE);
     const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
 
+    // Split the query into words
+    const words = query.split(' ').filter(word => word.length > 1); // Ignore single letters
+
     // Update the search query to match firstName, middleName, or lastName
     const searchQuery = {
-      $or: [
-        { firstName: new RegExp(query, "i") },
-        { middleName: new RegExp(query, "i") },
-        { lastName: new RegExp(query, "i") },
-      ],
+      $and: words.map(word => ({
+        $or: [
+          { firstName: { $regex: `.*${word}.*`, $options: "i" } },
+          { middleName: { $regex: `.*${word}.*`, $options: "i" } },
+          { lastName: { $regex: `.*${word}.*`, $options: "i" } },
+        ]
+      })),
     };
 
     // Fetch the data based on the search query
@@ -266,6 +267,9 @@ exports.searchPatients = async function (req, res) {
     res.status(500).json({ error: "Error searching patients" });
   }
 };
+
+
+
 
 exports.getPatientProfile = async function (req, res) {
   try {
@@ -405,5 +409,42 @@ exports.getPatientRiskHistory = async function (req, res) {
     } else {
       res.status(500).render("error", { error: error.message });
     }
+  }
+};
+
+exports.liveSearchPatients = async function (req, res) {
+  try {
+    if (!req.query.q || req.query.q.trim() === "") {
+      return res.json({ patients: [] });
+    }
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    const query = escapeRegExp(req.query.q);
+
+    await client.connect();
+    const db = client.db(process.env.MONGODB_DATABASE);
+    const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
+
+    const searchQuery = {
+      $or: [
+        { firstName: new RegExp(query, "i") },
+        { middleName: new RegExp(query, "i") },
+        { lastName: new RegExp(query, "i") },
+      ],
+    };
+
+    const patients = await patientsCollection
+      .find(searchQuery)
+      .limit(10)
+      .toArray();
+
+    res.json({ patients: patients });
+
+  } catch (error) {
+    console.error("Error searching patients:", error);
+    res.status(500).json({ error: "Error searching patients" });
   }
 };

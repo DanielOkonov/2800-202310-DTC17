@@ -211,9 +211,19 @@ app.post("/resetPassword", async (req, res) => {
   }
 });
 
-app.get("/analyze", (req, res) => {
-  res.render("analyze");
+app.get('/analyze', function (req, res) {
+  var query = req.query.q;
+  // other code...
+  res.render('analyze', { query: query });
 });
+app.get("/api/livesearch", patient.liveSearchPatients);
+
+// app.get("/analyze", (req, res) => {
+//   res.render("analyze");
+// });
+// app.get('/api/searchanalysispatient', patient.searchAnalysisPatient);
+
+
 
 app.get("/share", (req, res) => {
   res.render("share-button"); // replace 'share-button' with the correct path to your share-button.ejs file if it's not in the views directory
