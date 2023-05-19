@@ -11,6 +11,8 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Joi = require("joi");
 const saltRounds = 10;
+const { exec } = require('child_process');
+const path = require('path');
 
 app.use("/public/", express.static("./public"));
 
@@ -196,7 +198,7 @@ app.post("/resetPassword", async (req, res) => {
 });
 
 app.get("/analyze", (req, res) => {
-  res.render("analyze");
+  res.render("analyze", {result: null});
 });
 
 app.get("/share", (req, res) => {
@@ -238,6 +240,41 @@ app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
     res.status(500).json({ message: "Error occurred during email sending." });
   }
 });
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post('/analyze/result', (req, res) => {
+  const serumCreatinine = req.body['serum-creatinine'];
+  const ejectionFraction = req.body['ejection-fraction'];
+
+
+  runPythonScript(serumCreatinine, ejectionFraction)
+    .then((result) => {
+      res.render('analyze.ejs', { result });
+    })
+    .catch((error) => {
+      console.error('Error executing Python script:', error);
+      res.status(500).send('Internal Server Error');
+    });
+});
+
+function runPythonScript(serumCreatinine, ejectionFraction) {
+  return new Promise((resolve, reject) => {
+
+    const pythonScript = 'scripts\\analysis.py';
+    const command = `python ${pythonScript} ${serumCreatinine} ${ejectionFraction}`;
+
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      }
+      const result = stdout.trim();
+      resolve(result);
+    });
+  });
+}
+
 
 app.get("*", (req, res) => {
   res.status(404);
