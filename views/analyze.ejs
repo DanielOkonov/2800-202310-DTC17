@@ -35,14 +35,12 @@
           </div>
         </div>
       </div>
-      <div class="container">
-        <button id="analyzeBtn" class="btn btn-primary mt-3" disabled>Analyze Patient</button>
-      </div>
     </div>
   </div>
 
   <script>
     let selectedPatientId = null;
+    let patientId = null;
 
     $('form').on('submit', function (e) {
       e.preventDefault();
@@ -94,14 +92,16 @@
                   $(".list-group-item").removeClass("border border-success").hide();
                   $(this).addClass("border border-success").show();
                   selectedPatientId = $(this).data('patient-id');
+                  patientId = this.dataset.patientId;
+                  console.log(patientId);
                   $('#analyzeBtn').prop('disabled', false);
                   // Show patient-selected alert
                   $('.alert-success').remove(); // Remove old success alert
-                  $('.col-md-12.mb-3').first().after(`
-                <div class="alert alert-success mt-3" role="alert">
-                  Patient selected: <strong>${$(this).find('.list-group-item-heading').text()}</strong>
-                </div>
-              `);
+                  // $('.col-md-12.mb-3').first().after(`
+                  // <div class="alert alert-success mt-3" role="alert">
+                  //   Patient selected: <strong>${$(this).find('.list-group-item-heading').text()}</strong>
+                  // </div>
+                  // `);
                 }
               });
               patientList.append(patientItem);
@@ -112,15 +112,6 @@
         // Handle the case when the search query is empty
         $('#patientList').empty();
         $('#analyzeBtn').prop('disabled', true);
-      }
-    });
-
-
-
-    $('#analyzeBtn').on('click', function () {
-      if (selectedPatientId !== null) {
-        // TODO: Implement patient analysis and population of EJS with patient's name here
-        console.log('Analyze patient: ' + selectedPatientId);
       }
     });
   </script>
