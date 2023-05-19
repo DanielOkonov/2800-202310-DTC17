@@ -1,0 +1,120 @@
+<%- include("templates/header") %>
+
+  <div class="container">
+    <div class="container">
+      <div class="row mt-3">
+        <h1>Analyze Patient</h1>
+        <p>Type in the name, select the name and type in the information before clicking analyze to analyze a patient's
+          risk of heart failure.</p>
+        <!-- Search Form -->
+        <div class="col-md-12 mb-3">
+          <!-- Search Query Alert -->
+          <% if (query) { %>
+            <div class="alert alert-primary mt-3 py-1 px-2" role="alert">
+              Search results for: <strong>
+                <%= query %>
+              </strong>
+            </div>
+            <% } %>
+              <form action="/search" method="GET">
+                <div class="input-group mb-3 mx-1">
+                  <input type="text" class="form-control" placeholder="Search patients..." aria-label="Search"
+                    aria-describedby="button-addon2" id="searchBar" name="q" value="<%= query || '' %>">
+                </div>
+                <div class="d-flex flex-wrap mx-1">
+                  <a href="/add-patient" class="btn btn-success mb-2" id="add-patient-button"><i
+                      class="fas fa-plus"></i>
+                    Add Patient</a>
+                </div>
+              </form>
+        </div>
+        <!-- Patient List -->
+        <div class="col-md-12 mb-3">
+          <div id="patientList" class="list-group">
+            <!-- Search results will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedPatientId = null;
+    let patientId = null;
+
+    $('form').on('submit', function (e) {
+      e.preventDefault();
+    });
+
+    $('#searchBar').on('input', function () {
+      let query = $(this).val();
+
+      if (query !== "") {
+        $.getJSON('/api/livesearch?q=' + query, function (data) {
+          var patientList = $('#patientList');
+          patientList.empty();
+
+          if (data.patients.length === 0) {
+            patientList.append(`
+          <div class="alert alert-warning mt-3" role="alert">
+            No patients found for: <strong>${query}</strong>
+          </div>
+        `);
+          } else {
+            $.each(data.patients, function (i, patient) {
+              var patientItem = `
+          <div class="list-group-item" data-patient-id="${patient._id}">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
+                ${patient.firstName} ${patient.middleName ? patient.middleName + ' ' : ''}${patient.lastName}
+              </h4>
+              <div class="text-right mx-2">
+                <p class="mb-0 text-muted text-sm">Age: ${patient.age}</p>
+                <p class="mb-0 text-muted text-sm">Sex: ${patient.sex}</p>
+              </div>
+              <div class="ml-3">
+                <a href="/patient/${patient._id}" class="btn btn-light">
+                  <i class="fas fa-info-circle"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+              patientItem = $(patientItem);
+              patientItem.click(function () {
+                if ($(this).hasClass("border border-success")) {
+                  $(this).removeClass("border border-success");
+                  $('.list-group-item').show();
+                  selectedPatientId = null;
+                  $('#analyzeBtn').prop('disabled', true);
+                  $('.alert-success').remove(); // Remove success alert
+                } else {
+                  $(".list-group-item").removeClass("border border-success").hide();
+                  $(this).addClass("border border-success").show();
+                  selectedPatientId = $(this).data('patient-id');
+                  patientId = this.dataset.patientId;
+                  console.log(patientId);
+                  $('#analyzeBtn').prop('disabled', false);
+                  // Show patient-selected alert
+                  $('.alert-success').remove(); // Remove old success alert
+                  // $('.col-md-12.mb-3').first().after(`
+                  // <div class="alert alert-success mt-3" role="alert">
+                  //   Patient selected: <strong>${$(this).find('.list-group-item-heading').text()}</strong>
+                  // </div>
+                  // `);
+                }
+              });
+              patientList.append(patientItem);
+            });
+          }
+        });
+      } else {
+        // Handle the case when the search query is empty
+        $('#patientList').empty();
+        $('#analyzeBtn').prop('disabled', true);
+      }
+    });
+  </script>
+
+
+  <%- include("templates/bottom-navbar") %>

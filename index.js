@@ -7,15 +7,26 @@ const MongoDBSession = require("connect-mongodb-session")(session);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 const crypto = require("crypto");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Joi = require("joi");
 const saltRounds = 10;
+
+app.use("/public/", express.static("./public"));
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" }); // files will be saved in the 'uploads' directory. You can change this to suit your needs
 
 dotenv.config();
 
 const server = require("./server");
 const patient = require("./patient");
+const {
+  createDummyPatients,
+} = require("./controllers/patients/dummyDataGenerator");
+const {
+  deleteAllPatients,
+} = require("./controllers/patients/deletePatientCollection");
 
 module.exports = app;
 
@@ -31,7 +42,6 @@ const mongoStore = new MongoDBSession({
 // Use the session middleware (sessions expire after 1 hour)
 
 const NODE_SESSION_SECRET = process.env.NODE_SESSION_SECRET;
-
 
 var { database } = include("database-connection");
 const userCollection = database
@@ -54,9 +64,20 @@ app.get("/add-patient", server.isAuth, patient.renderAddPatients);
 app.post("/add-patient", patient.addPatient);
 app.get("/patient-list", server.isAuth, patient.getPatients);
 app.post("/patient-list", server.isAuth, patient.addPatient);
-app.get('/search', patient.searchPatients);
+app.get("/search", patient.searchPatients);
+app.get("/patient/:id", patient.getPatientProfile);
+app.get("/analysis-result/:patientId/:analysisId", patient.getAnalysisResult);
+app.get("/patient-risk-history/:id", patient.getPatientRiskHistory);
 
-
+app.get("/create-dummy-patients", server.isAuth, async (req, res) => {
+  const loggedInUsername = req.session.username;
+  await createDummyPatients(loggedInUsername);
+  res.send("Dummy patients created successfully.");
+});
+app.get("/delete-all-patients", server.isAuth, async (req, res) => {
+  await deleteAllPatients();
+  res.send("All patient entries deleted successfully.");
+});
 
 app.get("/", server.redirectToDashboardIfAuth, server.renderIndex);
 app.get("/login", server.redirectToDashboardIfAuth, server.renderLogin);
@@ -65,14 +86,9 @@ app.get("/dashboard", server.isAuth, server.renderDashboard);
 app.get("/doctor-profile", server.currentUserInfo);
 app.get("/under-construction", server.renderUnderConstruction);
 
-
-
-
-
 app.post("/register", server.processRegister);
 app.post("/login", server.processLogin);
 app.post("/logout", server.logout);
-
 
 // Attempting to implement reset password functionality
 const transporter = nodemailer.createTransport({
@@ -86,7 +102,6 @@ const transporter = nodemailer.createTransport({
 app.get("/forgot-password", function (req, res) {
   res.render("forgot-password", { message: "Your custom error message here" });
 });
-
 
 app.post("/forgot-password", async (req, res, next) => {
   try {
@@ -197,17 +212,64 @@ app.post("/resetPassword", async (req, res) => {
   }
 });
 
+app.get('/analyze', function (req, res) {
+  var query = req.query.q;
+  // other code...
+  res.render('analyze', { query: query });
+});
+app.get("/api/livesearch", patient.liveSearchPatients);
+
+// app.get("/analyze", (req, res) => {
+//   res.render("analyze");
+// });
+// app.get('/api/searchanalysispatient', patient.searchAnalysisPatient);
 
 
+
+app.get("/share", (req, res) => {
+  res.render("share"); // replace 'share-button' with the correct path to your share-button.ejs file if it's not in the views directory
+});
+
+app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const pdfPath = req.file.path;
+
+    const mailOptions = {
+      from: process.env.EMAIL_ADDRESS,
+      to: email,
+      subject: "Here is the PDF you requested",
+      text: "Please find the PDF attached.",
+      attachments: [
+        {
+          filename: "file.pdf",
+          path: pdfPath,
+          contentType: "application/pdf",
+        },
+      ],
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", error);
+        return res
+          .status(500)
+          .json({ message: "Error occurred while sending email." });
+      } else {
+        console.log("Email sent:", info.response);
+        return res.render("success", { message: "Email sent successfully." });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error occurred during email sending." });
+  }
+});
 
 app.get("*", (req, res) => {
-  res.status(404)
-  res.render("404")
-})
-
-
-
-
+  res.status(404);
+  res.render("404");
+});
 
 app.listen(3000, () => {
   console.log("Server started on http://localhost:3000");
