@@ -30,6 +30,8 @@ body {
 
 .navbar-brand {
     color: #f8f9fa !important; /* Change text color */
+    padding-left: 50px;
+    
 }
 
 .fixed-bottom {

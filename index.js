@@ -227,7 +227,7 @@ app.get("/api/livesearch", patient.liveSearchPatients);
 
 
 app.get("/share", (req, res) => {
-  res.render("share"); // replace 'share-button' with the correct path to your share-button.ejs file if it's not in the views directory
+  res.render("share"); 
 });
 
 app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
