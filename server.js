@@ -379,8 +379,6 @@ exports.processLogin = async function (req, res) {
       .render("login", { error: "Invalid email or password" });
   }
   if (await bcrypt.compare(password, result[0].password)) {
-    console.log("correct password");
-    console.log(result[0]);
     req.session.isAuth = true;
     req.session.username = result[0].username;
     req.session.userEmail = result[0].email;
