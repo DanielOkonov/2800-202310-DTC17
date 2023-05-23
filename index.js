@@ -13,6 +13,9 @@ const Joi = require("joi");
 const saltRounds = 10;
 const { exec } = require('child_process');
 const path = require('path');
+const { MongoClient } = require('mongodb');
+const { ObjectId } = require('mongodb');
+
 
 app.use("/public/", express.static("./public"));
 
@@ -198,7 +201,7 @@ app.post("/resetPassword", async (req, res) => {
 });
 
 app.get("/analyze", (req, res) => {
-  res.render("analyze", {result: null});
+  res.render("analyze");
 });
 
 app.get("/share", (req, res) => {
@@ -244,21 +247,6 @@ app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/analyze/result', (req, res) => {
-  const serumCreatinine = req.body['serum-creatinine'];
-  const ejectionFraction = req.body['ejection-fraction'];
-
-
-  runPythonScript(serumCreatinine, ejectionFraction)
-    .then((result) => {
-      res.render('analyze.ejs', { result });
-    })
-    .catch((error) => {
-      console.error('Error executing Python script:', error);
-      res.status(500).send('Internal Server Error');
-    });
-});
-
 function runPythonScript(serumCreatinine, ejectionFraction) {
   return new Promise((resolve, reject) => {
 
@@ -275,6 +263,93 @@ function runPythonScript(serumCreatinine, ejectionFraction) {
   });
 }
 
+function insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId) {
+  const uri = url
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+  return client.connect()
+    .then(() => {
+      const db = client.db(process.env.MONGODB_DATABASE);
+      const collection = db.collection(process.env.MONGODB_PATIENTCOLLECTION);
+
+      const query = { _id: new ObjectId('6466801f0ba9aa81b0cfb574') };
+
+      return collection.findOne(query)
+        .then((user) => {
+          if (!user) {
+            console.log('User not found in the database.');
+            return;
+          }
+          const update = {
+            $push: {
+              analysis: {
+                $each: [{
+                  analysisDate: new Date(),
+                  conductedBy: userId,
+                  ejectionFraction: ejectionFraction,
+                  serumCreatinine: serumCreatinine,
+                  analysisResult: result
+                }],
+                $position: 0
+              }
+            }
+          };
+          
+
+          return collection.updateOne(query, update);
+        });
+    })
+    .finally(() => {
+      client.close();
+    });
+}
+
+
+
+app.post('/result', (req, res) => {
+  const serumCreatinine = req.body['serum-creatinine'];
+  const ejectionFraction = req.body['ejection-fraction'];
+
+  MongoClient.connect(url, { useUnifiedTopology: true })
+    .then((client) => {
+      const db = client.db(process.env.MONGODB_DATABASE);
+      const userCollection = db.collection(process.env.MONGODB_USERCOLLECTION);
+      userCollection.findOne({ email: req.session.userEmail })
+        .then((user) => {
+          if (user) {
+            const userId = user._id;
+
+            runPythonScript(serumCreatinine, ejectionFraction)
+              .then((result) => {
+                insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId)
+                  .catch((error) => {
+                    console.error('Error inserting data into MongoDB:', error);
+                  });
+
+                res.render('result.ejs', { result, serumCreatinine, ejectionFraction });
+              })
+              .catch((error) => {
+                console.error('Error executing Python script:', error);
+                res.status(500).send('Internal Server Error');
+              });
+          } else {
+            console.error('User not found');
+            res.status(404).send('User not found');
+          }
+        })
+        .catch((error) => {
+          console.error('Error finding user:', error);
+          res.status(500).send('Internal Server Error');
+        })
+        .finally(() => {
+          client.close();
+        });
+    })
+    .catch((error) => {
+      console.error('Error connecting to MongoDB:', error);
+      res.status(500).send('Internal Server Error');
+    });
+});
 
 app.get("*", (req, res) => {
   res.status(404);

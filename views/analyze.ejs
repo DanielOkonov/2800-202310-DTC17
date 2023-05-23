@@ -1,6 +1,6 @@
 <%- include("templates/header") %>
   <div class="container">
-    <form action="/analyze/result" method="post">
+    <form action="/result" method="post">
       <div class="analysis-form">
         <label for="serum-creatinine">Serum Creatinine:</label>
         <input type="text" name="serum-creatinine" id="serum-creatinine">
@@ -11,9 +11,6 @@
       </div>
       <button type="submit" class="btn btn-primary">Analyze</button>
     </form>
-    <% if (result) { %>
-      <p>Percentage of Death Event: <%= result %></p>
-    <% } %>
     <button id="downloadBtn" class="btn btn-primary">Download</button>
   </div>
   <script>

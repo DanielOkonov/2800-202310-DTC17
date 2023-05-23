@@ -1,0 +1,51 @@
+<%- include("templates/header") %>
+
+<div class="result-container">
+    <div class="breadcrumb-container"> 
+        <a class="btn btn-outline-primary" role='button' href="/analyze" style="border:none;">< Analyze</a>
+    </div>
+    <div class="heart-failure-risk">
+        <h2>Heart Failure Risk</h2>
+        <div class="analysis-result">
+            <% if (result) { %>
+                <%= result %> %
+            <% } %>
+        </div>
+        
+        <% if (result < 25) { %>
+            <p>Based on your input, this patient is at a low risk of heart failure.</p>
+        <% } else if (result >= 25 && result < 50) { %>
+            <p>Based on your input, this patient is at a moderate risk of heart failure.</p>
+        <% } else if (result >= 50 && result < 75) { %>
+            <p>Based on your input, this patient is at a high risk of heart failure.</p>
+        <% } else { %>
+            <p>Based on your input, this patient is at a very high risk of heart failure.</p>
+        <% } %>
+    </div>
+
+    <div class="serum-creatinine">
+        <h3>Serum Creatinine</h3>
+        <div class="factor-level">
+            <%= serumCreatinine %> mg/dL
+        </div>
+        <div class="factor-description">For men, the typical range is 0.74 - 1.35 mg/dL. For women, the typical range is 0.59 - 1.04 mg/dL.</div>
+    </div>
+    
+    <div class="ejection-fraction">
+        <h3>Ejection Fraction</h3>
+        <div class="factor-level">
+            <%= ejectionFraction %> %
+        </div>
+        <div class="factor-description">The typical range for men and women is between 50 - 70%.</div>
+    </div>
+
+    <div class="notes-container">
+        <h3>Notes</h3>
+        <textarea class="notes-textarea" placeholder="Add notes..."></textarea>
+        <button class="save-notes-button">Save Notes</button>
+    </div>
+    
+    
+</div>
+
+<%- include("templates/bottom-navbar") %>
