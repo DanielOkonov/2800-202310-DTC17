@@ -1,17 +1,6 @@
 <%- include("templates/header") %>
 
   <div class="container">
-    <form action="/result" method="post">
-      <div class="analysis-form">
-        <label for="serum-creatinine">Serum Creatinine:</label>
-        <input type="text" name="serum-creatinine" id="serum-creatinine">
-      </div>
-      <div class="analysis-form">
-        <label for="ejection-fraction">Ejection Fraction:</label>
-        <input type="text" name="ejection-fraction" id="ejection-fraction">
-      </div>
-      <button type="submit" class="btn btn-primary">Analyze</button>
-    </form>
     <div class="container">
       <div class="row mt-3">
         <h1>Analyze Patient</h1>
@@ -38,6 +27,7 @@
                     Add Patient</a>
                 </div>
               </form>
+        
         </div>
         <!-- Patient List -->
         <div class="col-md-12 mb-3">
@@ -47,15 +37,25 @@
         </div>
       </div>
     </div>
+    <form action="/result" method="post">
+      <div class="analysis-form">
+        <label for="serum-creatinine">Serum Creatinine:</label>
+        <input type="text" name="serum-creatinine" id="serum-creatinine">
+      </div>
+      <div class="analysis-form">
+        <label for="ejection-fraction">Ejection Fraction:</label>
+        <input type="text" name="ejection-fraction" id="ejection-fraction">
+      </div>
+      <div class="selected-patient" style="display: none">
+        <input type="text" name="patient-id" id="patient-id" value="">
+      </div>
+      <button type="submit" class="btn btn-primary">Analyze</button>
+    </form>
   </div>
 
   <script>
     let selectedPatientId = null;
     let patientId = null;
-
-    $('form').on('submit', function (e) {
-      e.preventDefault();
-    });
 
     $('#searchBar').on('input', function () {
       let query = $(this).val();
@@ -105,6 +105,8 @@
                   selectedPatientId = $(this).data('patient-id');
                   patientId = this.dataset.patientId;
                   console.log(patientId);
+                  let patientIdInput = document.getElementById('patient-id');
+                  patientIdInput.setAttribute('value', patientId);
                   $('#analyzeBtn').prop('disabled', false);
                   // Show patient-selected alert
                   $('.alert-success').remove(); // Remove old success alert
@@ -116,6 +118,8 @@
                 }
               });
               patientList.append(patientItem);
+              
+
             });
           }
         });

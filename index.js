@@ -290,7 +290,7 @@ function runPythonScript(serumCreatinine, ejectionFraction) {
   });
 }
 
-function insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId) {
+function insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId, patientId) {
   const uri = url
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -299,7 +299,7 @@ function insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId
       const db = client.db(process.env.MONGODB_DATABASE);
       const collection = db.collection(process.env.MONGODB_PATIENTCOLLECTION);
 
-      const query = { _id: new ObjectId('6466801f0ba9aa81b0cfb574') };
+      const query = { _id: new ObjectId(patientId) };
 
       return collection.findOne(query)
         .then((user) => {
@@ -336,6 +336,7 @@ function insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId
 app.post('/result', (req, res) => {
   const serumCreatinine = req.body['serum-creatinine'];
   const ejectionFraction = req.body['ejection-fraction'];
+  const patientId = req.body['patient-id']
 
   MongoClient.connect(url, { useUnifiedTopology: true })
     .then((client) => {
@@ -348,7 +349,7 @@ app.post('/result', (req, res) => {
 
             runPythonScript(serumCreatinine, ejectionFraction)
               .then((result) => {
-                insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId)
+                insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId, patientId)
                   .catch((error) => {
                     console.error('Error inserting data into MongoDB:', error);
                   });
