@@ -1,49 +1,50 @@
-<div class="container pt-1 mt-1">
+<div class="container">
     <!-- Dropdown for display options -->
-    <div class="dropdown mr-auto my-1">
-        <button class="btn btn-primary dropdown-toggle mr-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
+    <div class="dropdown mr-auto">
+        <button class="btn btn-primary dropdown-toggle mr-2" type="button" id="dropdownMenuButton"
+            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Displaying: <%= itemsPerPage %>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=10">10</a>
-            <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=25">25</a>
-            <a class="dropdown-item" href="/search?q=<%= query %>&page=<%= currentPage %>&itemsPerPage=50">50</a>
+            <a class="dropdown-item" href="/search?q=<%= query %>&page=1&itemsPerPage=10">10</a>
+            <a class="dropdown-item" href="/search?q=<%= query %>&page=1&itemsPerPage=25">25</a>
+            <a class="dropdown-item" href="/search?q=<%= query %>&page=1&itemsPerPage=50">50</a>
         </div>
+
     </div>
 
     <!-- Pagination -->
     <nav>
-        <ul class="pagination">
-            <% if (currentPage !== 1) { %>
+        <ul class="pagination my-2">
+            <% if (currentPage !==1) { %>
                 <li class="page-item">
                     <a class="page-link"
                         href="<%= path %>?q=<%= query ? query : '' %>&page=<%= currentPage - 1 %>&itemsPerPage=<%= itemsPerPage %>">
                         <i class="fas fa-chevron-left"></i>
                     </a>
                 </li>
-            <% } %>
-            
-            <% var startPage = Math.max(currentPage - 2, 1); %>
-            <% var endPage = Math.min(startPage + 4, totalPages); %>
+                <% } %>
 
-            <% for(let page = startPage; page <= endPage; page++) { %>
-                <li class="page-item <%= currentPage === page ? 'active' : '' %>">
-                    <a class="page-link"
-                        href="<%= path %>?q=<%= query ? query : '' %>&page=<%= page %>&itemsPerPage=<%= itemsPerPage %>">
-                        <%= page %>
-                    </a>
-                </li>
-            <% } %>
+                    <% var startPage=Math.max(currentPage - 2, 1); %>
+                        <% var endPage=Math.min(startPage + 4, totalPages); %>
 
-            <% if (currentPage !== totalPages) { %>
-                <li class="page-item">
-                    <a class="page-link"
-                        href="<%= path %>?q=<%= query ? query : '' %>&page=<%= currentPage + 1 %>&itemsPerPage=<%= itemsPerPage %>">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </li>
-            <% } %>
+                            <% for(let page=startPage; page <=endPage; page++) { %>
+                                <li class="page-item <%= currentPage === page ? 'active' : '' %>">
+                                    <a class="page-link"
+                                        href="<%= path %>?q=<%= query ? query : '' %>&page=<%= page %>&itemsPerPage=<%= itemsPerPage %>">
+                                        <%= page %>
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <% if (currentPage !==totalPages) { %>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                                href="<%= path %>?q=<%= query ? query : '' %>&page=<%= currentPage + 1 %>&itemsPerPage=<%= itemsPerPage %>">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </a>
+                                        </li>
+                                        <% } %>
         </ul>
     </nav>
 </div>
