@@ -1,33 +1,33 @@
 <%- include("templates/header") %>
 
-    <body id="pageBody">
-        <h1>THIS IS DOCTOR PROFILE</h1>
-        <div class="container">
-            <p>User: <%= user %>
-            </p>
-            <p>Email: <%= userEmail %>
-            </p>
-        </div>
+<link rel="stylesheet" href="/public/styles/doctor-profile.css" />
 
-        <form action="/dashboard">
-            <button type="submit" class="btn btn-primary mt-3">Back</button>
-        </form>
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-info">
+      <h2>Doctor Profile</h2>
+      <p><span class="info-label">User:</span> <%= user %></p>
+      <p><span class="info-label">Email:</span> <%= userEmail %></p>
+    </div>
+    <div class="profile-actions">
+      <form action="/dashboard">
+        <button type="submit" class="btn btn-primary mt-3">Back</button>
+      </form>
+      <form action="/logout" method="post">
+        <button type="submit" class="btn btn-danger btn-lg mb-3">Logout</button>
+      </form>
+    </div>
+  </div>
+</div>
 
-        <div class="col-sm-6 text-left">
-          <form action="/logout" method="post">
-            <button type="submit" class="btn btn-danger btn-lg mb-3">Logout</button>
-          </form>
-        </div>
-        <script>
-            window.onload = function () {
-                console.log("Function being called");
-                let count = parseInt(localStorage.getItem("buttonClicks")) || 0;
-                if (count % 4 === 0 && count !== 0) {
-                    document.getElementById("pageBody").style.fontFamily = "Papyrus";
-                } else {
-                    document.getElementById("pageBody").style.fontFamily = "";
-                }
-            }
-        </script>
-    </body>
-    <%- include("templates/bottom-navbar") %>
+<script>
+  window.onload = function () {
+    let count = parseInt(localStorage.getItem("buttonClicks")) || 0;
+    if (count % 4 === 0 && count !== 0) {
+      document.getElementById("pageBody").style.fontFamily = "Papyrus";
+    } else {
+      document.getElementById("pageBody").style.fontFamily = "";
+    }
+  };
+</script>
+<%- include("templates/bottom-navbar") %>
