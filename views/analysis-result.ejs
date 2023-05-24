@@ -1,52 +1,41 @@
 <%- include("templates/header") %>
 
-    <div class="container mt-5">
-        <% if (error) { %>
-            <div class="alert alert-danger" role="alert">
-                <%= error %>
-            </div>
-            <% } else { %>
-                <h1 class="text-center mb-4">Result: <%= result.analysisDate %>
-                </h1>
-                <div class="card">
-                    <div class="card" style="height: 8rem; width: 79.5rem">
-                        <div class="card-body">
-                            <h4 class="text-center mb-4card-title">Heart Failure Risk</h4>
-                            <h3 class="text-center card-text">
-                                <%= result.analysisResult %>%
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="card" style="height: 8rem; width: 79.5rem">
-                        <div class="card-body">
-                            <h4 class="text-center mb-4card-title">Serum Creatinine</h4>
-                            <h3 class="text-center card-text">
-                                <%= result.serumCreatinine %> mg/dL
-                            </h3>
-                            <p class="text-center card-text">
-                                The average Serum Creatinine levels are 0.3 mg/dL
-                            </p>
-                        </div>
-                    </div>
-                    <div class="card" style="height: 8rem; width: 79.5rem">
-                        <div class="card-body">
-                            <h4 class="text-center mb-4card-title">Ejection Fraction</h4>
-                            <h3 class="text-center card-text">
-                                <%= result.ejectionFraction %>%
-                            </h3>
-                            <p class="text-center card-text">
-                                The average Ejection Fraction is 40%
-                            </p>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="mb-3">
-                        <input type="email" class="form-control" style="height: 8rem" id="exampleFormControlInput1"
-                            placeholder="Notes" />
-                    </div>
-                    <button type="button" class="btn btn-primary">Save Notes</button>
-                </div>
-                <% } %>
-    </div>
+<link rel="stylesheet" href="/public/styles/analysis-result.css">
 
-    <%- include("templates/bottom-navbar") %>
+<div class="container mt-5">
+    <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } else { %>
+        <h1 class="text-center mb-4">Result: <%= result.analysisDate %></h1>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center mb-4 card-title">Heart Failure Risk</h4>
+                <h3 class="text-center card-text"><%= result.analysisResult %>%
+                </h3>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center mb-4 card-title">Serum Creatinine</h4>
+                <h3 class="text-center card-text"><%= result.serumCreatinine %> mg/dL</h3>
+                <p class="text-center card-text">The average Serum Creatinine levels are 0.3 mg/dL</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="text-center mb-4 card-title">Ejection Fraction</h4>
+                <h3 class="text-center card-text"><%= result.ejectionFraction %>%
+                </h3>
+                <p class="text-center card-text">The average Ejection Fraction is 40%</p>
+            </div>
+        </div>
+        <div class="mb-3">
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Notes" />
+        </div>
+        <button type="button" class="btn btn-primary">Save Notes</button>
+    <% } %>
+</div>
+
+<%- include("templates/bottom-navbar") %>
