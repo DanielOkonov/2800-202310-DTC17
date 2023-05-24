@@ -39,13 +39,13 @@
 
                                 <br>
 
-                                <% if (patient.previous_analysis && patient.previous_analysis.length> 0) { %>
-                                    <% patient.previous_analysis.forEach(analysis=> { %>
+                                <% if (patient.analysis && patient.analysis.length> 0) { %>
+                                    <% patient.analysis.forEach(analysis=> { %>
                                         <li class="list-group-item">
                                             Analysis:
                                             <a
-                                                href="/analysis-result/<%= patient._id %>/<%= patient.previous_analysis.indexOf(analysis) %>">
-                                                <%= analysis.timestamp %>
+                                                href="/analysis-result/<%= patient._id %>/<%= patient.analysis.indexOf(analysis) %>">
+                                                <%= analysis.analysisDate %>
                                             </a>
                                         </li>
                                         <% }) %>
