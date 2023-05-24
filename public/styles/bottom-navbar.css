@@ -1,0 +1,33 @@
+.navbar {
+    background: #f8f9fa;
+    box-shadow: 0px -2px 10px rgba(0,0,0,0.15);
+}
+
+.navbar .navbar-brand {
+    color: #000;
+}
+
+.navbar .navbar-brand:hover {
+    color: #007bff;
+}
+
+.navbar .navbar-brand i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.navbar .navbar-brand .fa-notes-medical {
+    color: #fd7e14;
+}
+
+.navbar .navbar-brand .fa-microscope {
+    color: #6610f2;
+}
+
+.navbar .navbar-brand .fa-bell {
+    color: #28a745;
+}
+
+.navbar .navbar-brand .fa-user-md {
+    color: #20c997;
+}
