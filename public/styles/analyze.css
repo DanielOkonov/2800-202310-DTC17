@@ -1,66 +1,75 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
 .analyze-container {
-    font-family: 'Arial', sans-serif;
-    padding: 2em;
+  width: 80%;
+  margin: auto;
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    color: #555;
-    font-weight: bold;
+  color: #343a40;
 }
 
 p {
-    color: #777;
-    margin-bottom: 1em;
-}
-
-.input-group {
-    width: 100%;
-}
-
-#searchBar {
-    margin-bottom: 1em;
-}
-
-#add-patient-button {
-    color: white;
-    margin-bottom: 1em;
-}
-
-#patientList {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 1em;
-    margin-bottom: 2em;
+  color: #6c757d;
 }
 
 .analysis-form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1em;
+  margin-bottom: 20px;
 }
 
 .analysis-form label {
-    font-weight: bold;
-    margin-bottom: .5em;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .analysis-form input {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: .5em;
-    font-size: 1em;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+}
+
+.mandatory {
+  color: red;
 }
 
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: #fff;
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+  color: #fff;
+  background-color: #0069d9;
+  border-color: #0062cc;
 }
-.mandatory {
-  color: red;
+
+#patientList {
+  margin-bottom: 20px;
+}
+
+#patientList .list-group-item {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+#patientList .list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+#patientList .list-group-item.border.border-success {
+  border-color: #28a745 !important;
 }
