@@ -3,6 +3,10 @@
     box-shadow: 0px -2px 10px rgba(0,0,0,0.15);
 }
 
+body {
+    padding-bottom: 70px; /* Change value according to the actual height of your navbar */
+}
+
 .navbar .navbar-brand {
     color: #000;
 }
