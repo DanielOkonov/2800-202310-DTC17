@@ -8,8 +8,10 @@
         <script>
 
             var xyValues = JSON.parse('<%- data %>');
+            const dateSeries = xyValues.map((v) => ({ ts: Date.parse((v.x)), y: (v.y) }));
+            dateSeries.sort((a, b) => { return a.ts - b.ts });
 
-            const labels = xyValues.map((v) => (v.x));
+            const labels = dateSeries.map((ds) => (new Date((ds.ts)).toLocaleDateString('en-US')));
 
             new Chart("myChart", {
                 type: 'line',
@@ -18,7 +20,7 @@
                     datasets: [{
                         pointRadius: 4,
                         pointBackgroundColor: "rgb(0,0,255)",
-                        data: xyValues,
+                        data: dateSeries,
                     }]
                 },
 
