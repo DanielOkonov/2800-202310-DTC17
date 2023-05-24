@@ -1,10 +1,14 @@
 body {
     font-family: 'Manrope', sans-serif;
 }
+.bg-lightblue {
+    background-color: #4ca2ff !important;
+}
 
 .navbar-brand {
     font-weight: bold;
     font-size: 1.5em;
+    color: white !important;
 }
 
 .navbar-nav .nav-link {

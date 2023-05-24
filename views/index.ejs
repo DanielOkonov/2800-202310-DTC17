@@ -1,11 +1,15 @@
 <%- include("templates/header") %>
     <!-- Hero Section -->
-    <header class="hero bg-primary text-white text-center">
-      <div class="container">
-        <h1 class="display-4">Revolutionizing Heart Disease Detection</h1>
+    <header class="hero bg-lightblue text-white text-center" data-aos="fade-up">
+      <div class="container" data-aos="fade-down">
+        <h1 class="display-4" style="font-weight: 500">Revolutionizing Heart Disease Detection</h1>
         <p class="lead">Predict and manage heart failure risks with our cutting-edge AI diagnostic tool.</p>
-        <a href="#" class="btn btn-light btn-lg">Learn More</a>
-        <a href="/login" class="btn btn-light btn-lg">Login</a>
+        <a href="/login" class="btn btn-light btn-lg btn-hover"style="
+        background: #fb6464e6;
+        color: white;
+        border: #fb6464e6;
+        font-weight: 500;
+        ">Physician Login</a>
       </div>
     </header>
 
@@ -13,12 +17,18 @@
 <section class="about-section py-5">
   <div class="container">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-6" data-aos="fade-right">
         <h2>About Heart Wise</h2>
         <p>Heart Wise is an AI-powered diagnostic tool developed by Team DTC-17. Our mission is to revolutionize early detection and intervention for cardiovascular diseases.</p>
       </div>
-      <div class="col-lg-6">
-        <img src="/public/images/Doctor.jpg" class="img-fluid rounded-circle">
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="image-slider">
+          <div><img src="/public/images/doctor2.jpg" class="img-fluid rounded-circle"></div>
+<div><img src="/public/images/Heart.jpg" class="img-fluid rounded-circle"></div>
+<div><img src="/public/images/Doctor.jpg" class="img-fluid rounded-circle"></div>
+<div><img src="/public/images/aihealth.jpg" class="img-fluid rounded-circle"></div>
+<div><img src="/public/images/patient.jpg" class="img-fluid rounded-circle"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -92,5 +102,23 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.image-slider').slick({
+          lazyload: 'ondemand',
+          slidesToShow: 1,
+          autoplay: true,
+          autoplaySpeed: 4000,
+          arrows: false,
+        });
+      });
+    </script>
+    <script>
+      AOS.init();
+    </script>
   </body>
 </html>
