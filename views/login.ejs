@@ -10,14 +10,15 @@
                         <div class="card-header bg-primary text-white text-uppercase"><i class="fa fa-sign-in"></i> Login</div>
                         <div class="card-body">
                             <form action="/login" method="post">
-                                <div class="form-group">
-                                    <label for="typeEmailX">Email</label>
-                                    <input type="email" class="form-control" id="typeEmailX" name="email" aria-describedby="emailHelp">
-                                </div>
-                                <div class="form-group">
-                                    <label for="typePasswordX">Password</label>
-                                    <input type="password" class="form-control" id="typePasswordX" name="password">
-                                </div>
+                               <div class="form-group">
+  <label for="typeEmailX">Email<span class="mandatory">*</span></label>
+  <input type="email" class="form-control" id="typeEmailX" name="email" aria-describedby="emailHelp" required>
+</div>
+<div class="form-group">
+  <label for="typePasswordX">Password<span class="mandatory">*</span></label>
+  <input type="password" class="form-control" id="typePasswordX" name="password" required>
+</div>
+
                                 <p class="text-danger" id="error-msg">
                                     <%= error ? error : '' %>
                                 </p>
