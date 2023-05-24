@@ -296,7 +296,7 @@ exports.isAuth = (req, res, next) => {
 // Middleware to redirect to dashboard if authenticated
 exports.redirectToDashboardIfAuth = (req, res, next) => {
   if (req.session.isAuth) {
-    res.redirect("/dashboard");
+    res.redirect("/patient-list");
   } else {
     next();
   }
@@ -384,7 +384,7 @@ exports.processLogin = async function (req, res) {
     req.session.userEmail = result[0].email;
     req.session.cookie.maxAge = 3600000;
     req.session.admin = result[0].admin;
-    res.redirect("/dashboard");
+    res.redirect("/patient-list");
     return;
   } else {
     return res
