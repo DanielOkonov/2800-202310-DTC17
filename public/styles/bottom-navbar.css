@@ -34,29 +34,32 @@
 
 
 .fixed-bottom {
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   background-color: white;
 }
 
 .navbar.navbar-light {
+  margin-bottom: 0;
   padding: 0;
 }
 
-.navbar.navbar-light .container-fluid {
-  justify-content: space-around;
-}
-
-.navbar-brand {
+.navbar .navbar-brand {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5px;
   color: black;
 }
 
-.navbar-brand i {
+.navbar .navbar-brand i {
   margin-bottom: 5px;
 }
+
+.container-fluid {
+  justify-content: space-around;
+}
+
 
