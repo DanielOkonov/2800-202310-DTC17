@@ -31,3 +31,32 @@
 .navbar .navbar-brand .fa-user-md {
     color: #20c997;
 }
+
+
+.fixed-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  background-color: white;
+}
+
+.navbar.navbar-light {
+  padding: 0;
+}
+
+.navbar.navbar-light .container-fluid {
+  justify-content: space-around;
+}
+
+.navbar-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  color: black;
+}
+
+.navbar-brand i {
+  margin-bottom: 5px;
+}
+
