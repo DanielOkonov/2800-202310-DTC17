@@ -133,8 +133,23 @@ app.post("/forgot-password", async (req, res, next) => {
       from: "heartwiseincorporated@gmail.com",
       to: email,
       subject: "Password Reset",
-      html: `<p>Dear ${existingUser.username},</p><p>Please click the following link to reset your password: <a href="http://localhost:3000/resetPassword/${resetToken}">Reset Password.</a></p>`,
+      html: `
+    <div style="text-align: center;">
+      <h1>Heart Wise Password Reset</h1>
+      <p>Dear ${existingUser.username},</p>
+      <p>Please click the following link to reset your password:</p>
+      <p><a href="http://localhost:3000/resetPassword/${resetToken}">Reset Password</a></p>
+      <hr />
+      <h2>Privacy Policy</h2>
+      <p>Your privacy is of utmost importance to us. We handle your data with the greatest care, ensuring it is used only for the purpose for which you have given consent.</p>
+      <h2>Attribution</h2>
+      <p>This service is provided by Heart Wise Inc., a pioneer in heart health technologies.</p>
+      <hr />
+      <p><small>If you have received this email in error, please immediately delete it and all copies of it from your system, destroy any hard copies of it, and notify the sender. You must not, directly or indirectly, use, disclose, distribute, print, or copy any part of this message if you are not the intended recipient.</small></p>
+    </div>
+  `,
     };
+
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
