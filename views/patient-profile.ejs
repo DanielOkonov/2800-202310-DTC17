@@ -10,8 +10,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="<%= patient.avatar %>" class="rounded-circle mb-3" style="width: 300px;"
-                                alt="Patient Avatar">
+                            <img src="<%= patient.avatar %>" class="rounded-circle mb-3" style="width: 300px"
+                                alt="Patient Avatar" />
                         </div>
                         <h5 class="card-title text-center">
                             <%= patient.firstName %>
@@ -25,27 +25,31 @@
 
                         <ul class="list-group list-group-flush">
                             <% var dateOfBirth=new Date(patient.dateOfBirth); %>
-                                <li class="list-group-item">Date of Birth: <%= dateOfBirth.toLocaleDateString("en-CA", {
-                                        year: 'numeric' , month: '2-digit' , day: '2-digit' }) %>
+                                <li class="list-group-item">
+                                    Date of Birth: <%= dateOfBirth.toLocaleDateString("en-CA", { year: 'numeric' ,
+                                        month: '2-digit' , day: '2-digit' }) %>
                                 </li>
                                 <li class="list-group-item">Age: <%= patient.age %>
                                 </li>
-                                <li class="list-group-item">Healthcare Number: <%= patient.personalHealthId %>
+                                <li class="list-group-item">
+                                    Healthcare Number: <%= patient.personalHealthId %>
                                 </li>
                                 <li class="list-group-item">Sex: <%= patient.sex %>
                                 </li>
-                                <li class="list-group-item">Anaemia: <%= patient.anaemia ? 'Yes' : 'No' %>
+                                <li class="list-group-item">
+                                    Anaemia: <%= patient.anaemia ? 'Yes' : 'No' %>
                                 </li>
-                                <li class="list-group-item">Diabetes: <%= patient.diabetes ? 'Yes' : 'No' %>
+                                <li class="list-group-item">
+                                    Diabetes: <%= patient.diabetes ? 'Yes' : 'No' %>
                                 </li>
-                                <li class="list-group-item">High Blood Pressure: <%= patient.highBloodPressure ? 'Yes'
-                                        : 'No' %>
+                                <li class="list-group-item">
+                                    High Blood Pressure: <%= patient.highBloodPressure ? 'Yes' : 'No' %>
                                 </li>
 
-                                <br>
+                                <br />
 
-                                <% if (patient.analysis && patient.analysis.length> 0) { %>
-                                    <% patient.analysis.forEach(analysis=> { %>
+                                <% if (patient.analysis && patient.analysis.length> 0) { %> <%
+                                        patient.analysis.forEach(analysis=> { %>
                                         <li class="list-group-item">
                                             Analysis:
                                             <a
@@ -72,4 +76,5 @@
             window.history.back();
         }
     </script>
+
     <%- include("templates/bottom-navbar") %>
