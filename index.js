@@ -11,11 +11,10 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Joi = require("joi");
 const saltRounds = 10;
-const { exec } = require('child_process');
-const path = require('path');
-const { MongoClient } = require('mongodb');
-const { ObjectId } = require('mongodb');
-
+const { exec } = require("child_process");
+const path = require("path");
+const { MongoClient } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 app.use("/public/", express.static("./public"));
 
@@ -134,8 +133,23 @@ app.post("/forgot-password", async (req, res, next) => {
       from: "heartwiseincorporated@gmail.com",
       to: email,
       subject: "Password Reset",
-      html: `<p>Dear ${existingUser.username},</p><p>Please click the following link to reset your password: <a href="http://localhost:3000/resetPassword/${resetToken}">Reset Password.</a></p>`,
+      html: `
+    <div style="text-align: center;">
+      <h1>Heart Wise Password Reset</h1>
+      <p>Dear ${existingUser.username},</p>
+      <p>Please click the following link to reset your password:</p>
+      <p><a href="http://localhost:3000/resetPassword/${resetToken}">Reset Password</a></p>
+      <hr />
+      <h2>Privacy Policy</h2>
+      <p>Your privacy is of utmost importance to us. We handle your data with the greatest care, ensuring it is used only for the purpose for which you have given consent.</p>
+      <h2>Attribution</h2>
+      <p>This service is provided by Heart Wise Inc., a pioneer in heart health technologies.</p>
+      <hr />
+      <p><small>If you have received this email in error, please immediately delete it and all copies of it from your system, destroy any hard copies of it, and notify the sender. You must not, directly or indirectly, use, disclose, distribute, print, or copy any part of this message if you are not the intended recipient.</small></p>
+    </div>
+  `,
     };
+
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -217,10 +231,10 @@ app.post("/resetPassword", async (req, res) => {
   }
 });
 
-app.get('/analyze', function (req, res) {
+app.get("/analyze", function (req, res) {
   var query = req.query.q;
   // other code...
-  res.render('analyze', { query: query });
+  res.render("analyze", { query: query });
 });
 app.get("/api/livesearch", patient.liveSearchPatients);
 
@@ -229,10 +243,8 @@ app.get("/api/livesearch", patient.liveSearchPatients);
 // });
 // app.get('/api/searchanalysispatient', patient.searchAnalysisPatient);
 
-
-
 app.get("/share", (req, res) => {
-  res.render("share"); 
+  res.render("share");
 });
 
 app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
@@ -243,16 +255,29 @@ app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: email,
-      subject: "Here is the PDF you requested",
-      text: "Please find the PDF attached.",
+      subject: "Heart Wise Patient Result PDF",
+      html: `
+    <div style="text-align: center;">
+      <h1>Heart Wise Patient Result PDF</h1>
+      <p>To whom it may concern, please find the requested patient PDF attached.</p>
+      <hr />
+      <h2>Privacy Policy</h2>
+      <p>Your privacy is of utmost importance to us. We handle your data with the greatest care, ensuring it is used only for the purpose for which you have given consent.</p>
+      <h2>Attribution</h2>
+      <p>This service is provided by Heart Wise Inc., a pioneer in heart health technologies.</p>
+      <hr />
+      <p><small>If you have received this email in error, please immediately delete it and all copies of it from your system, destroy any hard copies of it, and notify the sender. You must not, directly or indirectly, use, disclose, distribute, print, or copy any part of this message if you are not the intended recipient.</small></p>
+    </div>
+  `,
       attachments: [
         {
-          filename: "file.pdf",
+          filename: "results.pdf",
           path: pdfPath,
           contentType: "application/pdf",
         },
       ],
     };
+
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -271,13 +296,11 @@ app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
   }
 });
 
-
 app.use(bodyParser.urlencoded({ extended: true }));
 
 function runPythonScript(serumCreatinine, ejectionFraction) {
   return new Promise((resolve, reject) => {
-
-    const pythonScript = 'scripts\\analysis.py';
+    const pythonScript = "scripts\\analysis.py";
     const command = `python ${pythonScript} ${serumCreatinine} ${ejectionFraction}`;
 
     exec(command, (error, stdout, stderr) => {
@@ -290,92 +313,110 @@ function runPythonScript(serumCreatinine, ejectionFraction) {
   });
 }
 
-function insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId, patientId) {
-  const uri = url
-  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+function insertDataIntoMongoDB(
+  serumCreatinine,
+  ejectionFraction,
+  result,
+  userId,
+  patientId
+) {
+  const uri = url;
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 
-  return client.connect()
+  return client
+    .connect()
     .then(() => {
       const db = client.db(process.env.MONGODB_DATABASE);
       const collection = db.collection(process.env.MONGODB_PATIENTCOLLECTION);
 
       const query = { _id: new ObjectId(patientId) };
 
-      return collection.findOne(query)
-        .then((user) => {
-          if (!user) {
-            console.log('User not found in the database.');
-            return;
-          }
-          const update = {
-            $push: {
-              analysis: {
-                $each: [{
+      return collection.findOne(query).then((user) => {
+        if (!user) {
+          console.log("User not found in the database.");
+          return;
+        }
+        const update = {
+          $push: {
+            analysis: {
+              $each: [
+                {
                   analysisDate: new Date(),
                   conductedBy: userId,
                   ejectionFraction: ejectionFraction,
                   serumCreatinine: serumCreatinine,
-                  analysisResult: result
-                }],
-                $position: 0
-              }
-            }
-          };
-          
+                  analysisResult: result,
+                },
+              ],
+              $position: 0,
+            },
+          },
+        };
 
-          return collection.updateOne(query, update);
-        });
+        return collection.updateOne(query, update);
+      });
     })
     .finally(() => {
       client.close();
     });
 }
 
-
-
-app.post('/result', (req, res) => {
-  const serumCreatinine = req.body['serum-creatinine'];
-  const ejectionFraction = req.body['ejection-fraction'];
-  const patientId = req.body['patient-id']
+app.post("/result", (req, res) => {
+  const serumCreatinine = req.body["serum-creatinine"];
+  const ejectionFraction = req.body["ejection-fraction"];
+  const patientId = req.body["patient-id"];
 
   MongoClient.connect(url, { useUnifiedTopology: true })
     .then((client) => {
       const db = client.db(process.env.MONGODB_DATABASE);
       const userCollection = db.collection(process.env.MONGODB_USERCOLLECTION);
-      userCollection.findOne({ email: req.session.userEmail })
+      userCollection
+        .findOne({ email: req.session.userEmail })
         .then((user) => {
           if (user) {
             const userId = user._id;
 
             runPythonScript(serumCreatinine, ejectionFraction)
               .then((result) => {
-                insertDataIntoMongoDB(serumCreatinine, ejectionFraction, result, userId, patientId)
-                  .catch((error) => {
-                    console.error('Error inserting data into MongoDB:', error);
-                  });
+                insertDataIntoMongoDB(
+                  serumCreatinine,
+                  ejectionFraction,
+                  result,
+                  userId,
+                  patientId
+                ).catch((error) => {
+                  console.error("Error inserting data into MongoDB:", error);
+                });
 
-                res.render('result.ejs', { result, serumCreatinine, ejectionFraction });
+                res.render("result.ejs", {
+                  result,
+                  serumCreatinine,
+                  ejectionFraction,
+                });
               })
               .catch((error) => {
-                console.error('Error executing Python script:', error);
-                res.status(500).send('Internal Server Error');
+                console.error("Error executing Python script:", error);
+                res.status(500).send("Internal Server Error");
               });
           } else {
-            console.error('User not found');
-            res.status(404).send('User not found');
+            console.error("User not found");
+            res.status(404).send("User not found");
           }
         })
         .catch((error) => {
-          console.error('Error finding user:', error);
-          res.status(500).send('Internal Server Error');
+          console.error("Error finding user:", error);
+          res.status(500).send("Internal Server Error");
         })
         .finally(() => {
           client.close();
         });
     })
     .catch((error) => {
-      console.error('Error connecting to MongoDB:', error);
-      res.status(500).send('Internal Server Error');
+      console.error("Error connecting to MongoDB:", error);
+      res.status(500).send("Internal Server Error");
     });
 });
 

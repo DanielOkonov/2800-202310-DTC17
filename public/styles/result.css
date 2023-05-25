@@ -24,7 +24,9 @@
     border-radius: 4px;
     cursor: pointer;
     width: 45%; /* Adjusted to account for the gap */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); /* Add box shadow */
 }
+
 
 #download {
     margin-right: 10px;  /* Adjust as needed */
@@ -78,20 +80,39 @@
   resize: vertical;
 }
 
+
+
 .save-notes-button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 45%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
+.save-notes-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Share Button */
+#share {
+    background-color: #FF6F00;
+    color: #FFFFFF;
+}
+
+/* Download Button */
+#download {
+    background-color: #1976D2;
+    color: #FFFFFF;
+}
 .breadcrumb-container {
   align-self: flex-start;
 }

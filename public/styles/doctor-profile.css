@@ -1,68 +1,49 @@
-body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-  
-}
-
 .profile-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
+  max-width: 800px;
+  margin: auto;
+  margin-top: 50px; /* adjust this value to lower the card as needed */
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 .profile-card {
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.1);
-    width: 50%;
-    min-width: 300px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.doctor-image {
+  flex-basis: 30%;
+}
+
+.doctor-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%;
+}
+
+.profile-info {
+  flex-basis: 65%;
 }
 
 .profile-info h2 {
-    color: #444;
-    font-size: 2em;
-    margin-bottom: 10px;
-}
-
-.profile-info p {
-    font-size: 1.2em;
-    color: #666;
+  color: #333;
+  font-size: 1.5em;
 }
 
 .info-label {
-    font-weight: bold;
+  font-weight: bold;
+  color: #333;
 }
 
 .profile-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+  margin-top: 20px;
+  text-align: center;
 }
 
-.btn {
-    flex-basis: 45%;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: #fff;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-    color: #fff;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
+.profile-actions .btn {
+  margin: 5px;
 }

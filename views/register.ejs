@@ -10,22 +10,23 @@
                     <div class="card-header bg-primary text-white text-uppercase"><i class="fa fa-user-plus"></i> Register</div>
                     <div class="card-body">
                         <form action="/register" method="post">
-                            <div class="form-group">
-                                <label for="typeName">Full Name</label>
-                                <input type="text" class="form-control" id="typeName" name="username" aria-describedby="nameHelp">
-                            </div>
-                            <div class="form-group">
-                                <label for="typeEmailX">Email</label>
-                                <input type="email" class="form-control" id="typeEmailX" name="email" aria-describedby="emailHelp">
-                            </div>
-                            <div class="form-group">
-                                <label for="typePasswordX">Password</label>
-                                <input type="password" class="form-control" id="typePasswordX" name="password">
-                            </div>
-                            <div class="form-group">
-                                <label for="typeConfirmPasswordX">Confirm Password</label>
-                                <input type="password" class="form-control" id="typeConfirmPasswordX" name="confirmPassword" style="margin-bottom: 10px" >
-                            </div>
+                           <div class="form-group">
+  <label for="typeName">Full Name<span class="mandatory">*</span></label>
+  <input type="text" class="form-control" id="typeName" name="username" aria-describedby="nameHelp" required>
+</div>
+<div class="form-group">
+  <label for="typeEmailX">Email<span class="mandatory">*</span></label>
+  <input type="email" class="form-control" id="typeEmailX" name="email" aria-describedby="emailHelp" required>
+</div>
+<div class="form-group">
+  <label for="typePasswordX">Password<span class="mandatory">*</span></label>
+  <input type="password" class="form-control" id="typePasswordX" name="password" required>
+</div>
+<div class="form-group">
+  <label for="typeConfirmPasswordX">Confirm Password<span class="mandatory">*</span></label>
+  <input type="password" class="form-control" id="typeConfirmPasswordX" name="confirmPassword" style="margin-bottom: 10px" required>
+</div>
+
                             <button type="submit" class="btn btn-primary btn-block">Register</button>
                             <a href="/login" class="btn btn-light btn-block">Back</a>
                         </form>
