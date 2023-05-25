@@ -3,18 +3,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
     <body>
+        <div class="container mt-5">
 
+            <button style="margin-bottom: 2rem; margin-top: 2rem; margin-left: 2rem;" class="btn btn-primary"
+                onclick="history.back()">Back</button>
 
-        <button style="margin-bottom: 2rem; margin-top: 2rem; margin-left: 2rem;" class="btn btn-primary"
-            onclick="history.back()">Back</button>
+            <h1 class="text-center mb-4">Patient Heart Risk History</h1>
 
-
-        <div class="card">
-            <div class="card-body">
-                <canvas id="myChart" style="width:100%;max-width:1100px; margin-left: 16.5rem;"></canvas>
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="myChart" style="width:100%;max-width:1100px;"></canvas>
+                </div>
             </div>
         </div>
-
         <script>
 
             var xyValues = JSON.parse('<%- data %>');
