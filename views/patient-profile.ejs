@@ -1,6 +1,6 @@
 <%- include("templates/header") %>
 
-    <div class="container mt-5">
+    <div style="margin-bottom: 5rem;" class="container mt-5">
         <% if (error) { %>
             <div class="alert alert-danger" role="alert">
                 <%= error %>
@@ -18,7 +18,15 @@
                                 <%= patient.middleName %>
                                     <%= patient.lastName %>
                         </h5>
+
+                        <a href="/patient-risk-history/<%= patient._id %>">
+                            <button style="margin-bottom: 2rem;" class="bg-lightblue">View History</button>
+                        </a>
+
                         <ul class="list-group list-group-flush">
+
+
+
                             <% var dateOfBirth=new Date(patient.dateOfBirth); %>
                                 <li class="list-group-item">Date of Birth: <%= dateOfBirth.toLocaleDateString("en-CA", {
                                         year: 'numeric' , month: '2-digit' , day: '2-digit' }) %>
@@ -57,5 +65,6 @@
                 </div>
                 <% } %>
     </div>
+
 
     <%- include("templates/bottom-navbar") %>
