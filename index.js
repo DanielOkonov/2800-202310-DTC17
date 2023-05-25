@@ -67,11 +67,19 @@ app.use(
 app.get("/add-patient", server.isAuth, patient.renderAddPatients);
 app.post("/add-patient", patient.addPatient);
 app.get("/patient-list", server.isAuth, patient.getPatients);
-app.post("/patient-list", server.isAuth, patient.addPatient);
-app.get("/search", patient.searchPatients);
-app.get("/patient/:id", patient.getPatientProfile);
-app.get("/analysis-result/:patientId/:analysisId", patient.getAnalysisResult);
-app.get("/patient-risk-history/:id", patient.getPatientRiskHistory);
+app.post("/patient-list", patient.addPatient);
+app.get("/search", server.isAuth, patient.searchPatients);
+app.get("/patient/:id", server.isAuth, patient.getPatientProfile);
+app.get(
+  "/analysis-result/:patientId/:analysisId",
+  server.isAuth,
+  patient.getAnalysisResult
+);
+app.get(
+  "/patient-risk-history/:id",
+  server.isAuth,
+  patient.getPatientRiskHistory
+);
 
 app.get("/create-dummy-patients", server.isAuth, async (req, res) => {
   const loggedInUsername = req.session.username;
@@ -149,7 +157,6 @@ app.post("/forgot-password", async (req, res, next) => {
     </div>
   `,
     };
-
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -277,7 +284,6 @@ app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
         },
       ],
     };
-
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
