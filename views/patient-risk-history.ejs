@@ -46,23 +46,29 @@
                         }
                     },
                     scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                tooltipFormat: 'DD T'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'value'
-                            }
-                        }
-                    },
+                        yAxes: [{ ticks: { min: 0, max: 100 } }]
+                    }
+
+                    // scales: {
+                    //     x: {
+                    //         type: 'time',
+                    //         time: {
+                    //             tooltipFormat: 'DD T'
+                    //         },
+                    //         title: {
+                    //             display: true,
+                    //             text: 'Date'
+                    //         }
+                    //     },
+                    //     y: {
+                    //         title: {
+                    //             display: true,
+                    //             text: 'value'
+                    //         },
+                    //         max: 100,
+
+                    //     }
+                    // },
                 },
             });
 
