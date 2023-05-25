@@ -52,10 +52,16 @@
 @media screen and (max-width: 768px) {
   .profile-card {
     flex-direction: column;
+    align-items: center; /* This centers the items horizontally */
+    text-align: center; /* This centers the text */
   }
 
   .doctor-image,
   .profile-info {
     flex-basis: 100%;
+  }
+
+  .doctor-image {
+    margin-bottom: 20px; /* Add a margin at the bottom of the image */
   }
 }
