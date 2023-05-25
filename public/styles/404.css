@@ -15,10 +15,20 @@ body {
 
 section.notFound {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  margin: 0 5%;
+  flex-wrap: wrap;
+  padding: 0 5%;
   height: 100vh;
+}
+
+section.notFound .img {
+  flex: 1;
+}
+
+section.notFound .img img {
+  max-width: 100%;
+  height: auto;
 }
 
 section.notFound h1 {
@@ -31,13 +41,17 @@ section.notFound h2 {
 }
 
 section.notFound h1,
-h2,
-h3 {
+section.notFound h2,
+section.notFound h3 {
   margin-bottom: 40px;
 }
 
 div.text {
-  height: 50vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 div.text a {
@@ -57,18 +71,26 @@ div.text a:hover {
 @media only screen and (max-width: 768px) {
   section.notFound {
     flex-direction: column;
-    justify-content: space-around;
+    align-items: center;
   }
-  section.notFound div.img img {
-    width: 70vw;
+  
+  section.notFound .img {
+    width: 100%;
+  }
+  
+  section.notFound .img img {
+    width: 100%;
     height: auto;
   }
+  
   section.notFound h1 {
     font-size: 50px;
   }
+  
   section.notFound h2 {
     font-size: 25px;
   }
+
   div.text a:active {
     color: red;
     text-decoration: underline;
