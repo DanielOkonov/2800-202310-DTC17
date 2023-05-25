@@ -27,6 +27,13 @@
   <input type="password" class="form-control" id="typeConfirmPasswordX" name="confirmPassword" style="margin-bottom: 10px" required>
 </div>
 
+<% if (typeof error !== 'undefined' && error) { %>
+  <div class="alert alert-danger" role="alert">
+    <%= error %>
+  </div>
+<% } %>
+
+
                             <button type="submit" class="btn btn-primary btn-block">Register</button>
                             <a href="/login" class="btn btn-light btn-block">Back</a>
                         </form>

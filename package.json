@@ -37,7 +37,8 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",
     "pandas": "^0.0.3",
-    "scikit": "^0.0.1"
+    "scikit": "^0.0.1",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",

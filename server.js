@@ -230,6 +230,7 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const Joi = require("joi");
+const zxcvbn = require("zxcvbn");
 
 console.log("Script loaded!");
 
@@ -252,37 +253,38 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Joi validation schemas
-const schema = Joi.object({
-  username: Joi.string()
-    .regex(/^[\w-\s]+$/)
-    .max(20)
-    .required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().max(20).required(),
-  admin: Joi.boolean().optional(),
-});
+const passwordSchema = Joi.string()
+  .min(8)
+  .max(50)
+  .custom((value, helpers) => {
+    const result = zxcvbn(value);
+    // Customize the minimum strength as necessary (score is 0-4)
+    if (result.score < 3) {
+      return helpers.message(
+        "Password is too weak. It must include a combination of letters, numbers, and special characters."
+      );
+    }
+    return value;
+  }, "Password Strength Validation")
+  .messages({
+    "string.min": "Password length must be at least 8 characters long.",
+  })
+  .required();
+
+
+  const schema = Joi.object({
+    username: Joi.string().alphanum().max(20).required(),
+    email: Joi.string().email().required(),
+    password: passwordSchema,
+    admin: Joi.boolean().optional(),
+  });
 
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().max(20).required(),
 });
 
-// // Session configuration
-// const mongoStore = MongoStore.create({
-//   mongoUrl: `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/HeartWise`,
-//   crypto: {
-//     secret: process.env.MONGODB_SESSION_SECRET,
-//   },
-// })
 
-// app.use(
-//   session({
-//     secret: process.env.NODE_SESSION_SECRET,
-//     store: mongoStore,
-//     saveUninitialized: false,
-//     resave: true,
-//   })
-// );
 
 // Middleware to protect routes
 exports.isAuth = (req, res, next) => {
@@ -333,25 +335,20 @@ exports.processRegister = async function (req, res) {
   var password = req.body.password;
   var admin = req.body.admin === "on" ? true : false;
 
-  // const schema = Joi.object({
-  //   username: Joi.string().alphanum().max(30).required(),
-  //   password: Joi.string().max(20).required(),
-  //   email: Joi.string().email({
-  //     minDomainSegments: 2,
-  //     tlds: { allow: ["com", "ca"] },
-  //   }),
-  // });
+ const validationResult = schema.validate({
+   username,
+   email,
+   password,
+   admin,
+ });
 
-  const validationResult = schema.validate({
-    username: username,
-    password: password,
-    email: email,
-  });
-
-  if (validationResult.error != null) {
-    console.log(validationResult.error.message);
-    return res.redirect("/register");
-  }
+ if (validationResult.error) {
+   console.log(validationResult.error);
+   // Pass the error message to your view to display to the user
+   return res.render("register.ejs", {
+     error: validationResult.error.details[0].message,
+   });
+ }
 
   var hashedPassword = await bcrypt.hash(password, 12);
 
