@@ -1,74 +1,74 @@
 <%- include("templates/header") %>
 
-    <div class="container mt-5">
-        <% if (error) { %>
-            <div class="alert alert-danger" role="alert">
-                <%= error %>
-            </div>
-            <% } else { %>
-                <h1 class="text-center mb-4">Patient Profile</h1>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <img src="<%= patient.avatar %>" class="rounded-circle mb-3" style="width: 300px;"
-                                alt="Patient Avatar">
-                        </div>
-                        <h5 class="card-title text-center">
-                            <%= patient.firstName %>
-                                <%= patient.middleName %>
-                                    <%= patient.lastName %>
-                        </h5>
-                        <ul class="list-group list-group-flush">
-                            <% var dateOfBirth=new Date(patient.dateOfBirth); %>
-                                <li class="list-group-item">Date of Birth: <%= dateOfBirth.toLocaleDateString("en-CA", {
-                                        year: 'numeric' , month: '2-digit' , day: '2-digit' }) %>
-                                </li>
-                                <li class="list-group-item">Age: <%= patient.age %>
-                                </li>
-                                <li class="list-group-item">Healthcare Number: <%= patient.personalHealthId %>
-                                </li>
-                                <li class="list-group-item">Sex: <%= patient.sex %>
-                                </li>
-                                <li class="list-group-item">Anaemia: <%= patient.anaemia ? 'Yes' : 'No' %>
-                                </li>
-                                <li class="list-group-item">Diabetes: <%= patient.diabetes ? 'Yes' : 'No' %>
-                                </li>
-                                <li class="list-group-item">High Blood Pressure: <%= patient.highBloodPressure ? 'Yes'
-                                        : 'No' %>
-                                </li>
+<div class="container mt-5">
+  <% if (error) { %>
+  <div class="alert alert-danger" role="alert"><%= error %></div>
+  <% } else { %>
+  <h1 class="text-center mb-4">Patient Profile</h1>
+  <div class="card">
+    <div class="card-body">
+      <div class="text-center">
+        <img
+          src="<%= patient.avatar %>"
+          class="rounded-circle mb-3"
+          style="width: 300px"
+          alt="Patient Avatar"
+        />
+      </div>
+      <h5 class="card-title text-center">
+        <%= patient.firstName %> <%= patient.middleName %> <%= patient.lastName
+        %>
+      </h5>
+      <ul class="list-group list-group-flush">
+        <% var dateOfBirth=new Date(patient.dateOfBirth); %>
+        <li class="list-group-item">
+          Date of Birth: <%= dateOfBirth.toLocaleDateString("en-CA", { year:
+          'numeric' , month: '2-digit' , day: '2-digit' }) %>
+        </li>
+        <li class="list-group-item">Age: <%= patient.age %></li>
+        <li class="list-group-item">
+          Healthcare Number: <%= patient.personalHealthId %>
+        </li>
+        <li class="list-group-item">Sex: <%= patient.sex %></li>
+        <li class="list-group-item">
+          Anaemia: <%= patient.anaemia ? 'Yes' : 'No' %>
+        </li>
+        <li class="list-group-item">
+          Diabetes: <%= patient.diabetes ? 'Yes' : 'No' %>
+        </li>
+        <li class="list-group-item">
+          High Blood Pressure: <%= patient.highBloodPressure ? 'Yes' : 'No' %>
+        </li>
 
-                                <br>
+        <br />
 
-                                <% if (patient.analysis && patient.analysis.length> 0) { %>
-                                    <% patient.analysis.forEach(analysis=> { %>
-                                        <li class="list-group-item">
-                                            Analysis:
-                                            <a
-                                                href="/analysis-result/<%= patient._id %>/<%= patient.analysis.indexOf(analysis) %>">
-                                                <%= analysis.analysisDate %>
-                                            </a>
-                                        </li>
-                                        <% }) %>
-                                            <% } else { %>
-                                                <li class="list-group-item">(No previous analysis found)</li>
-                                                <% } %>
-                        </ul>
-                    </div>
-                </div>
-                <% } %>
+        <% if (patient.analysis && patient.analysis.length> 0) { %> <%
+        patient.analysis.forEach(analysis=> { %>
+        <li class="list-group-item">
+          Analysis:
+          <a
+            href="/analysis-result/<%= patient._id %>/<%= patient.analysis.indexOf(analysis) %>"
+          >
+            <%= analysis.analysisDate %>
+          </a>
+        </li>
+        <% }) %> <% } else { %>
+        <li class="list-group-item">(No previous analysis found)</li>
+        <% } %>
+      </ul>
     </div>
+  </div>
+  <% } %>
+</div>
 
-    <div class="container mt-3 d-flex justify-content-center">
-        <button class="btn btn-primary" onclick="goBack()">Back</button>
-    </div>
+<div class="container mt-3 d-flex justify-content-center">
+  <button class="btn btn-primary" onclick="goBack()">Back</button>
+</div>
 
-    <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
+<script>
+  function goBack() {
+    window.history.back();
+  }
+</script>
 
-    <<<<<<< HEAD <%- include("templates/bottom-navbar") %>
-        =======
-        <%- include("templates/bottom-navbar") %>
-            >>>>>>> 90db0afa342f670dc621ad8d20d65da2ad888687
+<%- include("templates/bottom-navbar") %>
