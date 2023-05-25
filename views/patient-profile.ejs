@@ -18,6 +18,11 @@
                                 <%= patient.middleName %>
                                     <%= patient.lastName %>
                         </h5>
+
+                        <a href="/patient-risk-history/<%= patient._id %>">
+                            <button style="margin-bottom: 2rem;" class="btn btn-primary">View History</button>
+                        </a>
+
                         <ul class="list-group list-group-flush">
                             <% var dateOfBirth=new Date(patient.dateOfBirth); %>
                                 <li class="list-group-item">Date of Birth: <%= dateOfBirth.toLocaleDateString("en-CA", {
@@ -67,8 +72,4 @@
             window.history.back();
         }
     </script>
-
-    <<<<<<< HEAD <%- include("templates/bottom-navbar") %>
-        =======
-        <%- include("templates/bottom-navbar") %>
-            >>>>>>> 90db0afa342f670dc621ad8d20d65da2ad888687
+    <%- include("templates/bottom-navbar") %>
