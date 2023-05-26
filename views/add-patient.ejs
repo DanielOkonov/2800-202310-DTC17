@@ -1,200 +1,81 @@
-<%- include("templates/header") %> <% if (error) { %>
-<div class="alert alert-danger" role="alert"><%= error %></div>
-<% } else { %>
-<div class="container">
-  <h1>Add New Patient</h1>
-  
+<%- include("templates/header") %>
+  <% if (error) { %>
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+    <% } else { %>
+      <div class="container">
+        <h1>Add New Patient</h1>
 
-  <% if (typeof success !=='undefined' ) { %>
-  <div class="alert alert-success" role="alert"><%= success %></div>
-  <% } %>
-  <form action="/add-patient" method="post" class="needs-validation" novalidate>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="firstName"
-          >First Name: <span class="text-danger">*</span></label
-        >
-        <input
-          type="text"
-          id="firstName"
-          name="firstName"
-          class="form-control"
-          placeholder="John"
-          required
-        />
-      </div>
-      <div class="form-group col-md-4">
-        <label for="middleName">Middle Name:</label>
-        <input
-          type="text"
-          id="middleName"
-          name="middleName"
-          class="form-control"
-          placeholder="Doe"
-        />
-      </div>
-      <div class="form-group col-md-4">
-        <label for="lastName"
-          >Last Name: <span class="text-danger">*</span></label
-        >
-        <input
-          type="text"
-          id="lastName"
-          name="lastName"
-          class="form-control"
-          placeholder="Smith"
-          required
-        />
-      </div>
-    </div>
 
-<<<<<<< Updated upstream
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="personalHealthId"
-          >Personal Health ID: <span class="text-danger">*</span></label
-        >
-        <input
-          type="text"
-          id="personalHealthId"
-          name="personalHealthId"
-          class="form-control"
-          placeholder="1234567890"
-          required
-        />
-      </div>
-      <div class="form-group col-md-4">
-        <label for="dateOfBirth"
-          >Date of Birth: <span class="text-danger">*</span></label
-        >
-        <input
-          type="date"
-          class="form-control"
-          id="dateOfBirth"
-          name="dateOfBirth"
-          required
-        />
-      </div>
-      <!-- <div class="form-group col-md-3">
-                        <label for="age">Age: <span class="text-danger">*</span></label>
-                        <input type="number" id="age" name="age" class="form-control" placeholder="45" min="1" required>
-                    </div> -->
-      <div class="form-group col-md-4">
-        <label for="sex">Sex: <span class="text-danger">*</span></label>
-        <select name="sex" id="sex" class="form-control" required>
-          <option value="">--Select--</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-    </div>
+        <% if (typeof success !=='undefined' ) { %>
+          <div class="alert alert-success" role="alert">
+            <%= success %>
+          </div>
+          <% } %>
+            <form action="/add-patient" method="post" class="needs-validation" novalidate>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="firstName">First Name: <span class="text-danger">*</span></label>
+                  <input type="text" id="firstName" name="firstName" class="form-control" placeholder="John" required />
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="middleName">Middle Name:</label>
+                  <input type="text" id="middleName" name="middleName" class="form-control" placeholder="Doe" />
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="lastName">Last Name: <span class="text-danger">*</span></label>
+                  <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Smith" required />
+                </div>
+              </div>
 
-    <div class="form-group">
-      <label for="anaemia"
-        >Anaemia (Decrease of red blood cells or hemoglobin):
-        <span class="text-danger">*</span></label
-      >
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="anaemia"
-          name="anaemia"
-        />
-        <label class="form-check-label" for="anaemia"
-          >Check if patient has anaemia</label
-        >
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="diabetes">Diabetes: <span class="text-danger">*</span></label>
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="diabetes"
-          name="diabetes"
-        />
-        <label class="form-check-label" for="diabetes"
-          >Check if patient has diabetes</label
-        >
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="highBloodPressure"
-        >High Blood Pressure: <span class="text-danger">*</span></label
-      >
-      <div class="form-check">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="highBloodPressure"
-          name="highBloodPressure"
-        />
-        <label class="form-check-label" for="highBloodPressure"
-          >Check if patient has high blood pressure</label
-        >
-      </div>
-    </div>
-<button type="button" class="btn btn-primary" onclick="window.history.back();">Back</button>
-    <button type="submit" class="btn btn-primary">Add Patient</button>
-  </form>
-</div>
-<% } %> <%- include("templates/bottom-navbar") %>
-=======
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="personalHealthId">Personal Health ID: <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" id="personalHealthId" name="personalHealthId"
-                                        class="form-control" placeholder="1234567890" required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="dateOfBirth">Date of Birth: <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth"
-                                        required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="sex">Sex: <span class="text-danger">*</span></label>
-                                    <select name="sex" id="sex" class="form-control" required>
-                                        <option value="">--Select--</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="personalHealthId">Personal Health ID: <span class="text-danger">*</span></label>
+                  <input type="text" id="personalHealthId" name="personalHealthId" class="form-control"
+                    placeholder="1234567890" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="dateOfBirth">Date of Birth: <span class="text-danger">*</span></label>
+                  <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="sex">Sex: <span class="text-danger">*</span></label>
+                  <select name="sex" id="sex" class="form-control" required>
+                    <option value="">--Select--</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
 
-                            <div class="form-group">
-                                <label for="anaemia">Anaemia (Decrease of red blood cells or hemoglobin): <span
-                                        class="text-danger">*</span></label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="anaemia" name="anaemia">
-                                    <label class="form-check-label" for="anaemia">Check if patient has anaemia</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="diabetes">Diabetes: <span class="text-danger">*</span></label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="diabetes" name="diabetes">
-                                    <label class="form-check-label" for="diabetes">Check if patient has diabetes</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="highBloodPressure">High Blood Pressure: <span
-                                        class="text-danger">*</span></label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="highBloodPressure"
-                                        name="highBloodPressure">
-                                    <label class="form-check-label" for="highBloodPressure">Check if patient has high
-                                        blood
-                                        pressure</label>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Patient</button>
-                        </form>
-            </div>
-            <% } %>
-                <%- include("templates/bottom-navbar") %>
->>>>>>> Stashed changes
+              <div class="form-group">
+                <label for="anaemia">Anaemia (Decrease of red blood cells or hemoglobin): <span
+                    class="text-danger">*</span></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="anaemia" name="anaemia">
+                  <label class="form-check-label" for="anaemia">Check if patient has anaemia</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="diabetes">Diabetes: <span class="text-danger">*</span></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="diabetes" name="diabetes">
+                  <label class="form-check-label" for="diabetes">Check if patient has diabetes</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="highBloodPressure">High Blood Pressure: <span class="text-danger">*</span></label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="highBloodPressure" name="highBloodPressure">
+                  <label class="form-check-label" for="highBloodPressure">Check if patient has high
+                    blood
+                    pressure</label>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Patient</button>
+            </form>
+      </div>
+      <% } %>
+        <%- include("templates/bottom-navbar") %>
