@@ -1,4 +1,5 @@
 # Heart Wise
+![Heart Wise Banner](/public/images/heartwise.png)
 
 Heart Wise is an **AI-powered diagnostic tool** to help healthcare professionals accurately predict and manage heart failure risks, revolutionizing early detection and intervention for cardiovascular diseases with cutting-edge algorithms and predictive analytics.
 
