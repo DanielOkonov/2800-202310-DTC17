@@ -42,13 +42,20 @@
     <form action="/result" method="post">
       <div class="analysis-form">
         <label for="serum-creatinine">Serum Creatinine<span class="mandatory">*</span>:</label>
-        <input type="text" pattern="^\d*\.?\d+$" title="Only positive decimal numbers are allowed"
-          name="serum-creatinine" id="serum-creatinine" required />
+        <<<<<<< Updated upstream <input type="text" pattern="^\d*\.?\d+$"
+          title="Only positive decimal numbers are allowed" name="serum-creatinine" id="serum-creatinine" required />
       </div>
       <div class="analysis-form">
         <label for="ejection-fraction">Ejection Fraction<span class="mandatory">*</span>:</label>
         <input type="text" pattern="^\d*\.?\d+$" title="Only positive decimal numbers are allowed"
           name="ejection-fraction" id="ejection-fraction" required />
+        =======
+        <input type="text" name="serum-creatinine" id="serum-creatinine" required />
+      </div>
+      <div class="analysis-form">
+        <label for="ejection-fraction">Ejection Fraction<span class="mandatory">*</span>:</label>
+        <input type="text" name="ejection-fraction" id="ejection-fraction" required />
+        >>>>>>> Stashed changes
       </div>
 
       <div class="selected-patient" style="display: none">
