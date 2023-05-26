@@ -26,24 +26,31 @@
                         <ul class="list-group list-group-flush">
                             <% var dateOfBirth=new Date(patient.dateOfBirth); %>
                                 <li class="list-group-item">
-                                    Date of Birth: <%= dateOfBirth.toLocaleDateString("en-CA", { year: 'numeric' ,
-                                        month: '2-digit' , day: '2-digit' }) %>
+                                    <b>Date of Birth:</b>
+                                    <%= dateOfBirth.toLocaleDateString("en-CA", { year: 'numeric' , month: '2-digit' ,
+                                        day: '2-digit' }) %>
                                 </li>
-                                <li class="list-group-item">Age: <%= patient.age %>
-                                </li>
-                                <li class="list-group-item">
-                                    Healthcare Number: <%= patient.personalHealthId %>
-                                </li>
-                                <li class="list-group-item">Sex: <%= patient.sex %>
+                                <li class="list-group-item"><b>Age:</b>
+                                    <%= patient.age %>
                                 </li>
                                 <li class="list-group-item">
-                                    Anaemia: <%= patient.anaemia ? 'Yes' : 'No' %>
+                                    <b>Healthcare Number:</b>
+                                    <%= patient.personalHealthId %>
+                                </li>
+                                <li class="list-group-item"><b>Sex:</b>
+                                    <%= patient.sex %>
                                 </li>
                                 <li class="list-group-item">
-                                    Diabetes: <%= patient.diabetes ? 'Yes' : 'No' %>
+                                    <b>Anaemia:</b>
+                                    <%= patient.anaemia ? 'Yes' : 'No' %>
                                 </li>
                                 <li class="list-group-item">
-                                    High Blood Pressure: <%= patient.highBloodPressure ? 'Yes' : 'No' %>
+                                    <b>Diabetes:</b>
+                                    <%= patient.diabetes ? 'Yes' : 'No' %>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>High Blood Pressure:</b>
+                                    <%= patient.highBloodPressure ? 'Yes' : 'No' %>
                                 </li>
 
                                 <br />
@@ -51,7 +58,7 @@
                                 <% if (patient.analysis && patient.analysis.length> 0) { %> <%
                                         patient.analysis.forEach(analysis=> { %>
                                         <li class="list-group-item">
-                                            Analysis:
+                                            <b>Analysis:</b>
                                             <a
                                                 href="/analysis-result/<%= patient._id %>/<%= patient.analysis.indexOf(analysis) %>">
                                                 <%= analysis.analysisDate %>
