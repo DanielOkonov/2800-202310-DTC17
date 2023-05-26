@@ -117,7 +117,17 @@ EMAIL_PASSWORD = <Google Mail account password>
 8. If set up correctly, in the terminal window, a message will appear containing a link to where the application is hosted. It will be in the form of 'localhost:3000'. Click on that link to view the application in your browser.
 9. Here is our [testing plan](https://docs.google.com/spreadsheets/d/12ZFcGtFpCMN1wZ5vDrhNiNGaxBmXxR2ixeeSjZpjWRk/edit#gid=394496370). You can view our testing history and even contribute to a bug fix!
 
+### AI Incorporation 
 
+We used AI extensively in our application. The core component of our app is a logistic regression model, an AI algorithm, which we trained to predict the risk of heart failure. This model takes two health indicator values (Serum Creatinine and Ejection Fraction) and provides a probability of a death event occurring. We trained our model using a dataset from Kaggle, optimizing its accuracy through a process called k-fold cross-validation with 10 folds. The AI model forms the backbone of our risk prediction feature, providing users with potential insights into their heart health.
+
+While we didn't use AI to create or clean datasets, the logistic regression model we used inherently assists in identifying and handling outliers and missing values in the dataset. This is part of the training and validation process, where we fine-tuned our model to handle the given heart failure datasets from Kaggle efficiently and accurately.
+
+Our linear regression model, trained using Kaggle datasets, allows us to predict the risk of heart failure based on health indicators. It's this AI model that allows us to generate risk predictions and offer data-driven insights to our users. 
+
+## Limitations
+
+One of the challenges we faced was the initial lower accuracy of our model, around 60%. However, we were able to overcome this limitation by implementing k-fold cross-validation with 10 folds, which improved the accuracy to about 75%. Another limitation was the potential for overfitting, considering the high dimensionality of medical data. We addressed this by using logistic regression, which is less prone to overfitting in comparison to other complex models. Furthermore, ensuring the quality and relevance of the data used for training was critical, so we chose a reliable source, Kaggle, for our dataset.
 
 ## Authors
 [Amir Eskandari](https://github.com/am-eskandari)
