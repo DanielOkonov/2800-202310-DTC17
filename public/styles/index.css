@@ -1,6 +1,7 @@
 body {
     font-family: 'Manrope', sans-serif;
 }
+
 .bg-lightblue {
     background-color: #4ca2ff !important;
 }
@@ -30,8 +31,8 @@ body {
 .footer {
     padding: 20px 0;
 }
+
 .text-center {
     margin-bottom: 20px;
-    
-}
 
+}
