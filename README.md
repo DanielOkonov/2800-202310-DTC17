@@ -156,7 +156,7 @@ MDN Web Docs: In-depth tutorials and articles on HTML, CSS, JavaScript, and more
 Stack Overflow: Question and answer site for professional and enthusiast programmers (https://stackoverflow.com/)
 Dataset used: https://www.kaggle.com/datasets/andrewmvd/heart-failure-clinical-data
 
-See [LICENCSE.txt](LICENSE.txt) file for licensing.
+See [LICENSE.txt](LICENSE.txt) file for licensing.
 
 ## AI Incorporation 
 
