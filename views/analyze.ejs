@@ -1,112 +1,89 @@
 <%- include("templates/header") %>
 
-<link rel="stylesheet" href="/public/styles/analyze.css" />
+  <link rel="stylesheet" href="/public/styles/analyze.css" />
 
-<div class="analyze-container">
-  <div class="container">
-    <div class="row mt-3">
-      <h1>Analyze Patient</h1>
-      <p>
-        Type in the name, select the name and type in the information before
-        clicking analyze to analyze a patient's risk of heart failure.
-      </p>
-      <!-- Search Form -->
-      <div class="col-md-12 mb-3">
-        <!-- Search Query Alert -->
-        <% if (query) { %>
-        <div class="alert alert-primary mt-3 py-1 px-2" role="alert">
-          Search results for: <strong> <%= query %> </strong>
+  <div class="analyze-container">
+    <div class="container">
+      <div class="row mt-3">
+        <h1>Analyze Patient</h1>
+        <p>
+          Type in the name, select the name and type in the information before
+          clicking analyze to analyze a patient's risk of heart failure.
+        </p>
+        <!-- Search Form -->
+        <div class="col-md-12 mb-3">
+          <!-- Search Query Alert -->
+          <% if (query) { %>
+            <div class="alert alert-primary mt-3 py-1 px-2" role="alert">
+              Search results for: <strong>
+                <%= query %>
+              </strong>
+            </div>
+            <% } %>
+              <form action="/search" method="GET">
+                <div class="input-group mb-3 mx-1">
+                  <input type="text" class="form-control" placeholder="Search patients..." aria-label="Search"
+                    aria-describedby="button-addon2" id="searchBar" name="q" value="<%= query || '' %>" />
+                </div>
+                <div class="d-flex flex-wrap mx-1">
+                  <a href="/add-patient" class="btn btn-success mb-2" id="add-patient-button"><i
+                      class="fas fa-plus"></i> Add Patient</a>
+                </div>
+              </form>
         </div>
-        <% } %>
-        <form action="/search" method="GET">
-          <div class="input-group mb-3 mx-1">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Search patients..."
-              aria-label="Search"
-              aria-describedby="button-addon2"
-              id="searchBar"
-              name="q"
-              value="<%= query || '' %>"
-            />
+        <!-- Patient List -->
+        <div class="col-md-12 mb-3">
+          <div id="patientList" class="list-group">
+            <!-- Search results will be populated here -->
           </div>
-          <div class="d-flex flex-wrap mx-1">
-            <a
-              href="/add-patient"
-              class="btn btn-success mb-2"
-              id="add-patient-button"
-              ><i class="fas fa-plus"></i> Add Patient</a
-            >
-          </div>
-        </form>
-      </div>
-      <!-- Patient List -->
-      <div class="col-md-12 mb-3">
-        <div id="patientList" class="list-group">
-          <!-- Search results will be populated here -->
         </div>
       </div>
     </div>
+    <form action="/result" method="post">
+      <div class="analysis-form">
+        <label for="serum-creatinine">Serum Creatinine<span class="mandatory">*</span>:</label>
+        <input type="text" pattern="^\d*\.?\d+$" title="Only positive decimal numbers are allowed"
+          name="serum-creatinine" id="serum-creatinine" required />
+      </div>
+      <div class="analysis-form">
+        <label for="ejection-fraction">Ejection Fraction<span class="mandatory">*</span>:</label>
+        <input type="text" pattern="^\d*\.?\d+$" title="Only positive decimal numbers are allowed"
+          name="ejection-fraction" id="ejection-fraction" required />
+      </div>
+
+      <div class="selected-patient" style="display: none">
+        <input type="text" name="patient-id" id="patient-id" value="" />
+      </div>
+      <button type="submit" class="btn btn-primary">Analyze</button>
+    </form>
   </div>
-  <form action="/result" method="post">
-    <div class="analysis-form">
-      <label for="serum-creatinine"
-        >Serum Creatinine<span class="mandatory">*</span>:</label
-      >
-      <input
-        type="text"
-        name="serum-creatinine"
-        id="serum-creatinine"
-        required
-      />
-    </div>
-    <div class="analysis-form">
-      <label for="ejection-fraction"
-        >Ejection Fraction<span class="mandatory">*</span>:</label
-      >
-      <input
-        type="text"
-        name="ejection-fraction"
-        id="ejection-fraction"
-        required
-      />
-    </div>
 
-    <div class="selected-patient" style="display: none">
-      <input type="text" name="patient-id" id="patient-id" value="" />
-    </div>
-    <button type="submit" class="btn btn-primary">Analyze</button>
-  </form>
-</div>
+  <script>
+    let selectedPatientId = null;
+    let patientId = null;
 
-<script>
-  let selectedPatientId = null;
-  let patientId = null;
+    $("#searchBar").on("input", function () {
+      let query = $(this).val();
 
-  $("#searchBar").on("input", function () {
-    let query = $(this).val();
+      if (query !== "") {
+        $.getJSON("/api/livesearch?q=" + query, function (data) {
+          var patientList = $("#patientList");
+          patientList.empty();
 
-    if (query !== "") {
-      $.getJSON("/api/livesearch?q=" + query, function (data) {
-        var patientList = $("#patientList");
-        patientList.empty();
-
-        if (data.patients.length === 0) {
-          patientList.append(`
+          if (data.patients.length === 0) {
+            patientList.append(`
           <div class="alert alert-warning mt-3" role="alert">
             No patients found for: <strong>${query}</strong>
           </div>
         `);
-        } else {
-          $.each(data.patients, function (i, patient) {
-            var patientItem = `
+          } else {
+            $.each(data.patients, function (i, patient) {
+              var patientItem = `
           <div class="list-group-item" data-patient-id="${patient._id}">
             <div class="d-flex justify-content-between align-items-center">
               <h4 class="list-group-item-heading mb-0 text-left flex-grow-1">
-                ${patient.firstName} ${
-              patient.middleName ? patient.middleName + " " : ""
-            }${patient.lastName}
+                ${patient.firstName} ${patient.middleName ? patient.middleName + " " : ""
+                }${patient.lastName}
               </h4>
               <div class="text-right mx-2">
                 <p class="mb-0 text-muted text-sm">Age: ${patient.age}</p>
@@ -120,44 +97,44 @@
             </div>
           </div>
         `;
-            patientItem = $(patientItem);
-            patientItem.click(function () {
-              if ($(this).hasClass("border border-success")) {
-                $(this).removeClass("border border-success");
-                $(".list-group-item").show();
-                selectedPatientId = null;
-                $("#analyzeBtn").prop("disabled", true);
-                $(".alert-success").remove(); // Remove success alert
-              } else {
-                $(".list-group-item")
-                  .removeClass("border border-success")
-                  .hide();
-                $(this).addClass("border border-success").show();
-                selectedPatientId = $(this).data("patient-id");
-                patientId = this.dataset.patientId;
-                console.log(patientId);
-                let patientIdInput = document.getElementById("patient-id");
-                patientIdInput.setAttribute("value", patientId);
-                $("#analyzeBtn").prop("disabled", false);
-                // Show patient-selected alert
-                $(".alert-success").remove(); // Remove old success alert
-                // $('.col-md-12.mb-3').first().after(`
-                // <div class="alert alert-success mt-3" role="alert">
-                //   Patient selected: <strong>${$(this).find('.list-group-item-heading').text()}</strong>
-                // </div>
-                // `);
-              }
+              patientItem = $(patientItem);
+              patientItem.click(function () {
+                if ($(this).hasClass("border border-success")) {
+                  $(this).removeClass("border border-success");
+                  $(".list-group-item").show();
+                  selectedPatientId = null;
+                  $("#analyzeBtn").prop("disabled", true);
+                  $(".alert-success").remove(); // Remove success alert
+                } else {
+                  $(".list-group-item")
+                    .removeClass("border border-success")
+                    .hide();
+                  $(this).addClass("border border-success").show();
+                  selectedPatientId = $(this).data("patient-id");
+                  patientId = this.dataset.patientId;
+                  console.log(patientId);
+                  let patientIdInput = document.getElementById("patient-id");
+                  patientIdInput.setAttribute("value", patientId);
+                  $("#analyzeBtn").prop("disabled", false);
+                  // Show patient-selected alert
+                  $(".alert-success").remove(); // Remove old success alert
+                  // $('.col-md-12.mb-3').first().after(`
+                  // <div class="alert alert-success mt-3" role="alert">
+                  //   Patient selected: <strong>${$(this).find('.list-group-item-heading').text()}</strong>
+                  // </div>
+                  // `);
+                }
+              });
+              patientList.append(patientItem);
             });
-            patientList.append(patientItem);
-          });
-        }
-      });
-    } else {
-      // Handle the case when the search query is empty
-      $("#patientList").empty();
-      $("#analyzeBtn").prop("disabled", true);
-    }
-  });
-</script>
+          }
+        });
+      } else {
+        // Handle the case when the search query is empty
+        $("#patientList").empty();
+        $("#analyzeBtn").prop("disabled", true);
+      }
+    });
+  </script>
 
-<%- include("templates/bottom-navbar") %>
+  <%- include("templates/bottom-navbar") %>
