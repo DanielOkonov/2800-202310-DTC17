@@ -48,6 +48,7 @@
       </div>
     </div>
 
+<<<<<<< Updated upstream
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="personalHealthId"
@@ -141,3 +142,59 @@
   </form>
 </div>
 <% } %> <%- include("templates/bottom-navbar") %>
+=======
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="personalHealthId">Personal Health ID: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" id="personalHealthId" name="personalHealthId"
+                                        class="form-control" placeholder="1234567890" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="dateOfBirth">Date of Birth: <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth"
+                                        required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="sex">Sex: <span class="text-danger">*</span></label>
+                                    <select name="sex" id="sex" class="form-control" required>
+                                        <option value="">--Select--</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="anaemia">Anaemia (Decrease of red blood cells or hemoglobin): <span
+                                        class="text-danger">*</span></label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="anaemia" name="anaemia">
+                                    <label class="form-check-label" for="anaemia">Check if patient has anaemia</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="diabetes">Diabetes: <span class="text-danger">*</span></label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="diabetes" name="diabetes">
+                                    <label class="form-check-label" for="diabetes">Check if patient has diabetes</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="highBloodPressure">High Blood Pressure: <span
+                                        class="text-danger">*</span></label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="highBloodPressure"
+                                        name="highBloodPressure">
+                                    <label class="form-check-label" for="highBloodPressure">Check if patient has high
+                                        blood
+                                        pressure</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Patient</button>
+                        </form>
+            </div>
+            <% } %>
+                <%- include("templates/bottom-navbar") %>
+>>>>>>> Stashed changes
