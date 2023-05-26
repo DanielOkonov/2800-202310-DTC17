@@ -84,13 +84,6 @@ exports.addPatient = async function (req, res) {
         break;
     }
 
-    // Validate the request body against the patient schema
-    // const date = new Date("2022-11-20");
-    // const dateWithoutTime = new Date(
-    //   date.getFullYear(),
-    //   date.getMonth(),
-    //   date.getDate()
-    // );
     const patientData = {
       firstName: req.body.firstName,
       middleName: req.body.middleName ? req.body.middleName : null,
@@ -351,15 +344,7 @@ exports.getPatientRiskHistory = async function (req, res) {
 
     if (patient) {
       console.log("Found patient:", patient);
-      // const fullData = [
-      //   { a: new Date(2022, 1, 24), b: 7, c: "blah" },
-      //   { a: new Date(2022, 3, 24), b: 8, c: "blah" },
-      //   { a: new Date(2022, 5, 24), b: 9, c: "blah" },
-      //   { a: new Date(2022, 7, 24), b: 12, c: "blah" },
-      //   { a: new Date(2022, 8, 24), b: 10, c: "blah" },
-      // ];
 
-      //const xyValues = fullData.map((datum) => ({ x: datum.a, y: datum.b }));
       const xyValues = patient.analysis.map((analysis) => ({
         x: analysis.analysisDate,
         y: analysis.analysisResult,
