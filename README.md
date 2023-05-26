@@ -114,15 +114,15 @@ EMAIL_PASSWORD = <Google Mail account password>
 ```
 7. In the same terminal from Steps 3 and 4 (the terminal window located at the bottom of VSC), type in `node index.js`.
 8. If set up correctly, in the terminal window, a message will appear containing a link to where the application is hosted. It will be in the form of 'localhost:3000'. Click on that link to view the application in your browser.
-9. Here is our [testing plan] (https://docs.google.com/spreadsheets/d/12ZFcGtFpCMN1wZ5vDrhNiNGaxBmXxR2ixeeSjZpjWRk/edit#gid=394496370). You can view our testing history and even contribute to a bug fix!
+9. Here is our [testing plan](https://docs.google.com/spreadsheets/d/12ZFcGtFpCMN1wZ5vDrhNiNGaxBmXxR2ixeeSjZpjWRk/edit#gid=394496370). You can view our testing history and even contribute to a bug fix!
 
 
 
 ## Authors
-Amir Eskandari: https://github.com/am-eskandari
+[Amir Eskandari](https://github.com/am-eskandari)
 
-Cadan Glass: https://github.com/CadanGlass
+[Cadan Glass](https://github.com/CadanGlass)
 
-Daniel Okonov: https://github.com/DanielOkonov
+[Daniel Okonov](https://github.com/DanielOkonov)
 
-Jas Randhawa: https://github.com/jasr1
+[Jas Randhawa](https://github.com/jasr1)
