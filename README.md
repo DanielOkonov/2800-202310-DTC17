@@ -160,7 +160,7 @@ See [LICENCSE.txt](LICENSE.txt) file for licensing.
 
 ## AI Incorporation 
 
-We used AI extensively in our application. The core component of our app is a logistic regression model, an AI algorithm, which we trained to predict the risk of heart failure. This model takes two health indicator values (Serum Creatinine and Ejection Fraction) and provides a probability of a death event occurring. We trained our model using a dataset from Kaggle, optimizing its accuracy through a process called k-fold cross-validation with 10 folds. The AI model forms the backbone of our risk prediction feature, providing users with potential insights into their heart health.
+We used AI extensively in our application. The core component of our app is a logistic regression model, an AI algorithm, which we trained to predict the risk of heart failure. This model takes two health indicator values (Serum Creatinine and Ejection Fraction) and provides a probability of a death event occurring. We trained our model using a dataset from Kaggle. The AI model forms the backbone of our risk prediction feature, providing users with potential insights into their heart health.
 
 While we didn't use AI to create or clean datasets, the logistic regression model we used inherently assists in identifying and handling outliers and missing values in the dataset. This is part of the training and validation process, where we fine-tuned our model to handle the given heart failure datasets from Kaggle efficiently and accurately.
 
@@ -168,7 +168,9 @@ Our linear regression model, trained using Kaggle datasets, allows us to predict
 
 ### Limitations
 
-One of the challenges we faced was the initial lower accuracy of our model, around 60%. However, we were able to overcome this limitation by implementing k-fold cross-validation with 10 folds, which improved the accuracy to about 75%. Another limitation was the potential for overfitting, considering the high dimensionality of medical data. We addressed this by using logistic regression, which is less prone to overfitting in comparison to other complex models. Furthermore, ensuring the quality and relevance of the data used for training was critical, so we chose a reliable source, Kaggle, for our dataset.
+One of the challenges we faced initially was the presumed lower accuracy of our model, around 60%. We trained our model with 80% of the dataset and used the remaining 20% to test accuracy. This process result in a accuracy of roughly 60%. However, after checking accuracy using k-fold cross validation with 10 folds, we discovered the accuracy is closer to 75%. For our initial analysis, this accuracy is acceptable but more data is required to train the model to a higher accuracy. 
+
+Overall, in order to ensure the quality and relevance of the data, we obtained it from Kaggle. 
 
 ## Authors
 [Amir Eskandari](https://github.com/am-eskandari)
