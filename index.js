@@ -196,7 +196,6 @@ app.get("/resetPassword/:token", async (req, res) => {
 });
 
 app.post("/resetPassword", async (req, res) => {
-  // Change this route to handle POST request
   const schema = Joi.object({
     newPassword: Joi.string().required(),
     token: Joi.string().required(), // Add token in the body
@@ -240,15 +239,10 @@ app.post("/resetPassword", async (req, res) => {
 
 app.get("/analyze", function (req, res) {
   var query = req.query.q;
-  // other code...
+
   res.render("analyze", { query: query });
 });
 app.get("/api/livesearch", patient.liveSearchPatients);
-
-// app.get("/analyze", (req, res) => {
-//   res.render("analyze");
-// });
-// app.get('/api/searchanalysispatient', patient.searchAnalysisPatient);
 
 app.get("/share", (req, res) => {
   res.render("share");
