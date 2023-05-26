@@ -117,6 +117,47 @@ EMAIL_PASSWORD = <Google Mail account password>
 8. If set up correctly, in the terminal window, a message will appear containing a link to where the application is hosted. It will be in the form of 'localhost:3000'. Click on that link to view the application in your browser.
 9. Here is our [testing plan](https://docs.google.com/spreadsheets/d/12ZFcGtFpCMN1wZ5vDrhNiNGaxBmXxR2ixeeSjZpjWRk/edit#gid=394496370). You can view our testing history and even contribute to a bug fix!
 
+## How to use Heart Wise (Features)
+
+Input Patient Data: As a healthcare professional, you can input your patient's data into the system. The required data fields are designed to capture critical information that will inform the system's risk analysis.
+
+Processing Data: Once the data is inputted, the system utilizes cutting-edge AI algorithms to process and analyze it. This results in accurate risk predictions that will aid in your decision-making process.
+
+View Risk Analysis Results: The system presents the analyzed results in an easy-to-understand format. This allows you to make informed decisions based on the predicted risks for each patient.
+
+Access Historical Data: The application provides a feature to view historical input data. This allows you to track a patient's heart data over time and observe any trends or changes that may occur.
+
+Secure Data Storage: The system securely stores all patient data in compliance with data protection regulations. You can be confident that all sensitive information is safe and secure.
+
+Patient Data Management: You can easily search, access, and update patient records. This provides flexibility and efficiency in managing your patients' data.
+
+Collaboration: The platform provides real-time collaboration features. You and your colleagues can discuss the AI-driven analysis results, make decisions, and provide timely care to your patients.
+
+Secure Sharing: You can securely share the AI-driven analysis results with your colleagues through the platform. This allows for effective collaboration while maintaining patient confidentiality.
+
+Export Results: The system provides an option to export the AI-driven analysis results in a universally accessible format. This can facilitate sharing findings with colleagues outside the platform or saving the results for future reference.
+
+Adaptive User Interface: The user interface adapts to different screen sizes. Whether you are on a desktop, laptop, tablet, or mobile device, you can effectively navigate and use the tool.
+
+
+## Credits, References, Licenses
+### Open Source Libraries
+Express: Fast, unopinionated, minimalist web framework for Node.js (https://expressjs.com/)
+JQuery: Fast, small, and feature-rich JavaScript library (https://jquery.com/)
+Pandas: High-performance, easy-to-use data structures and data analysis tools for the Python programming language (https://pandas.pydata.org/)
+Scikit-learn (sklearn): Simple and efficient tools for predictive data analysis, built on NumPy, SciPy, and matplotlib (https://scikit-learn.org/stable/)
+### Tools
+Node.js: JavaScript runtime built on Chrome's V8 JavaScript engine (https://nodejs.org/en)
+MongoDB: Source-available cross-platform document-oriented database program (https://www.mongodb.com/)
+MongoDB Atlas: Database as a Service - DBaaS on AWS, Azure, & GCP (https://www.mongodb.com/atlas/database)
+
+### External Resources
+MDN Web Docs: In-depth tutorials and articles on HTML, CSS, JavaScript, and more (https://developer.mozilla.org/en-US/)
+Stack Overflow: Question and answer site for professional and enthusiast programmers (https://stackoverflow.com/)
+Dataset used: https://www.kaggle.com/datasets/andrewmvd/heart-failure-clinical-data
+
+See [LICENCSE.txt](LICENSE.txt) file for licensing.
+
 ## AI Incorporation 
 
 We used AI extensively in our application. The core component of our app is a logistic regression model, an AI algorithm, which we trained to predict the risk of heart failure. This model takes two health indicator values (Serum Creatinine and Ejection Fraction) and provides a probability of a death event occurring. We trained our model using a dataset from Kaggle, optimizing its accuracy through a process called k-fold cross-validation with 10 folds. The AI model forms the backbone of our risk prediction feature, providing users with potential insights into their heart health.
