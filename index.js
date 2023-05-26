@@ -111,10 +111,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Renders the forgot-password page
 app.get("/forgot-password", function (req, res) {
   res.render("forgot-password", { message: "Your custom error message here" });
 });
 
+// Processes the forgot-password request and sends reset password email if user is found
 app.post("/forgot-password", async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -177,6 +179,8 @@ app.post("/forgot-password", async (req, res, next) => {
   }
 });
 
+// Route for displaying the password reset page.
+// It takes a token parameter which is checked against the database for validation
 app.get("/resetPassword/:token", async (req, res) => {
   try {
     const user = await userCollection.findOne({ resetToken: req.params.token });
@@ -186,6 +190,8 @@ app.get("/resetPassword/:token", async (req, res) => {
         .status(404)
         .render("404", { message: "Invalid or expired token." });
     }
+
+    // If the user exists, render the password reset page and pass the token to it
     res.render("reset-password", { token: req.params.token }); // Create a reset-password.ejs file that allows the user to enter a new password
   } catch (error) {
     console.error(error);
@@ -195,14 +201,17 @@ app.get("/resetPassword/:token", async (req, res) => {
   }
 });
 
+// Route for handling the password reset form submission
 app.post("/resetPassword", async (req, res) => {
   const schema = Joi.object({
     newPassword: Joi.string().required(),
     token: Joi.string().required(), // Add token in the body
   });
 
+  // Validate the request body against the schema
   const { error, value } = schema.validate(req.body);
 
+  // If validation fails, render an error page with a message
   if (error) {
     return res.render("error", {
       message: `Please provide ${error.details[0].message}.`,
@@ -210,14 +219,18 @@ app.post("/resetPassword", async (req, res) => {
   }
 
   try {
+    // Find a user in the database with a matching reset token
     const user = await userCollection.findOne({ resetToken: value.token });
 
+    // If no such user exists, render an error page
     if (!user) {
       return res.render("error", { message: "Invalid or expired token." }); // render an error page
     }
 
+    // If the user exists, hash the new password
     const hashedPassword = await bcrypt.hash(value.newPassword, saltRounds);
 
+    // Update the user in the database by setting the hashed password and removing the reset token
     await userCollection.updateOne(
       { resetToken: value.token },
       {
@@ -228,6 +241,7 @@ app.post("/resetPassword", async (req, res) => {
       }
     );
 
+    // After the password has been successfully updated, render a success page
     return res.render("success", { message: "Password changed successfully." }); // render a success page
   } catch (error) {
     console.error(error);
@@ -237,17 +251,22 @@ app.post("/resetPassword", async (req, res) => {
   }
 });
 
+// Analyze page route, with query parameters
 app.get("/analyze", function (req, res) {
   var query = req.query.q;
 
   res.render("analyze", { query: query });
 });
+
+// Live search functionality for patient information
 app.get("/api/livesearch", patient.liveSearchPatients);
 
+// Share page route
 app.get("/share", (req, res) => {
   res.render("share");
 });
 
+// Sends a patient's result in a PDF via email
 app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -296,8 +315,10 @@ app.post("/email-pdf", upload.single("pdf"), async (req, res, next) => {
   }
 });
 
+// Allows server to accept URL-encoded data
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Runs Python script for analysis
 function runPythonScript(serumCreatinine, ejectionFraction) {
   return new Promise((resolve, reject) => {
     const pythonScript = "scripts\\analysis.py";
@@ -313,6 +334,7 @@ function runPythonScript(serumCreatinine, ejectionFraction) {
   });
 }
 
+// Inserts analysis data into MongoDB
 function insertDataIntoMongoDB(
   serumCreatinine,
   ejectionFraction,
@@ -364,6 +386,7 @@ function insertDataIntoMongoDB(
     });
 }
 
+// Handles form submission of patient analysis and processes results
 app.post("/result", (req, res) => {
   const serumCreatinine = req.body["serum-creatinine"];
   const ejectionFraction = req.body["ejection-fraction"];
@@ -420,11 +443,13 @@ app.post("/result", (req, res) => {
     });
 });
 
+// Default 404 route for any unhandled routes
 app.get("*", (req, res) => {
   res.status(404);
   res.render("404");
 });
 
+// Starts server on localhost:3000
 app.listen(3000, () => {
   console.log("Server started on http://localhost:3000");
 });
