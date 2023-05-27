@@ -11,15 +11,6 @@ body {
         padding-bottom: 86px; /* Adjust if bottom navbar height changes */
     }
 
-    .main-content {
-        overflow-y: auto;
-        height: calc(100vh - (71px + 86px)); /* Adjusted based on actual navbar and bottom navbar heights */
-    }
-}
-
-.main-content {
-    overflow-y: auto;
-    height: calc(100vh - (71px + 86px)); /* Adjusted based on actual navbar and bottom navbar heights */
 }
 
 .navbar {
@@ -30,6 +21,8 @@ body {
 
 .navbar-brand {
     color: #f8f9fa !important; /* Change text color */
+    padding-left: 50px;
+    
 }
 
 .fixed-bottom {

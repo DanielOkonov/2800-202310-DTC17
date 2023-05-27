@@ -1,3 +1,65 @@
-.vh-100  {
-    background-color: aliceblue;
+.container {
+  padding: 20px;
+}
+
+.card {
+  box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease 0s;
+}
+
+.card:hover {
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+}
+
+.card-header {
+  font-size: 25px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.form-group label {
+  font-size: 20px;
+}
+
+.form-group input {
+  font-size: 18px;
+  height: 50px;
+}
+
+.btn {
+  font-size: 20px;
+  padding: 18px 0; /* Increase padding */
+  width: 100%; /* Make buttons full width */
+  margin-bottom: 15px; /* Add some space between buttons */
+}
+
+.btn-primary {
+  background-color: #2a9d8f;
+  border-color: #2a9d8f;
+}
+
+.btn-light {
+  background-color: #8ab6d6;
+  border-color: #8ab6d6;
+}
+
+.forgot-password-btn {
+  display: inline-block;
+  padding: 8px 15px;
+  margin: 15px auto;
+  border-radius: 5px;
+  color: #2a9d8f;
+  transition: all 0.3s ease 0s;
+  display: block;
+  text-align: center;
+}
+
+.forgot-password-btn:hover {
+  background-color: #2a9d8f;
+  color: #fff;
+}
+
+.mandatory {
+  color: red;
 }

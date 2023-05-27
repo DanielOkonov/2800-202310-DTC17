@@ -1,0 +1,117 @@
+.result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 30px;
+}
+
+.download-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  /* Adjust as needed */
+}
+
+.save-notes-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 45%;
+  /* Adjusted to account for the gap */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  /* Add box shadow */
+}
+
+#download {
+  margin-right: 10px;
+  /* Adjust as needed */
+}
+
+.heart-failure-risk,
+.serum-creatinine,
+.ejection-fraction,
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.heart-failure-risk {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.analysis-result {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.factor-level {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.factor-description {
+  text-align: center;
+}
+
+.notes-container {
+  margin-top: 20px;
+}
+
+.notes-textarea {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.save-notes-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 45%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.save-notes-button:hover {
+  background-color: #45a049;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Share Button */
+#share {
+  background-color: #FF6F00;
+  color: #FFFFFF;
+}
+
+/* Download Button */
+#download {
+  background-color: #1976D2;
+  color: #FFFFFF;
+}
+
+.breadcrumb-container {
+  align-self: flex-start;
+}

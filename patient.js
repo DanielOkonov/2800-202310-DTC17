@@ -27,17 +27,18 @@ const patientSchema = Joi.object({
   diabetes: Joi.boolean().required(),
   highBloodPressure: Joi.boolean().required(),
   avatar: Joi.string().uri().required(), // New line
-  analysis: Joi.array().items(
-    Joi.object({
-      analysisDate: Joi.date().iso().required(),
-      conductedBy: Joi.string().required(),
-      ejectionFraction: Joi.number().integer().min(0).max(100).required(),
-      serumCreatinine: Joi.number().precision(1).min(0).required(),
-      analysisResult: Joi.number().integer().min(0).max(100).required()
-    })
-  ).optional()
+  analysis: Joi.array()
+    .items(
+      Joi.object({
+        analysisDate: Joi.date().iso().required(),
+        conductedBy: Joi.string().required(),
+        ejectionFraction: Joi.number().integer().min(0).max(100).required(),
+        serumCreatinine: Joi.number().precision(1).min(0).required(),
+        analysisResult: Joi.number().integer().min(0).max(100).required(),
+      })
+    )
+    .optional(),
 });
-
 
 exports.renderAddPatients = function (req, res) {
   res.render("add-patient", { error: null });
@@ -61,7 +62,10 @@ exports.addPatient = async function (req, res) {
     const today = new Date();
     let age = today.getFullYear() - dateOfBirth.getFullYear();
     const monthDiff = today.getMonth() - dateOfBirth.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dateOfBirth.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < dateOfBirth.getDate())
+    ) {
       age--;
     }
 
@@ -80,13 +84,6 @@ exports.addPatient = async function (req, res) {
         break;
     }
 
-    // Validate the request body against the patient schema
-    // const date = new Date("2022-11-20");
-    // const dateWithoutTime = new Date(
-    //   date.getFullYear(),
-    //   date.getMonth(),
-    //   date.getDate()
-    // );
     const patientData = {
       firstName: req.body.firstName,
       middleName: req.body.middleName ? req.body.middleName : null,
@@ -99,29 +96,6 @@ exports.addPatient = async function (req, res) {
       diabetes: req.body.diabetes,
       highBloodPressure: req.body.highBloodPressure,
       analysis: req.body.analysis || [],
-      // previous_analysis: [
-      //   //dummy patient analysis
-      //   {
-      //     timestamp: new Date(2023, 1, 1, 0, 0, 0, 0),
-      //     heartFailureRiskPercent: 11,
-      //     serumCreatinineMg: 1.5,
-      //     ejectionFraction: 63,
-      //   },
-
-      //   {
-      //     timestamp: new Date(2023, 1, 2, 0, 0, 0, 0),
-      //     heartFailureRiskPercent: 22,
-      //     serumCreatinineMg: 3.5,
-      //     ejectionFraction: 33,
-      //   },
-
-      //   {
-      //     timestamp: new Date(2023, 1, 3, 0, 0, 0, 0),
-      //     heartFailureRiskPercent: 55,
-      //     serumCreatinineMg: 5.5,
-      //     ejectionFraction: 22,
-      //   },
-      // ],
       avatar: `https://avatars.dicebear.com/api/${avatarType}/${req.body.firstName}.svg`,
     };
     await patientSchema.validateAsync(patientData);
@@ -149,8 +123,6 @@ exports.addPatient = async function (req, res) {
     }
   }
 };
-
-
 
 exports.getPatients = async function (req, res) {
   try {
@@ -192,24 +164,21 @@ exports.getPatients = async function (req, res) {
       .toArray();
 
     // render the patients.ejs view and pass the patients data to it
-    res.render('patient-list', {
+    res.render("patient-list", {
       patients: patients,
       currentPage: currentPage,
       totalPages: totalPages,
       itemsPerPage: itemsPerPage,
-      path: '/patient-list',
+      path: "/patient-list",
       query: req.query.q, // The search query string
       sort: sortField, // The field to sort by
-      order: req.query.order // The sort order
+      order: req.query.order, // The sort order
     });
-
   } catch (error) {
     console.error("Error getting patients:", error);
     res.status(500).send("Error getting patients");
   }
 };
-
-
 
 exports.searchPatients = async function (req, res) {
   try {
@@ -227,16 +196,16 @@ exports.searchPatients = async function (req, res) {
     const patientsCollection = db.collection(process.env.MONGODB_COLLECTION);
 
     // Split the query into words
-    const words = query.split(' ').filter(word => word.length > 1); // Ignore single letters
+    const words = query.split(" ").filter((word) => word.length > 1); // Ignore single letters
 
     // Update the search query to match firstName, middleName, or lastName
     const searchQuery = {
-      $and: words.map(word => ({
+      $and: words.map((word) => ({
         $or: [
           { firstName: { $regex: `.*${word}.*`, $options: "i" } },
           { middleName: { $regex: `.*${word}.*`, $options: "i" } },
           { lastName: { $regex: `.*${word}.*`, $options: "i" } },
-        ]
+        ],
       })),
     };
 
@@ -267,9 +236,6 @@ exports.searchPatients = async function (req, res) {
     res.status(500).json({ error: "Error searching patients" });
   }
 };
-
-
-
 
 exports.getPatientProfile = async function (req, res) {
   try {
@@ -338,7 +304,7 @@ exports.getAnalysisResult = async function (req, res) {
         .render("404", { error: "Patient for analysis result not found" });
     }
 
-    const analysisResult = patient.previous_analysis[analysisId];
+    const analysisResult = patient.analysis[analysisId];
 
     if (analysisResult) {
       console.log("Found analysisResult:", analysisResult);
@@ -378,25 +344,13 @@ exports.getPatientRiskHistory = async function (req, res) {
 
     if (patient) {
       console.log("Found patient:", patient);
-      // const fullData = [
-      //   { a: new Date(2022, 1, 24), b: 7, c: "blah" },
-      //   { a: new Date(2022, 3, 24), b: 8, c: "blah" },
-      //   { a: new Date(2022, 5, 24), b: 9, c: "blah" },
-      //   { a: new Date(2022, 7, 24), b: 12, c: "blah" },
-      //   { a: new Date(2022, 8, 24), b: 10, c: "blah" },
-      // ];
 
-      //const xyValues = fullData.map((datum) => ({ x: datum.a, y: datum.b }));
-      const xyValues = patient.previous_analysis.map((analysis) => ({
-        x: analysis.timestamp,
-        y: analysis.heartFailureRiskPercent,
+      const xyValues = patient.analysis.map((analysis) => ({
+        x: analysis.analysisDate,
+        y: analysis.analysisResult,
       }));
 
       res.render("patient-risk-history", { data: JSON.stringify(xyValues) });
-      // res.render("patient-risk-history", {
-      //   previousAnalysis: patient.previous_analysis,
-      //   error: null,
-      // });
     } else {
       console.log("Patient not found");
       res.status(404).render("404", { error: "Patient not found" });
@@ -442,7 +396,6 @@ exports.liveSearchPatients = async function (req, res) {
       .toArray();
 
     res.json({ patients: patients });
-
   } catch (error) {
     console.error("Error searching patients:", error);
     res.status(500).json({ error: "Error searching patients" });

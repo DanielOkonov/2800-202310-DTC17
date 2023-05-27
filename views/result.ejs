@@ -1,0 +1,114 @@
+<%- include("templates/header") %>
+
+<link rel="stylesheet" href="/public/styles/result.css">
+
+<div class="result-container">
+  <div class="breadcrumb-container">
+    <a
+      class="btn btn-outline-primary"
+      role="button"
+      href="/analyze"
+      style="border: none"
+      >< Analyze</a
+    >
+  </div>
+  <div class="heart-failure-risk">
+    <h2>Heart Failure Risk</h2>
+    <div class="analysis-result">
+      <% if (result) { %> <%= result %> % <% } %>
+    </div>
+
+    <% if (result < 25) { %>
+    <p>Based on your input, this patient is at a low risk of heart failure.</p>
+    <% } else if (result >= 25 && result < 50) { %>
+    <p>
+      Based on your input, this patient is at a moderate risk of heart failure.
+    </p>
+    <% } else if (result >= 50 && result < 75) { %>
+    <p>Based on your input, this patient is at a high risk of heart failure.</p>
+    <% } else { %>
+    <p>
+      Based on your input, this patient is at a very high risk of heart failure.
+    </p>
+    <% } %>
+  </div>
+
+  <div class="serum-creatinine">
+    <h3>Serum Creatinine</h3>
+    <div class="factor-level"><%= serumCreatinine %> mg/dL</div>
+    <div class="factor-description">
+      For men, the typical range is 0.74 - 1.35 mg/dL. For women, the typical
+      range is 0.59 - 1.04 mg/dL.
+    </div>
+  </div>
+
+  <div class="ejection-fraction">
+    <h3>Ejection Fraction</h3>
+    <div class="factor-level"><%= ejectionFraction %> %</div>
+    <div class="factor-description">
+      The typical range for men and women is between 50 - 70%.
+    </div>
+  </div>
+
+ <div class="download-container">
+    <button id="download" class="save-notes-button">Download Results</button>
+    <button id="share" class="save-notes-button">Share Results</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Share via Email</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/email-pdf" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="email">Recipient's Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="pdf">Upload or drag PDF:</label>
+            <input type="file" class="form-control-file" id="pdf" name="pdf" accept=".pdf" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+document.getElementById("download").addEventListener("click", function() {
+    html2canvas(document.body).then(function(canvas) {
+        var img = canvas.toDataURL("image/png");
+        var doc = new jsPDF();
+        doc.addImage(img, "JPEG", 20, 20);
+        doc.save("results.pdf");
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var shareButton = document.getElementById('share');
+    var shareModal = document.getElementById('shareModal');
+    var bsModal = new bootstrap.Modal(shareModal);
+
+    shareButton.addEventListener('click', function() {
+      bsModal.show();
+    });
+});
+</script>
+
+
+<%- include("templates/bottom-navbar") %>

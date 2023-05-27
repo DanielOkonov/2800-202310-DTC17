@@ -3,13 +3,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
     <body>
-        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+        <div class="container mt-5">
 
+            <h1 class="text-center mb-4">Patient Heart Risk History</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="myChart" style="width:100%;max-width:1100px;"></canvas>
+                </div>
+            </div>
+
+            <div class="text-center mb-4">
+                <button style="margin-top: 1rem;" class="btn btn-primary" onclick="history.back()">Back</button>
+            </div>
+        </div>
         <script>
 
             var xyValues = JSON.parse('<%- data %>');
+            const dateSeries = xyValues.map((v) => ({ ts: Date.parse((v.x)), y: (v.y) }));
+            dateSeries.sort((a, b) => { return a.ts - b.ts });
 
-            const labels = xyValues.map((v) => (v.x));
+            const labels = dateSeries.map((ds) => (new Date((ds.ts)).toLocaleDateString('en-US')));
 
             new Chart("myChart", {
                 type: 'line',
@@ -18,11 +32,14 @@
                     datasets: [{
                         pointRadius: 4,
                         pointBackgroundColor: "rgb(0,0,255)",
-                        data: xyValues,
+                        data: dateSeries,
                     }]
                 },
 
                 options: {
+                    legend: {
+                        display: false,
+                    },
                     plugins: {
                         title: {
                             text: 'Heart failure risk history',
@@ -30,23 +47,8 @@
                         }
                     },
                     scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                tooltipFormat: 'DD T'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'value'
-                            }
-                        }
-                    },
+                        yAxes: [{ ticks: { min: 0, max: 100 } }]
+                    }
                 },
             });
 

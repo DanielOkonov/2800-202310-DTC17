@@ -10,42 +10,58 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="<%= patient.avatar %>" class="rounded-circle mb-3" style="width: 300px;"
-                                alt="Patient Avatar">
+                            <img src="<%= patient.avatar %>" class="rounded-circle mb-3" style="width: 300px"
+                                alt="Patient Avatar" />
                         </div>
                         <h5 class="card-title text-center">
                             <%= patient.firstName %>
                                 <%= patient.middleName %>
                                     <%= patient.lastName %>
                         </h5>
+
+                        <a href="/patient-risk-history/<%= patient._id %>">
+                            <button style="margin-bottom: 2rem;" class="btn btn-primary">View History</button>
+                        </a>
+
                         <ul class="list-group list-group-flush">
                             <% var dateOfBirth=new Date(patient.dateOfBirth); %>
-                                <li class="list-group-item">Date of Birth: <%= dateOfBirth.toLocaleDateString("en-CA", {
-                                        year: 'numeric' , month: '2-digit' , day: '2-digit' }) %>
+                                <li class="list-group-item">
+                                    <b>Date of Birth:</b>
+                                    <%= dateOfBirth.toLocaleDateString("en-CA", { year: 'numeric' , month: '2-digit' ,
+                                        day: '2-digit' }) %>
                                 </li>
-                                <li class="list-group-item">Age: <%= patient.age %>
+                                <li class="list-group-item"><b>Age:</b>
+                                    <%= patient.age %>
                                 </li>
-                                <li class="list-group-item">Healthcare Number: <%= patient.personalHealthId %>
+                                <li class="list-group-item">
+                                    <b>Healthcare Number:</b>
+                                    <%= patient.personalHealthId %>
                                 </li>
-                                <li class="list-group-item">Sex: <%= patient.sex %>
+                                <li class="list-group-item"><b>Sex:</b>
+                                    <%= patient.sex %>
                                 </li>
-                                <li class="list-group-item">Anaemia: <%= patient.anaemia ? 'Yes' : 'No' %>
+                                <li class="list-group-item">
+                                    <b>Anaemia:</b>
+                                    <%= patient.anaemia ? 'Yes' : 'No' %>
                                 </li>
-                                <li class="list-group-item">Diabetes: <%= patient.diabetes ? 'Yes' : 'No' %>
+                                <li class="list-group-item">
+                                    <b>Diabetes:</b>
+                                    <%= patient.diabetes ? 'Yes' : 'No' %>
                                 </li>
-                                <li class="list-group-item">High Blood Pressure: <%= patient.highBloodPressure ? 'Yes'
-                                        : 'No' %>
+                                <li class="list-group-item">
+                                    <b>High Blood Pressure:</b>
+                                    <%= patient.highBloodPressure ? 'Yes' : 'No' %>
                                 </li>
 
-                                <br>
+                                <br />
 
-                                <% if (patient.previous_analysis && patient.previous_analysis.length> 0) { %>
-                                    <% patient.previous_analysis.forEach(analysis=> { %>
+                                <% if (patient.analysis && patient.analysis.length> 0) { %> <%
+                                        patient.analysis.forEach(analysis=> { %>
                                         <li class="list-group-item">
-                                            Analysis:
+                                            <b>Analysis:</b>
                                             <a
-                                                href="/analysis-result/<%= patient._id %>/<%= patient.previous_analysis.indexOf(analysis) %>">
-                                                <%= analysis.timestamp %>
+                                                href="/analysis-result/<%= patient._id %>/<%= patient.analysis.indexOf(analysis) %>">
+                                                <%= analysis.analysisDate %>
                                             </a>
                                         </li>
                                         <% }) %>
@@ -57,5 +73,15 @@
                 </div>
                 <% } %>
     </div>
+
+    <div class="container mt-3 d-flex justify-content-center">
+        <button class="btn btn-primary" onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 
     <%- include("templates/bottom-navbar") %>

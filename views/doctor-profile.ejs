@@ -1,27 +1,40 @@
 <%- include("templates/header") %>
 
-    <body id="pageBody">
-        <h1>THIS IS DOCTOR PROFILE</h1>
-        <div class="container">
-            <p>User: <%= user %>
-            </p>
-            <p>Email: <%= userEmail %>
-            </p>
-        </div>
+<link rel="stylesheet" href="/public/styles/doctor-profile.css" />
 
-        <form action="/dashboard">
-            <button type="submit" class="btn btn-primary mt-3">Back</button>
-        </form>
-        <script>
-            window.onload = function () {
-                console.log("Function being called");
-                let count = parseInt(localStorage.getItem("buttonClicks")) || 0;
-                if (count % 4 === 0 && count !== 0) {
-                    document.getElementById("pageBody").style.fontFamily = "Papyrus";
-                } else {
-                    document.getElementById("pageBody").style.fontFamily = "";
-                }
-            }
-        </script>
-    </body>
-    <%- include("templates/bottom-navbar") %>
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="doctor-image">
+      <img src="/public/images/doctor.jpg" alt="Doctor's Image" />
+    </div>
+    <div class="profile-info">
+      <h2>Doctor Profile</h2>
+      <p><span class="info-label">Name:</span> Dr. John Doe</p>
+      <p><span class="info-label">Specialty:</span> Cardiologist</p>
+      <p><span class="info-label">Experience:</span> 10 years</p>
+      <p>
+        <span class="info-label">Qualifications:</span> MBBS, MD (Cardiology)
+      </p>
+      <p><span class="info-label">User:</span> johndoe</p>
+      <p><span class="info-label">Email:</span> johndoe@example.com</p>
+      <p><span class="info-label">Phone:</span> +1 123 456 7890</p>
+    </div>
+    <div class="profile-actions">
+      <form action="/logout" method="post">
+        <button type="submit" class="btn btn-danger btn-lg mb-3">Logout</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    let count = parseInt(localStorage.getItem("buttonClicks")) || 0;
+    if (count % 4 === 0 && count !== 0) {
+      document.getElementById("pageBody").style.fontFamily = "Papyrus";
+    } else {
+      document.getElementById("pageBody").style.fontFamily = "";
+    }
+  };
+</script>
+<%- include("templates/bottom-navbar") %>
